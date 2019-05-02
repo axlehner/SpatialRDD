@@ -1,0 +1,93 @@
+
+rm(list = ls())
+library(sf)
+library(tmap)
+library(ggplot2)
+
+
+cut_off.sf <- st_read("data/Border_OldGoa_VillageBoundaries.gpkg")
+polygon_treated.sf <- st_read("data/Polygon_GoaOLD_VillageBoundaries.gpkg")
+if (st_crs(cut_off.sf) == st_crs(polygon_treated.sf)) {
+  print("loading successful")
+} else {
+  print("CRS not matching!")
+  NULL # or break?
+}
+
+polygon_full.sf <- st_read("data/Polygon_GoaFULL_VillageBoundaries.gpkg")
+
+set.seed(1088)
+rm(points_samp.sf)
+points_samp.sf <- st_sample(polygon_full.sf, 1000)
+points_samp.sf <- st_sf(points_samp.sf)
+points_samp.sf$id <- 1
+points_samp.sf$id <- 1:nrow(points_samp.sf)
+tm_shape(points_samp.sf) + tm_dots() + tm_shape(cut_off.sf) + tm_lines(col = "red")
+
+points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated.sf, id = "id")
+tm_shape(points_samp.sf) + tm_dots("treated", palette = "Accent") + tm_shape(cut_off.sf) + tm_lines(col = "red")
+
+# simulating data
+
+# education
+
+points_samp.sf$education <- 0
+points_samp.sf$education[points_samp.sf$treated == 1] <- .9
+points_samp.sf$education[points_samp.sf$treated == 0] <- .6
+tm_shape(points_samp.sf) + tm_dots("education") + tm_shape(cut_off.sf) + tm_lines(col = "red")
+summary(lm(education ~ treated, data = points_samp.sf))
+
+NTr <- length(points_samp.sf$education[points_samp.sf$treated == 1])
+NCo <- length(points_samp.sf$education[points_samp.sf$treated == 0])
+points_samp.sf$education[points_samp.sf$treated == 1] <- sample(c(.7, .75), NTr, replace = T)
+points_samp.sf$education[points_samp.sf$treated == 0] <- sample(c(.5, .55, .6, .65, .7, .75), NCo, replace = T)
+tm_shape(points_samp.sf) + tm_dots("education", palette = "RdYlGn", size = .1) + tm_shape(cut_off.sf) + tm_lines()
+summary(lm(education ~ treated, data = points_samp.sf))
+
+# distance to cutoff
+points_samp.sf$dist2cutoff <- as.numeric(st_distance(points_samp.sf, cut_off.sf))
+qplot(points_samp.sf$dist2cutoff)
+tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("education", palette = "RdYlGn", size = .1) + tm_shape(cut_off.sf) + tm_lines()
+summary(lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
+
+
+
+points_samp.sf$segment <- border_segment(points_samp.sf, cut_off.sf, 10)
+summary(lm(education ~ treated + factor(segment), data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
+
+library(sandwich, lmtest, stargazer)
+options(digits = 3)
+lm1 <- lm(education ~ treated + factor(segment), data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ])
+stargazer(coeftest(lm1, vcov = vcovHC))
+coeftest(lm1, vcov = vcovHC)
+coeftest(lm1, vcov = vcovCL, cluster = ~ segment)
+
+# lfe way
+library(lfe)
+# 1 formula | 2 factor to be projected out | 3 IV ... 0 if not needed | 4 cluster (clu1 + clu2 for multi)
+summary(felm(education ~ treated | factor(segment) | 0 | segment, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
+summary(felm(education ~ treated | factor(segment) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
+
+summary(felm(education ~ treated | factor(segment) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]), robust = T)
+
+# RDnaive
+#======================
+library(rdrobust)
+points_samp.sf$distrunning <- points_samp.sf$dist2cutoff
+points_samp.sf$distrunning[points_samp.sf$treated == 1] <- -1 * points_samp.sf$distrunning[points_samp.sf$treated == 1]
+summary(rdrobust(points_samp.sf$education, points_samp.sf$distrunning, c = 0))
+
+ggplot(data = points_samp.sf, aes(x = distrunning, y = education)) + geom_point() + geom_vline(xintercept = 0, col = "red")
+
+
+
+# RD
+#=======================
+borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
+tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("education", palette = "RdYlGn", size = .1) +
+  tm_shape(cut_off.sf) + tm_lines() +
+  tm_shape(borderpoints.sf) + tm_symbols(shape = 4, size = .3)
+
+
+results <- SpatialRD(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated")
+results

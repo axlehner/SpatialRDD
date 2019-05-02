@@ -1,0 +1,19 @@
+Package: SpatialRDD
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.0.0.9000
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    sf,
+    ggplot2,
+    tmap,
+    rdrobust,
+    RATest
+RoxygenNote: 6.1.1
