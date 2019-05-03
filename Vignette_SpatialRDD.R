@@ -3,7 +3,7 @@ rm(list = ls())
 library(sf)
 library(tmap)
 library(ggplot2)
-library(stargazer)
+#library(stargazer)
 library(sandwich)
 library(lmtest)
 library(lfe)
@@ -68,7 +68,8 @@ summary(lm(education ~ treated + factor(segment), data = points_samp.sf[points_s
 
 options(digits = 3)
 lm1 <- lm(education ~ treated + factor(segment), data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ])
-stargazer(coeftest(lm1, vcov = vcovHC))
+coeftest(lm1, vcov = vcovHC)
+#stargazer(coeftest(lm1, vcov = vcovHC))
 coeftest(lm1, vcov = vcovHC)
 coeftest(lm1, vcov = vcovCL, cluster = ~ segment)
 
