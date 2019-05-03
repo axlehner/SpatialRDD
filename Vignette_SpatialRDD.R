@@ -48,6 +48,8 @@ NTr <- length(points_samp.sf$education[points_samp.sf$treated == 1])
 NCo <- length(points_samp.sf$education[points_samp.sf$treated == 0])
 points_samp.sf$education[points_samp.sf$treated == 1] <- sample(c(.7, .75), NTr, replace = T)
 points_samp.sf$education[points_samp.sf$treated == 0] <- sample(c(.5, .55, .6, .65, .7, .75), NCo, replace = T)
+points_samp.sf$education[points_samp.sf$treated == 1] <- rnorm(NTr, mean = 0, sd = .1) + points_samp.sf$education[points_samp.sf$treated == 1]
+points_samp.sf$education[points_samp.sf$treated == 0] <- rnorm(NCo, mean = 0, sd = .1) + points_samp.sf$education[points_samp.sf$treated == 0]
 tm_shape(points_samp.sf) + tm_dots("education", palette = "RdYlGn", size = .1) + tm_shape(cut_off.sf) + tm_lines()
 summary(lm(education ~ treated, data = points_samp.sf))
 
