@@ -4,18 +4,23 @@ library(sf)
 library(tmap)
 library(ggplot2)
 library(stargazer)
+library(sandwich)
+library(lmtest)
+library(lfe)
 
 
-cut_off.sf <- st_read("data/Border_OldGoa_VillageBoundaries.gpkg")
-polygon_treated.sf <- st_read("data/Polygon_GoaOLD_VillageBoundaries.gpkg")
-if (st_crs(cut_off.sf) == st_crs(polygon_treated.sf)) {
-  print("loading successful")
-} else {
-  print("CRS not matching!")
-  NULL # or break?
-}
+# cut_off.sf <- st_read("data/Border_OldGoa_VillageBoundaries.gpkg")
+# polygon_treated.sf <- st_read("data/Polygon_GoaOLD_VillageBoundaries.gpkg")
+# if (st_crs(cut_off.sf) == st_crs(polygon_treated.sf)) {
+#   print("loading successful")
+# } else {
+#   print("CRS not matching!")
+#   NULL # or break?
+# }
+#
+# polygon_full.sf <- st_read("data/Polygon_GoaFULL_VillageBoundaries.gpkg")
 
-polygon_full.sf <- st_read("data/Polygon_GoaFULL_VillageBoundaries.gpkg")
+data("Goa_GIS")
 
 set.seed(1088)
 #rm(points_samp.sf)
@@ -56,9 +61,7 @@ summary(lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff
 points_samp.sf$segment <- border_segment(points_samp.sf, cut_off.sf, 10)
 summary(lm(education ~ treated + factor(segment), data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
 
-library(sandwich)
-library(lmtest)
-library(stargazer)
+
 
 options(digits = 3)
 lm1 <- lm(education ~ treated + factor(segment), data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ])
@@ -67,7 +70,7 @@ coeftest(lm1, vcov = vcovHC)
 coeftest(lm1, vcov = vcovCL, cluster = ~ segment)
 
 # lfe way
-library(lfe)
+
 # 1 formula | 2 factor to be projected out | 3 IV ... 0 if not needed | 4 cluster (clu1 + clu2 for multi)
 summary(felm(education ~ treated | factor(segment) | 0 | segment, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
 summary(felm(education ~ treated | factor(segment) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
@@ -84,6 +87,14 @@ summary(rdrobust(points_samp.sf$education, points_samp.sf$distrunning, c = 0))
 ggplot(data = points_samp.sf, aes(x = distrunning, y = education)) + geom_point() + geom_vline(xintercept = 0, col = "red")
 
 
+# rddapp
+library(rddapp)
+plot(rd_est(education ~ distrunning, data = points_samp.sf, t.design = "g"))
+
+# rdd
+library(rdd)
+plot(RDestimate(education ~ distrunning, data = points_samp.sf, bw = 5000))
+abline(v = 0, col = "red")
 
 # RD
 #=======================
@@ -127,3 +138,13 @@ library(cowplot)
 plot_grid(GRDD, GRDDfix, align = "v", nrow = 2)
 
 #result should be sf object so we can immediately plot all the points
+
+
+# RASTERS ===========================================================
+library(raster)
+
+raster_template = raster(extent(points_samp.sf), resolution = 1000,
+                         crs = st_crs(points_samp.sf)$proj4string)
+plot(rasterize(points_samp.sf, raster_template, field = 1, fun = "count"))
+plot(rasterize(points_samp.sf, raster_template, field = "education", fun = mean))
+lines(as(cut_off.sf, "Spatial"))
