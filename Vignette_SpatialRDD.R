@@ -20,6 +20,7 @@ library(lfe)
 #
 # polygon_full.sf <- st_read("data/Polygon_GoaFULL_VillageBoundaries.gpkg")
 
+# load the data that is inside the package
 data("Goa_GIS")
 
 set.seed(1088)
@@ -146,5 +147,27 @@ library(raster)
 raster_template = raster(extent(points_samp.sf), resolution = 1000,
                          crs = st_crs(points_samp.sf)$proj4string)
 plot(rasterize(points_samp.sf, raster_template, field = 1, fun = "count"))
+raster_mean <- rasterize(points_samp.sf, raster_template, field = "education", fun = mean)
 plot(rasterize(points_samp.sf, raster_template, field = "education", fun = mean))
 lines(as(cut_off.sf, "Spatial"))
+
+
+# interpolation with focal (using a simple MANUAL weighting function, based on 3 cells around and a weight of 1)
+#--------------------------------------------------------------
+plot(focal(raster_mean, matrix(1, nc = 3, nr = 3), fun = mean, NAonly = T, na.rm = T, pad = T))
+#points(points.sp)
+lines(as(cut_off.sf, "Spatial"))
+
+
+
+# PLACEBO BORDERS ======================================
+
+tm_shape(cut_off.sf) + tm_lines()
+
+border_sfc <- st_geometry(cut_off.sf)
+border_shift <- border_sfc + c(0, 2000) # units are in metres
+border <- st_set_geometry(cut_off.sf, border_shift)
+
+tm_shape(cut_off.sf) + tm_lines() + tm_shape(border) + tm_lines(col = "red")
+
+

@@ -5,9 +5,9 @@
 #'
 #' @format A data frame with 3 sf objects:
 #' \describe{
-#'   \item{1}{text}
-#'   \item{2}{text}
+#'   \item{test}{text}
+#'   \item{test}{text}
 #'   ...
 #' }
-#' @source Lehner (2019)
-"Goa_GIS"
+#' @source Lehner2019
+NULL
