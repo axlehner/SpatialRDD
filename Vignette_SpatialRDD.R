@@ -3,6 +3,7 @@ rm(list = ls())
 library(sf)
 library(tmap)
 library(ggplot2)
+library(stargazer)
 
 
 cut_off.sf <- st_read("data/Border_OldGoa_VillageBoundaries.gpkg")
@@ -17,7 +18,7 @@ if (st_crs(cut_off.sf) == st_crs(polygon_treated.sf)) {
 polygon_full.sf <- st_read("data/Polygon_GoaFULL_VillageBoundaries.gpkg")
 
 set.seed(1088)
-rm(points_samp.sf)
+#rm(points_samp.sf)
 points_samp.sf <- st_sample(polygon_full.sf, 1000)
 points_samp.sf <- st_sf(points_samp.sf)
 points_samp.sf$id <- 1
@@ -55,7 +56,10 @@ summary(lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff
 points_samp.sf$segment <- border_segment(points_samp.sf, cut_off.sf, 10)
 summary(lm(education ~ treated + factor(segment), data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]))
 
-library(sandwich, lmtest, stargazer)
+library(sandwich)
+library(lmtest)
+library(stargazer)
+
 options(digits = 3)
 lm1 <- lm(education ~ treated + factor(segment), data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ])
 stargazer(coeftest(lm1, vcov = vcovHC))
@@ -90,4 +94,36 @@ tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("educati
 
 
 results <- SpatialRD(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated")
-results
+
+
+# plotting
+#-------------------------------------------------
+# series first
+GRDD <- ggplot(data = results,
+               mapping = aes(x = rep(1:nrow(results)), y = Estimate)) + #, ymin = Rob_CIl, ymax = Rob_CIu)) +
+  #geom_errorbar(color = "grey") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  geom_point(aes(colour = cut(pvalC, c(-Inf, .11, Inf))), size = 1, shape = 19) +
+  scale_color_manual(values = c("palegreen2", "lightcoral")) +
+  # Here comes the styling
+  theme_bw() + # needs to go before any other individual styling, otherwise it overwrites it
+  theme(text = element_text(family = "Courier New"), plot.title = element_text(hjust = 0.5), legend.position = "none") + # center title, omit legend
+  ggtitle(paste("GRDDseries,")) +
+  labs(y = "Estimate (rdrobust)", x = "#Boundarypoint (> 10 observations)")
+
+GRDDfix <- ggplot(data = results,
+                  mapping = aes(x = rep(1:nrow(results)), y = Estimate)) + #, ymin = Rob_CIl_fix, ymax = Rob_CIu_fix)) +
+  #geom_errorbar(color = "grey") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  geom_point(aes(colour = cut(pvalC, c(-Inf, .11, Inf))), size = 1, shape = 19) +
+  scale_color_manual(values = c("palegreen2", "lightcoral")) +
+  # Here comes the styling
+  theme_bw() + # needs to go before any other individual styling, otherwise it overwrites it
+  theme(text = element_text(family = "Courier New"), plot.title = element_text(hjust = 0.5), legend.position = "none") + # center title, omit legend
+  ggtitle(paste("[forced bandwith = 20km],")) +
+  labs(y = "Estimate (rdrobust)", x = "#Boundarypoint (> 10 observations)")
+
+library(cowplot)
+plot_grid(GRDD, GRDDfix, align = "v", nrow = 2)
+
+#result should be sf object so we can immediately plot all the points
