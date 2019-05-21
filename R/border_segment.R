@@ -10,17 +10,32 @@
 
 border_segment <- function(data = points.sf, cutoff = cut_off.sf, n = 10) {
 
-  cat("Starting to create", n, "border segments with an approximate length of", round(as.numeric(st_length(cutoff))/1000/n, 0), "kilometres each.\n")
 
-  cutoff <- cutoff %>% st_cast("LINESTRING")
-  borderpoints.sf <- st_line_sample(cutoff, n)
-  borderpoints.sf <- borderpoints.sf %>% st_cast("POINT") # cast to POINT in order to get the rownumber right
-  borderpoints.sf <- st_sf(borderpoints.sf) # then we need to make it an sf data frame again
-  borderpoints.sf$id <- 1:nrow(borderpoints.sf)
-  closest <- list()
-  for(i in seq_len(nrow(data))){
-    closest[[i]] <- borderpoints.sf[which.min(st_distance(borderpoints.sf, data[i, ])),]$id
+  # first bifurcation depending on input type
+  if (st_geometry_type(cutoff)[1] == "POINT" | st_geometry_type(cutoff)[1] == "MULTIPOINT") {
+    # only random sampling implemented for now in st_sample
+    # thus i cook up standard subsetting
+    borderpoints.sf <- cutoff[seq(1, nrow(cutoff), round(nrow(cutoff) / n, 0)), ] # subset according to this rule
+    borderpoints.sf$id <- 1:nrow(borderpoints.sf)
+    closest <- list()
+    for(i in seq_len(nrow(data))){
+      closest[[i]] <- borderpoints.sf[which.min(st_distance(borderpoints.sf, data[i, ])),]$id
+    }
+    closest <- as.factor(as.numeric(closest))
+    closest
+
+  } else { # this is when it is a line
+    cat("Starting to create", n, "border segments with an approximate length of", round(as.numeric(st_length(cutoff))/1000/n, 0), "kilometres each.\n")
+    cutoff <- cutoff %>% st_cast("LINESTRING")
+    borderpoints.sf <- st_line_sample(cutoff, n)
+    borderpoints.sf <- borderpoints.sf %>% st_cast("POINT") # cast to POINT in order to get the rownumber right
+    borderpoints.sf <- st_sf(borderpoints.sf) # then we need to make it an sf data frame again
+    borderpoints.sf$id <- 1:nrow(borderpoints.sf)
+    closest <- list()
+    for(i in seq_len(nrow(data))){
+      closest[[i]] <- borderpoints.sf[which.min(st_distance(borderpoints.sf, data[i, ])),]$id
+    }
+    closest <- as.factor(as.numeric(closest))
+    closest
   }
-  closest <- as.factor(as.numeric(closest))
-  closest
 }

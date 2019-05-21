@@ -22,6 +22,8 @@ assign_treated <- function(data.sf = points.sf, polygon.sf = polygon_treated.sf,
 
   # PRECHECK IF CRS' ARE MATCHING!
 
+  # also change id to NA by default so we can get an easy error message when not provided (otherwise might lead to confusion bc it works without providing it)
+
 
   # retrieving the id's that were treated (this function effectively subsets the whole df/sf object, we extract only one column of that)
   over_id <- st_intersection(polygon.sf, data.sf)[[id]]

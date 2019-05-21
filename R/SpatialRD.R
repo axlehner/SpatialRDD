@@ -18,8 +18,9 @@
 SpatialRD <- function(y = "regressand", # should we make that a formula, in case we want to allow for the covariate stuff as well?
                        data = points.sf, cutoff.points = borderpoints.sf, treated = "treated", # data in, plus specify the name of the column where the dummy is AS STRING
                        minobs = 50, bwfix = F, bwfix_m = NA, # here we define parameters, minobs that have to be selected, bwfix in metres
-                       sample = F, samplesize = 10,
-                       cluster = NA # string required
+                       sample = F, samplesize = NA,
+                       cluster = NA, # string required
+                       spatial.object = T # if this is 1, function will return an sf object
                        ) {
 
   # no deparse(substitute(colname)), require the string directly
@@ -27,12 +28,13 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
   # message 1
 
   n <- nrow(data)
-  cat("We have", n, "observations of which", sum(as.numeric(data[["treated"]])), "are treated observations.\n")
+  cat("We have", n, "observations of which", sum(as.numeric(as.character(cutoff.points[[treated]]))), "are treated observations.\n")
 
   if (!is.na(bwfix_m)) {bwfix <- T}
 
   # bordersamplesize
   if (sample == T) {
+    if(is.na(samplesize)) {cat("Random border point sampling chosen: provide desired samplesize!\n")}
     border_id <- sample(1:nrow(cutoff.points), samplesize)
     # sort it so we loop beginning from the first one
     border_id <- border_id[order(border_id)]
@@ -40,13 +42,15 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
     np <- nrow(cutoff.points)
     cat("Choosing", np, "random points on the border to iterate over.\n")
   } else {
-    np <- length(cutoff.points) #replaced the nrow with length
+    np <- nrow(cutoff.points) #replaced the nrow with length. why? need nrow. NO only for points., hae?
     cat("We are iterating over", np, "Boundarypoints.\n")
   }
 
   cat("The dependent variable is", y,".\n")
   # create storage for final results
-  columnames <- c("Point", "Estimate", "pvalC", "pvalR", "Ntr", "Nco", "bw", "CI_Conv", "CI_Rob", "McCrary", "RATest")
+  #columnames <- c("Point", "Estimate", "pvalC", "pvalR", "Ntr", "Nco", "bw", "CI_Conv", "CI_Rob", "McCrary", "RATest")
+  # the version where the CIs have upper and lower in a separate column
+  columnames <- c("Point", "Estimate", "pvalC", "pvalR", "Ntr", "Nco", "bw", "CI_Conv_l", "CI_Conv_u", "CI_Rob_l", "CI_Rob_u", "McCrary", "RATest")
   results <- data.frame(matrix(ncol = length(columnames), nrow = np))
   colnames(results) <- columnames
 
@@ -63,7 +67,11 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
 
     # this would be the dplyr vector way, NON-CLUMSY
     # as.numeric(st_distance(data, cutoff.points[i, ], drop = T)) %>% .[. < bwfix_m]
-    data[["dist2cutoff"]] <- as.numeric(st_distance(data, cutoff.points[i], drop = T)) # rewrote the subsetting from [i, ]
+    #data[["dist2cutoff"]] <- as.numeric(st_distance(data, cutoff.points[i], drop = T)) # rewrote the subsetting from [i, ]
+
+    # this is after the KT replication. need to choose min
+    data[["dist2cutoff"]] <- as.numeric(st_distance(data, cutoff.points[i, ], drop = T)) # rewrote the subsetting to [i, ]
+
 
     # weight (redundant)
     #w <- as.vector((1 / bw) * Kt((data[["dist2cutoff"]] - 0) / bw))
@@ -71,7 +79,7 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
     # this the number of positive weights
 
     # make distance of treated data negative
-    data[["dist2cutoff"]][data[["treated"]] == 1] <- data[["dist2cutoff"]][data[["treated"]] == 1] * (-1)
+    data[["dist2cutoff"]][data[[treated]] == 0] <- data[["dist2cutoff"]][data[[treated]] == 0] * (-1)
     data[["dist2cutoff"]] <- data[["dist2cutoff"]] #/ 1000 #make it km
     #bw <- bw / 1000
 
@@ -88,9 +96,9 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
     } else { # this is the same, just with MSE-optimal bandwidth
 
       if (is.na(cluster)) { # if nothing was specified, the default is without clustering:
-        rdrob_bwflex <- rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0)#, covs = cbind(data[["Lat"]], data[["Long"]]))
+        rdrob_bwflex <- try(rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0))#, covs = cbind(data[["Lat"]], data[["Long"]]))
       } else { # this runs when a cluster was specified as a string
-        rdrob_bwflex <- rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, cluster = data[[cluster]])
+        rdrob_bwflex <- try(rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, cluster = data[[cluster]]))
       }
 
     }
@@ -110,14 +118,23 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
     results[i, "Ntr"] <- rdrob_bwflex[["Nh"]][[1]]
     results[i, "Nco"] <- rdrob_bwflex[["Nh"]][[2]]
     results[i, "bw"] <- round(rdrob_bwflex[["bws"]][["h", 1]] / 1000, 1)
-    results[i, "CI_Conv"] <- paste0("[",round(rdrob_bwflex$ci["Conventional", 1], 2), ";", round(rdrob_bwflex$ci["Conventional", 2], 2), "]", sep = "")
-    results[i, "CI_Rob"] <- paste0("[",round(rdrob_bwflex$ci["Robust", 1], 2), ";", round(rdrob_bwflex$ci["Robust", 2], 2), "]", sep = "")
+    #results[i, "CI_Conv"] <- paste0("[",round(rdrob_bwflex$ci["Conventional", 1], 2), ";", round(rdrob_bwflex$ci["Conventional", 2], 2), "]", sep = "")
+    #results[i, "CI_Rob"] <- paste0("[",round(rdrob_bwflex$ci["Robust", 1], 2), ";", round(rdrob_bwflex$ci["Robust", 2], 2), "]", sep = "")
+    # this is for the version with lower upper CIs separated:
+    results[i, "CI_Conv_l"] <- round(rdrob_bwflex$ci["Conventional", 1], 2)
+    results[i, "CI_Conv_u"] <- round(rdrob_bwflex$ci["Conventional", 2], 2)
+    results[i, "CI_Rob_l"] <- round(rdrob_bwflex$ci["Robust", 1], 2)
+    results[i, "CI_Rob_u"] <- round(rdrob_bwflex$ci["Robust", 2], 2)
+
     #results[i, "McCrary"] <- round(mccrary, 3)
     results[i, "RATest"] <- round(permtest$results[2], 3)
   }
-
+  # set the geometry of the borderpoints before subsetting according to the minobs criterion
+  if (spatial.object == T) {results <- st_set_geometry(results, st_geometry(cutoff.points))}
   # this selects ultimately only the boundarypoint estimates that have a large enough sample size on both sides in order to ensure proper inference
   results %>% dplyr::filter(Nco > minobs & Ntr > minobs)
 
+  # MAKE THIS RESULTS LIST A LIST
+  # AND THEN PRODUCE ALSO STANDARD OUPUT! that is printed when u run it
 
 }
