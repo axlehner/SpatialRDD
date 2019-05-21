@@ -54,6 +54,8 @@ st_set_geometry(any.sf.object, NULL)
 ```{r}
 library(tmap)
 tm_shape(cut_off.sf) + tm_lines()
+tm_shape(polygon_full.sf) + tm_polygons()
+
 ```
 
 
