@@ -70,17 +70,19 @@ points_samp.sf$distrunning <- points_samp.sf$dist2cutoff
 points_samp.sf$distrunning[points_samp.sf$treated == 1] <- -1 * points_samp.sf$distrunning[points_samp.sf$treated == 1]
 summary(rdrobust(points_samp.sf$education, points_samp.sf$distrunning, c = 0))
 ggplot(data = points_samp.sf, aes(x = distrunning, y = education)) + geom_point() + geom_vline(xintercept = 0, col = "red")
-
+rdplot(points_samp.sf$education, points_samp.sf$distrunning, c = 0, ci = 95, kernel = "triangular", y.label = "education", x.label = "distance to border")
 
 
 
 # rddapp
 library(rddapp)
-plot(rd_est(education ~ distrunning, data = points_samp.sf, t.design = "g"))
+plot(rd_est(education ~ distrunning, data = points_samp.sf, t.design = "g"), fit_line = "optimal", bin_n = 50)
+summary(rd_est(education ~ distrunning, data = points_samp.sf, t.design = "g"))
 
-# rdd
+summary()# rdd
 library(rdd)
 plot(RDestimate(education ~ distrunning, data = points_samp.sf, bw = 5000))
+testRD <- RDestimate(education ~ distrunning, data = points_samp.sf, bw = 5000, frame = T)
 abline(v = 0, col = "red")
 
 
