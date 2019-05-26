@@ -2,14 +2,26 @@
 % Please edit documentation in R/assign_treated.R
 \name{assign_treated}
 \alias{assign_treated}
-\title{Title}
+\title{Let the package know which observations were treated}
 \usage{
 assign_treated(data.sf = points.sf, polygon.sf = polygon_treated.sf,
-  id = "id_column")
+  id = NA)
 }
 \arguments{
-\item{id}{}
+\item{data.sf}{sf object containing point data}
+
+\item{polygon.sf}{sf object with polygon geometry that fully describes the area(s) that contain the treated points}
+
+\item{id}{string that represents the name of the column in the points object that represents the unique identifier for each observation}
+}
+\value{
+A vector of type factor with 0's and 1's. Convert with as.numeric() if you want real numbers/integers.
 }
 \description{
-Title
+Creates a vector with 0's and 1's to determine on which side of the cut-off each observation is. For this it is useful to have a polygon that fully describes the "treated area".
+If you do not have such a polygon there is a (very preliminary and patchy) way implemented in the package via \code{\link{points2line}} and \code{\link{cutoff2polygon}} that let's you go from points to line to "treated polygon" in a very crude way.
+}
+\examples{
+points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")
+
 }

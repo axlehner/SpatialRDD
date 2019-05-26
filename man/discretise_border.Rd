@@ -2,12 +2,35 @@
 % Please edit documentation in R/discretise_border.R
 \name{discretise_border}
 \alias{discretise_border}
-\title{This function takes in a border in the form of a polyline
-and converts it into point data
-these points are later used to calculate a heterogenous treatment effect alongside the border (i.e. the cut-off)}
+\title{Discretise the RDD cut-off}
 \usage{
-discretise_border(cutoff = cut_off.sf, n = 10, random = F)
+discretise_border(cutoff = cut_off.sf, n = 10, random = F,
+  range = F, ymax = NA, ymin = NA, xmax = NA, xmin = NA)
+}
+\arguments{
+\item{cutoff}{sf object of the RD cut-off in the form of a line (not preferred, but also boundarypoints are possible)}
+
+\item{n}{the number of borderpoints to be created}
+
+\item{random}{whether they are randomly chosen (not desireable in most cases)}
+
+\item{range}{default = F, if there is a specific range (N-S or E-W) for which the points are to be drawn (useful in order to exclude sparse borderpoints with little/no oberservations around because the non-parametric RD estimation will fail)}
+
+\item{ymax}{if range = T: y coordinates}
+
+\item{ymin}{if range = T: y coordinates}
+
+\item{xmax}{if range = T: x coordinates}
+
+\item{xmin}{if range = T: x coordinates}
+}
+\value{
+an sf object with selected and evenly spaced borderpoints
 }
 \description{
-supported formats for the line:
+Takes in a border in the form of a polyline (or borderpoints) and converts it into point data.
+These points are later used to calculate a heterogenous treatment effect alongside the border (i.e. the cut-off)
+}
+\examples{
+borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
 }

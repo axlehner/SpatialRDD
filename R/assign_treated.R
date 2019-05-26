@@ -1,32 +1,32 @@
 
-#
-# this function takes in the points.sf file with all observations
-# and assigns the treatment dummy based on a shapefile/geopackage/sf polygon file that covers the full area of the treated region
-# it returns the full points.sf data frame with one additional column that is called "treated"
-# it also need the column name of the unique identifier of the points.sf file
-#
 
-#' Title
+
+#' Let the package know which observations were treated
 #'
-#' @param data
-#' @param polygon
-#' @param id
+#' Creates a vector with 0's and 1's to determine on which side of the cut-off each observation is. For this it is useful to have a polygon that fully describes the "treated area".
+#' If you do not have such a polygon there is a (very preliminary and patchy) way implemented in the package via \code{\link{points2line}} and \code{\link{cutoff2polygon}} that let's you go from points to line to "treated polygon" in a very crude way.
 #'
-#' @return
+#' @param data.sf sf object containing point data
+#' @param polygon.sf sf object with polygon geometry that fully describes the area(s) that contain the treated points
+#' @param id string that represents the name of the column in the points object that represents the unique identifier for each observation
+#'
+#' @return A vector of type factor with 0's and 1's. Convert with as.numeric() if you want real numbers/integers.
 #' @export
 #'
 #' @examples
-assign_treated <- function(data.sf = points.sf, polygon.sf = polygon_treated.sf, id = "id_column") {
+#' points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")
+#'
+assign_treated <- function(data.sf = points.sf, polygon.sf = polygon_treated.sf, id = NA) {
 
   # no deparse(substitute(colname)), require the string directly
 
   # PRECHECK IF CRS' ARE MATCHING!
 
-  # also change id to NA by default so we can get an easy error message when not provided (otherwise might lead to confusion bc it works without providing it)
-
+  if (is.na(id)) {cat("Please provide column name for unique id point layer as a string.\n")
+    return()}
 
   # retrieving the id's that were treated (this function effectively subsets the whole df/sf object, we extract only one column of that)
-  over_id <- st_intersection(polygon.sf, data.sf)[[id]]
+  over_id <- sf::st_intersection(polygon.sf, data.sf)[[id]]
   data.sf[["treated"]] <- 0
   # here we have a very clumsy way to access the column we just created, just to keep in mind that would work
   data.sf[[deparse(substitute(treated))]][data.sf[[id]] %in% over_id] <- 1
@@ -35,3 +35,4 @@ assign_treated <- function(data.sf = points.sf, polygon.sf = polygon_treated.sf,
 }
 
 # v 1.0 done
+# v 1 documentation donex

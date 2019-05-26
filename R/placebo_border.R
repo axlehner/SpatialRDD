@@ -8,51 +8,51 @@
 
 # putput should always be a polygon so that we can assign the treated!
 
-placebo_border <- function(border = cut_off.sf, distance = 0, buffer = T) {
+placebo_border <- function(border = cut_off.sf, operation = c("shift", "scale", "rotate"),
+                           shift = c(0, 0), scale = 1, angle = 0) {
 
   cat("Pay attention to CRS! If in 4326 then degrees have to be provided. For precision we would prefer a local CRS!\n")
 
-  if (buffer == T) {
+  # first we take out the geometry and the centroid
+  border_sfc <- st_geometry(border)
+  border_centroid_sfc <- st_centroid(border_sfc)
 
-    placebo_polygon <- st_buffer(border, dist = distance)
-    placebo_polygon
-
-  } else {
+  #----------------------------------------------------------------------
+  if ("shift" %in% operation) {
 
     #if (st_geometry_type(border)[1] == "POINT") { # cases for the different types, but we prbly don't need
 
-      border_sfc <- st_geometry(border)
-      border_shift <- border_sfc + c(distance, distance) # units are in deg or meters here
-      # border <- st_set_geometry(border, border_shift)
-      st_crs(border_shift) <- st_crs(border)
-      border_shift
+    border_sfc <- border_sfc + c(shift[1], shift[2]) # units are in deg or meters here
+
     #} else {
     #  cat("nothing of use provided")
     #}
 
 
   }
+  #----------------------------------------------------------------------
+  if ("scale" %in% operation) {
 
+    border_sfc <- (border_sfc - border_centroid_sfc) * scale + border_centroid_sfc
 
+  }
+  #----------------------------------------------------------------------
+  if ("rotate" %in% operation) {
 
+    # this is a rotation matrix that takes degrees
+    rotation <- function(a) {
+      r <- a * pi / 180 # degrees to radians
+      matrix(c(cos(r), sin(r), -sin(r), cos(r)), nrow = 2, ncol = 2)
+    }
 
+    border_sfc <- (border_sfc - border_centroid_sfc) * rotation(angle) + border_centroid_sfc
 
+  }
 
-  # tm_shape(cut_off.sf) + tm_lines()
-  #
-  # tm_sfc <- st_geometry(cut_off.sf)
-  # tm_centroid_sfc <- st_centroid(tm_sfc)
-  # tm_scale <- (tm_sfc - tm_centroid_sfc) * 0.7 + tm_centroid_sfc
-  # #tm_scale <- tm_scale - c(2000, 0)
-  # tm_scale.sf <- st_set_geometry(cut_off.sf, tm_scale)
-  # tm_shape(cut_off.sf) + tm_lines() + tm_shape(tm_scale.sf) + tm_lines(col = "red")
-  #
-  # border_sfc <- st_geometry(cut_off.sf)
-  # border_shift <- border_sfc + c(0, 2000) # units are in metres
-  # border <- st_set_geometry(cut_off.sf, border_shift)
-  #
-  # tm_shape(cut_off.sf) + tm_lines() + tm_shape(border) + tm_lines(col = "red")
-
+  # then we convert the sfc into an sf?
+  border_new <- st_set_geometry(border, border_sfc)
+  st_crs(border_new) <- st_crs(border)
+  border_new
 }
 
 

@@ -2,28 +2,46 @@
 % Please edit documentation in R/SpatialRD.R
 \name{SpatialRD}
 \alias{SpatialRD}
-\title{This is essentially the main function
-It loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
-using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014) Econometrica}
+\title{Spatial RD / GRD}
 \usage{
 SpatialRD(y = "regressand", data = points.sf,
   cutoff.points = borderpoints.sf, treated = "treated", minobs = 50,
-  bwfix = F, bwfix_m = NA, sample = F, samplesize = 10,
-  cluster = NA)
+  bwfix = F, bwfix_m = NA, sample = F, samplesize = NA,
+  cluster = NA, spatial.object = T)
 }
 \arguments{
-\item{y}{A number.}
+\item{y}{The name of the dependent variable in the points frame in the form of a string}
 
-\item{x}{A number.}
+\item{data}{sf object with points that describe the observations}
+
+\item{cutoff.points}{the borderpoints that have been discretised before}
+
+\item{treated}{column that contains the treated dummy (string)}
+
+\item{minobs}{the minimum amount of observations in each estimation for the point estimate to be included}
+
+\item{bwfix}{T/F if there should be a fixed bandwith applied to each single RD estimation}
+
+\item{bwfix_m}{fixed bandwidth in meters}
+
+\item{sample}{draw a random sample of points T/F}
+
+\item{samplesize}{if random, how many points}
+
+\item{cluster}{level at which standard errors should be clustered}
+
+\item{spatial.object}{return a spatial object?}
 }
 \value{
-The sum of \code{x} and \code{y}.
+a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
 }
 \description{
-It takes in the discretised cut-off point file (the RDcut-off linestring chopped into parts by the SpatialRDD::discretise_border() function)
+This is essentially the main function
+It loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
+using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014) Econometrica.x
+It takes in the discretised cut-off point file (the RDcut-off linestring chopped into parts by the \code{\link{discretise_border}} function)
 and the sf object (which essentially is just a conventional data.frame with a geometry() column) containing all the observations (treated and untreated)
-the treated dummy variable has to be assigned before and be part of the sf object as a column
-distances etc are all computed within the function using sf
+the treated dummy variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
 }
 \details{
 “An object is data with functions. A closure is a function with data.” — John D. Cook

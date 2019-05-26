@@ -15,7 +15,8 @@ Imports:
     ggplot2,
     tmap,
     rdrobust,
-    RATest
+    RATest,
+    cowplot
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
