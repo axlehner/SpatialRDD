@@ -1,12 +1,13 @@
 Package: SpatialRDD
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Spatial Regression Discontinuity Designs
 Version: 0.0.0.9000
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+    person("Alexander", "Lehner", , "alexander.lehner@unibo.it", c("aut", "cre")
+    )
+Description: Carries out the necessary spatial and econometric tasks that are needed
+	for state of the art implementations of Spatial- or Geographic Regression 		Discontinuity Designs.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: 
@@ -16,7 +17,8 @@ Imports:
     tmap,
     rdrobust,
     RATest,
-    cowplot
+    cowplot,
+    magrittr
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
