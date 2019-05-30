@@ -1,6 +1,15 @@
 
 
 
+#' Title
+#'
+#' @param border
+#' @param crs
+#'
+#' @return
+#' @export
+#'
+#' @examples
 points2line <- function(border = borderpoints, crs = projectcrs) {
 
 

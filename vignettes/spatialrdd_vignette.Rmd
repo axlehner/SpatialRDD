@@ -244,7 +244,7 @@ tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("educati
 for plotting just a results table, it would be preferrable to choose just a `data.frame` as output (spatial.object = F). 
 ```{r}
 results <- SpatialRD(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 10, spatial.object = F)
-knitr::kable(results)
+knitr::kable(results) #%>% kable_styling(latex_options = "scale_down") # this last bit is new, never tried, prob not working but there must be a Markdown option
 ```
 
 For the plotting of the *GRDDseries* and a visualisation in space of each point estimate we need to have a spatial object. All this is incorporated in the `plotspatialrd()` function.

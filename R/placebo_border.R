@@ -8,6 +8,18 @@
 
 # putput should always be a polygon so that we can assign the treated!
 
+#' Title
+#'
+#' @param border
+#' @param operation
+#' @param shift
+#' @param scale
+#' @param angle
+#'
+#' @return
+#' @export
+#'
+#' @examples
 placebo_border <- function(border = cut_off.sf, operation = c("shift", "scale", "rotate"),
                            shift = c(0, 0), scale = 1, angle = 0) {
 

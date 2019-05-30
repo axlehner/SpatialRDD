@@ -23,6 +23,7 @@
 #' @param spatial.object return a spatial object?
 #'
 #' @return a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
+#' @export
 #' @examples
 
 

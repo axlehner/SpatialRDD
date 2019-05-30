@@ -21,7 +21,13 @@ border_segment <- function(data = points.sf, cutoff = cut_off.sf, n = 10) {
   if (sf::st_geometry_type(cutoff)[1] == "POINT" | sf::st_geometry_type(cutoff)[1] == "MULTIPOINT") {
     # only random sampling implemented for now in st_sample
     # thus i cook up standard subsetting
-    borderpoints.sf <- cutoff[seq(1, nrow(cutoff), round(nrow(cutoff) / n, 0)), ] # subset according to this rule
+    cutoff$id <- 1:nrow(cutoff) # create a unique id
+    # revision after miscoding as "always start with id = 1"
+    # borderpoints.sf <- cutoff[seq(1, nrow(cutoff), round(nrow(cutoff) / n, 0)), ] # subset according to this rule
+    # NEW APPROACH, comp efficient with RAM efficient solution from https://stackoverflow.com/questions/3318333/split-a-vector-into-chunks-in-r
+    temp <- split(cutoff$id, sort(cutoff$id%%n)) # slice it in n equal parts
+    temp <- as.numeric(lapply(temp,function(x){return(x[round(length(x)/2, 0)])})) # get the middle element of each slice
+    borderpoints.sf <- cutoff[temp, ] # subset with the chosen boundarypoints
     borderpoints.sf$id <- 1:nrow(borderpoints.sf)
     closest <- list()
     for(i in seq_len(nrow(data))){

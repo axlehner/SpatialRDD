@@ -13,6 +13,7 @@
 #' @examples
 plotspatialrd <- function(SpatialRDoutput = results, map = T) {
 
+  # replaced Courier New with Courier for now
   # TODO
 
   # - make pvalue an aes() with more intensity of colour depending on p-value
@@ -25,7 +26,7 @@ plotspatialrd <- function(SpatialRDoutput = results, map = T) {
     ggplot2::scale_color_manual(values = c("palegreen2", "lightcoral")) +
     # Here comes the styling
     ggplot2::theme_bw() + # needs to go before any other individual styling, otherwise it overwrites it
-    ggplot2::theme(text = element_text(family = "Courier New"), plot.title = element_text(hjust = 0.5), legend.position = "none") + # center title, omit legend
+    ggplot2::theme(text = element_text(family = "Courier"), plot.title = element_text(hjust = 0.5), legend.position = "none") + # center title, omit legend
     ggplot2::ggtitle(paste("GRDDseries (conventional)")) +
     ggplot2::labs(y = "Point-Estimate", x = "#Boundarypoint [conv. confidence intervals]")
 
@@ -38,7 +39,7 @@ plotspatialrd <- function(SpatialRDoutput = results, map = T) {
     ggplot2::scale_color_manual(values = c("palegreen2", "lightcoral")) +
     # Here comes the styling
     ggplot2::theme_bw() + # needs to go before any other individual styling, otherwise it overwrites it
-    ggplot2::theme(text = element_text(family = "Courier New"), plot.title = element_text(hjust = 0.5), legend.position = "none") + # center title, omit legend
+    ggplot2::theme(text = element_text(family = "Courier"), plot.title = element_text(hjust = 0.5), legend.position = "none") + # center title, omit legend
     ggplot2::ggtitle(paste("GRDDseries (robust)")) +
     ggplot2::labs(y = "Point-Estimate", x = "#Boundarypoint [rob. confidence intervals]")
 
@@ -51,7 +52,7 @@ plotspatialrd <- function(SpatialRDoutput = results, map = T) {
     #geom_point(data = data, aes(longitude, latitude), size = 0.5) +
     # Here comes the styling
     ggplot2::theme_bw() + # needs to go before any other individual styling, otherwise it overwrites it
-    ggplot2::theme(text = element_text(family = "Courier New"), plot.title = element_text(hjust = 0.5), legend.position = "none", axis.title.y = element_blank()) +
+    ggplot2::theme(text = element_text(family = "Courier"), plot.title = element_text(hjust = 0.5), legend.position = "none", axis.title.y = element_blank()) +
     ggplot2::ggtitle("conv. inference")
   #coord_map(xlim = c(73.7, 74.2), ylim = c(15, 15.8))
 
