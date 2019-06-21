@@ -21,6 +21,7 @@
 #' @param samplesize if random, how many points
 #' @param cluster level at which standard errors should be clustered
 #' @param spatial.object return a spatial object?
+#' @param RATestvec vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired
 #'
 #' @return a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
 #' @export
@@ -31,14 +32,21 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
                        data = points.sf, cutoff.points = borderpoints.sf, treated = "treated", # data in, plus specify the name of the column where the dummy is AS STRING
                        minobs = 50, bwfix = F, bwfix_m = NA, # here we define parameters, minobs that have to be selected, bwfix in metres
                        sample = F, samplesize = NA,
+                       sparse.exclusion = F,
                        cluster = NA, # string required
-                       spatial.object = T # if this is 1, function will return an sf object
+                       spatial.object = T, # if this is 1, function will return an sf object
+                       RATestvec = NA
                        ) {
 
   # TODO
   # - fix the issue at the dist2cutoff st_crs dimension error with st_distance when different types of borderpoints come into play
   # - this plays also in the np determination (length vs nrow in the KTcase)
   # - solution to exclude sparse borderpoints before rdrobust(), check within buffer of c. 10km, if too little, jump the loop iteration
+  # --- LIKE KT16 propose!
+  # - make minobs non-mandatory, set a default
+  # - incorporate the swagger (separate function or righthere?)
+  # - color for pvalue intensity?
+  # - option to kick pvalue from results table
 
   # no deparse(substitute(colname)), require the string directly
 
@@ -46,6 +54,8 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
 
   n <- nrow(data)
   cat("We have", n, "observations of which", sum(as.numeric(as.character(data[[treated]]))), "are treated observations.\n")
+
+
 
   if (!is.na(bwfix_m)) {bwfix <- T}
 
@@ -62,6 +72,20 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
     np <- length(cutoff.points) #replaced the nrow with length. why? need nrow. NO only for points., hae?
     cat("We are iterating over", np, "Boundarypoints.\n")
   }
+
+
+  #######################################
+  if (sparse.exclusion == T) {
+    # Triangular or Edge kernel function
+    Kt = function(u) {
+      (1-abs(u)) * (abs(u) <= 1)
+    }
+
+
+
+  }
+  ########################################
+  # after this we also define the number of points newly
 
   cat("The dependent variable is", y,".\n")
   # create storage for final results
@@ -127,8 +151,13 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
     # RD testing
     #invisible(capture.output(mccrary <- dc_test(data[["dist2cutoff"]]), plot = F))
     # switch to another mccrary, probably from the rdd itself, or the RDDtools?
-    invisible(capture.output(permtest <- RATest::RDperm(W = c(y), z = "dist2cutoff", data = as.data.frame(data))))
+    # is based on the DCdensity from rdd
+    mccrary <- rdd::DCdensity(data[["dist2cutoff"]], 0, plot = F)
+    # mccrary <- rddapp::dc_test(data[["dist2cutoff"]], verbose = F, plot = F, ext.out = F), same results, bad output, the rdd:: is the original one in any case
 
+    if (!is.na(RATestvec)) {
+      invisible(capture.output(permtest <- RATest::RDperm(W = RATestvec, z = "dist2cutoff", data = as.data.frame(data))))
+    }
     # store results
     #========================
     results[i, "Point"] <- i
@@ -147,9 +176,16 @@ SpatialRD <- function(y = "regressand", # should we make that a formula, in case
     results[i, "CI_Rob_l"] <- round(rdrob_bwflex$ci["Robust", 1], 2)
     results[i, "CI_Rob_u"] <- round(rdrob_bwflex$ci["Robust", 2], 2)
 
-    #results[i, "McCrary"] <- round(mccrary, 3)
-    results[i, "RATest"] <- round(permtest$results[2], 3)
+    results[i, "McCrary"] <- round(mccrary, 2)
+    if (!is.na(RATestvec)) {results[i, "RATest"] <- round(permtest$results[2], 2)}
   }
+  # subset away what we don't want (can put if condition as function argument lateron)
+  # results <- results %>% select(-c(pvalC, pvalR)) # no p-values, but for now we have to keep them otherwise cannot make the plots
+
+  results[["Ntr"]] <- as.integer(results[["Ntr"]]) # make them integers so the results table doesn't get printed with .0
+  results[["Nco"]] <- as.integer(results[["Nco"]])
+
+
   # set the geometry of the borderpoints before subsetting according to the minobs criterion
   if (spatial.object == T) {results <- sf::st_set_geometry(results, sf::st_geometry(cutoff.points))}
   # this selects ultimately only the boundarypoint estimates that have a large enough sample size on both sides in order to ensure proper inference

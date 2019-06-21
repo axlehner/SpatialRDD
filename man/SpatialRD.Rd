@@ -7,7 +7,8 @@
 SpatialRD(y = "regressand", data = points.sf,
   cutoff.points = borderpoints.sf, treated = "treated", minobs = 50,
   bwfix = F, bwfix_m = NA, sample = F, samplesize = NA,
-  cluster = NA, spatial.object = T)
+  sparse.exclusion = F, cluster = NA, spatial.object = T,
+  RATestvec = NA)
 }
 \arguments{
 \item{y}{The name of the dependent variable in the points frame in the form of a string}
@@ -31,6 +32,8 @@ SpatialRD(y = "regressand", data = points.sf,
 \item{cluster}{level at which standard errors should be clustered}
 
 \item{spatial.object}{return a spatial object?}
+
+\item{RATestvec}{vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired}
 }
 \value{
 a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)

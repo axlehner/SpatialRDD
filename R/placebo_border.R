@@ -23,11 +23,14 @@
 placebo_border <- function(border = cut_off.sf, operation = c("shift", "scale", "rotate"),
                            shift = c(0, 0), scale = 1, angle = 0) {
 
+  # TODO
+  # - make the function more generic and let user decide on which fraction of the side she wants the line to end
+
   cat("Pay attention to CRS! If in 4326 then degrees have to be provided. For precision we would prefer a local CRS!\n")
 
   # first we take out the geometry and the centroid
-  border_sfc <- st_geometry(border)
-  border_centroid_sfc <- st_centroid(border_sfc)
+  border_sfc <- sf::st_geometry(border)
+  border_centroid_sfc <- sf::st_centroid(border_sfc)
 
   #----------------------------------------------------------------------
   if ("shift" %in% operation) {
@@ -61,10 +64,11 @@ placebo_border <- function(border = cut_off.sf, operation = c("shift", "scale", 
 
   }
 
-  # then we convert the sfc into an sf?
-  border_new <- st_set_geometry(border, border_sfc)
-  st_crs(border_new) <- st_crs(border)
-  border_new
+  # then we convert the sfc into an sf? JUNE19: seems we don't need, causes bug with KT15 border, therefore removed
+  #border_new <- sf::st_set_geometry(border, border_sfc)
+  #sf::st_crs(border_new) <- sf::st_crs(border)
+  sf::st_crs(border_sfc) <- sf::st_crs(border)
+  border_sfc
 }
 
 

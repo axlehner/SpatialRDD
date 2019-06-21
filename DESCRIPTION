@@ -16,7 +16,8 @@ Imports:
     rdrobust,
     RATest,
     cowplot,
-    magrittr
+    magrittr,
+    rdd
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
