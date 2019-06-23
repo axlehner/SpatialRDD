@@ -37,6 +37,8 @@ discretise_border <- function(cutoff = cut_off.sf, n = 10, random = F, range = F
     # using combine in this version, might be risky because of errors
     #cutoff <- sf::st_combine(cutoff)
 
+
+
     if (random == F) {
       cutoff <- cutoff %>% sf::st_cast("LINESTRING")
       #cutoff <- sf::st_combine(cutoff) # again?

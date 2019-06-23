@@ -35,6 +35,7 @@ The workhorse functions of `SpatialRDD` in a nutshell are:
 * `discretise_border()`
 * `SpatialRD()`
 * `plotspatialrd()`
+* `printspatialrd()`
 * `placebo_border()`
 * `cutoff2polygons()`
 

@@ -5,7 +5,8 @@
 \title{Create treated polygon from (placebo) line}
 \usage{
 cutoff2polygons(data = bbox, cutoff = lines.sf, orientation = NA,
-  endpoints = c(0, 0), upside = T, crs = crs)
+  endpoints = c(0, 0), corners = NA, difference = F, upside = T,
+  crs = crs)
 }
 \arguments{
 \item{data}{study dataset to determine the bounding box (so that all observations are covered by the new polygons) in sf format}
@@ -16,10 +17,12 @@ cutoff2polygons(data = bbox, cutoff = lines.sf, orientation = NA,
 
 \item{endpoints}{at what position on the edge should each polygon end (between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)}
 
-\item{upside}{upper- or lowerside? run one with T and once with F to cover the full studyarea (e.g. treated and untreated)}
+\item{corners}{clockwise 1-4 (numbers refer to quadrant corners i.e. 1 is top right). 2 corners max. If you need 3 go the other way round with 1 and take the spatial difference with the bounding box afterwards.}
+
+\item{upside}{deprecated, this is replaced by doing an intersect with the bounding box to get the difference}
 
 \item{crs}{epsg number if project crs}
 }
 \description{
-Creates a very crude approximation of a "treated/untreated polygon" that makes it easier to assign the status again to each observation after the border has been shifted
+Creates an approximation of a "treated/untreated polygon" to assign the status again to each observation after the border has been shifted
 }
