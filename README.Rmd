@@ -1,7 +1,20 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') -->
 
+```{r readme-setup, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "figures/"
+)
+is_online = curl::has_internet()
+```
+
 # Spatial<span style="color:blue">R</span>DD
+
 
 # Introduction
 
@@ -9,13 +22,19 @@ This repository hosts the code underlying the R package SpatialRDD
 
 > Lehner (2019)
 
+
 ## Contributing
+
 
 ## Installation
 
-``` r
+
+```{r, eval = FALSE, message = FALSE}
 install.packages("devtools")
 devtools::install_github("axlehner/SpatialRDD")
 ```
 
+
+
 ## References
+
