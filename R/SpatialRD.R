@@ -1,12 +1,13 @@
 #' Spatial RD / GRD
 #'
-#' This is essentially the main function
-#' It loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
+#'
+#' This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
 #' using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014) Econometrica.x
 #' It takes in the discretised cut-off point file (the RDcut-off linestring chopped into parts by the \code{\link{discretise_border}} function)
 #' and the sf object (which essentially is just a conventional data.frame with a geometry() column) containing all the observations (treated and untreated)
 #' the treated dummy variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
 #'
+#' To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{plotspatialrd}}.
 #'
 #' “An object is data with functions. A closure is a function with data.” — John D. Cook
 #'
@@ -25,7 +26,7 @@
 #'
 #' @return a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
 #' @export
-#' @examples
+#' @examples results <- SpatialRD(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 10, spatial.object = F)
 
 
 SpatialRD <- function(y = "regressand", # should we make that a formula, in case we want to allow for the covariate stuff as well?

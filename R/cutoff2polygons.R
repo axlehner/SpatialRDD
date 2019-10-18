@@ -133,11 +133,11 @@ cutoff2polygons <- function(data = bbox, cutoff = lines.sf,
 
   # REMOVE NA'S RESULTING FROM NO CORNER CASES (even if no corner we take NA's in because cleaning them out here is easier than excluding them in the first place with)
 
-  no_NAs <- as.data.frame(list(as.matrix(rbind(poly_1, poly_2)))) %>% filter(!is.na(X))
+  no_NAs <- as.data.frame(list(as.matrix(rbind(poly_1, poly_2)))) %>% dplyr::filter(!is.na(X))
 
   # TIE EVERYTHING UP AND MAKE IT AN SF OBJECT
   poly_full <- sf::st_sf("location" = paste(orientation[1], "-", orientation[2]),
-                        sf::st_sfc(st_polygon(list(as.matrix(no_NAs))),
+                        sf::st_sfc(sf::st_polygon(list(as.matrix(no_NAs))),
                         crs = crs))
 
 

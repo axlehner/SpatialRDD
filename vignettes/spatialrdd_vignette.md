@@ -1,7 +1,7 @@
 ---
 title: "SpatialRDD: get started"
 author: "Alexander Lehner"
-date: "2019-06-19"
+date: "2019-06-24"
 output: 
   rmarkdown::html_vignette:
     keep_md: true 
@@ -12,6 +12,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
 
 
 
@@ -27,6 +28,7 @@ The workhorse functions of `SpatialRDD` in a nutshell are:
 * `discretise_border()`
 * `SpatialRD()`
 * `plotspatialrd()`
+* `printspatialrd()`
 * `placebo_border()`
 * `cutoff2polygons()`
 
@@ -45,6 +47,7 @@ Throughout the vignette we will use the geographic boundaries on Goa, India, fro
 
 ```r
 library(SpatialRDD)
+library(dplyr) # more intuitive data wrangling
 library(sf)
 data(Goa_GIS)
 ```
@@ -66,8 +69,14 @@ If you import geospatial data in a different format, say the common shapefile (`
 
 
 ```r
+mydata.sf <- st_read("path/to/file.shp")
+```
+
+In case your data is saved as a .csv (or in stata file format - check the `foreign` and `readstata13` package) you just have to tell `sf` in which columns the X- and Y-coordinates are saved and it will convert it into a spatial object:
+
+```r
 mydata.sf <- st_as_sf(loaded_file, coords = c("longitude", "latitude"), crs = projcrs) 
-# just the EPSG or a proj4string
+# just the EPSG or a proj4string of the desired CRS
 ```
 
 
@@ -80,7 +89,7 @@ tm_shape(polygon_full.sf) + tm_polygons() +
   tm_shape(cut_off.sf) + tm_lines(col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 Above we see the simple map, visualising the "treated polygon" in a darker grey, and the `tmap` syntax that produced it.
 
@@ -95,7 +104,7 @@ points_samp.sf$id <- 1:nrow(points_samp.sf) # add a unique ID to each observatio
 tm_shape(points_samp.sf) + tm_dots() + tm_shape(cut_off.sf) + tm_lines(col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ## Assign Treatment
 
@@ -107,7 +116,7 @@ points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated.sf, id 
 tm_shape(points_samp.sf) + tm_dots("treated", palette = "Set1") + tm_shape(cut_off.sf) + tm_lines(col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 As a next step we add an outcome of interest that we are going to use as dependent variable in our Spatial Regression Discontinuity Design. Let's call this variable `education`, measuring the literacy rate that ranges from 0 to 1 (0%, meaning everyone illiterate to 100%, meaning everyone in the population can read and write). We assume that the units, call them villages, in the "treated" polygon have on average a higher literacy rate because they received some sort of "treatment". Let's just assume aliens dropped (better) schools in all of these villages, but NOT in any of the outside villages, and everything else is constant and identical across the two territories. 
 
@@ -130,7 +139,7 @@ library(ggplot2)
 ggplot(points_samp.sf, aes(x = education)) + geom_histogram(binwidth = .01) + facet_grid(treated ~ .)
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 From the above histograms we can see that we were successful in creating different group means. This is also confirmed by the simple univariate regression of $Y_i = \alpha + \beta T_i + \varepsilon_i$:
 
@@ -173,7 +182,7 @@ tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("educati
   tm_shape(cut_off.sf) + tm_lines()
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 And to run the univariate regression from above also just within a bandwith (this specification is already starting to resemble the RDD idea of Dell 2010). As we know the exact data generating process (no "spatial gradiant" but a rather uniform assignment), it is obvious to us that this of course leaves the point estimate essentially unchanged:
 
@@ -202,7 +211,7 @@ summary(lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff
 ```
 
 
-# Nonparametric estimation
+# Carrying out Spatial RDD estimation
 
 Now we go step by step through all potential (parametric and non-parametric) ways in which one could obtain point estimates for Spatial RDD's (see e.g. Lehner2019 for details).
 
@@ -218,7 +227,7 @@ points_samp.sf$distrunning[points_samp.sf$treated == 1] <- -1 * points_samp.sf$d
 ggplot(data = points_samp.sf, aes(x = distrunning, y = education)) + geom_point() + geom_vline(xintercept = 0, col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 The point estimate of the "classic" non-parametric local linear regression, carried out with the `rdrobust` package, then looks like this:
 
@@ -255,7 +264,7 @@ rdplot(points_samp.sf$education, points_samp.sf$distrunning, c = 0, ci = 95,
        kernel = "triangular", y.label = "education", x.label = "distance to border")
 ```
 
-<img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-15-1.png" width="\textwidth" />
+<img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-16-1.png" width="\textwidth" />
 
 For RDD estimation in **R** in general there are currently three packages flying around: `RDD`, `rddtools`, and `rddapp` (building on the `RDD`); whereby the latter seems to be the most up-to-date and comprehensive one (as it draws on previous work that others did).  
 `rddapp` estimates various specifications (does not do robust inference though)
@@ -300,7 +309,7 @@ And it gives several possibilities of visualising classic RDDs. Here we arbitrar
 plot(rd_est(education ~ distrunning, data = points_samp.sf, t.design = "g"), fit_line = c("quadratic", "optimal"), bin_n = 50)
 ```
 
-<img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-17-1.png" width="\textwidth" />
+<img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-18-1.png" width="\textwidth" />
 
 ## Parametric Specifications
 
@@ -317,7 +326,7 @@ tm_shape(points_samp.sf) + tm_dots("segment10", size = 0.1) + tm_shape(cut_off.s
 tm_shape(points_samp.sf) + tm_dots("segment15", size = 0.1) + tm_shape(cut_off.sf) + tm_lines()
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-18-1.png)![](spatialrdd_vignette_files/figure-html/unnamed-chunk-18-2.png)
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-19-1.png)![](spatialrdd_vignette_files/figure-html/unnamed-chunk-19-2.png)
 
 It is worth noting that the researcher has to pay attention to how the fixed effects are assigned. It could, e.g. due to odd bendings of the cut-off, be the case that for some segment only one side actually gets assigned points or the like. These situations are undesireable for estimation and a visualisation of how the segments are distributed across space is paramount.   
 The `border_segment()` already gives the researcher a feeling for how meaningful the choice for the number of segments was. In the above example we have a segment for every 13 kilometres, which seems not too unreasonable.   
@@ -330,7 +339,7 @@ points_samp.sf$segment5 <- border_segment(points_samp.sf, cut_off.sf, 5)
 tm_shape(points_samp.sf) + tm_dots("segment5", size = 0.1) + tm_shape(cut_off.sf) + tm_lines()
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 Simple OLS estimates, using the segments that we just obtained as categories for our fixed effects, show these differences (which in our simulated case of course are negligible):
 
@@ -402,7 +411,7 @@ tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("educati
 #> Legend labels were too wide. The labels have been resized to 0.66, 0.66, 0.66, 0.66, 0.66. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
 for plotting just a results table, it would be preferrable to choose just a `data.frame` as output (spatial.object = F). 
 
@@ -478,7 +487,7 @@ results <- SpatialRD(y = "education", data = points_samp.sf, cutoff.points = bor
 plotspatialrd(results, map = T)
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 just the *GRDDseries*
 
@@ -487,7 +496,7 @@ just the *GRDDseries*
 plotspatialrd(results, map = F)
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 
 # Robustness
@@ -507,22 +516,24 @@ placeboborderpoints.1 <- discretise_border(cutoff = placebocut_off.1, n = 50)
 tm_shape(points_samp.sf) + tm_dots("treated", palette = "Set1")  + tm_shape(placeboborderpoints.1) + tm_symbols(shape = 4, size = .3) + tm_shape(placebocut_off.1) + tm_lines()
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
 
 After the border shift we now have to re-assign the new "treated" status in order to carry out regressions. For that matter we create new polygons from scratch with the `cutoff2polygons()` function.
 
 
 
 ```r
-polySideUp <- cutoff2polygons(data = points_samp.sf, cutoff = placebocut_off.1, orientation = "West-West", 
-                              crs = 32643, upside = T)
-polySideDown <- cutoff2polygons(data = points_samp.sf, cutoff = placebocut_off.1, orientation = "West-West",
-                                crs = 32643, upside = F)
+polySideDown <- cutoff2polygons(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2),
+                              crs = 32643)
+#> 
+#>  No corners selected, both extensions will end in the same side.
+#polySideDown <- cutoff2polygons(data = points_samp.sf, cutoff = placebocut_off.1, orientation = "West-West",
+                                #crs = 32643)
 
-tm_shape(polySideUp) + tm_polygons(alpha = .3) + tm_shape(polySideDown) + tm_polygons(alpha = .3)
+tm_shape(polySideDown) + tm_polygons(alpha = .3) #+ tm_shape(polySideDown) + tm_polygons(alpha = .3)
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 Finally we have to use the `assign_treated()` function from the beginning of the vignette again:
 
@@ -534,7 +545,7 @@ sum(points_samp.sf$treated == 0 & points_samp.sf$treated1 == 1) # number of vill
 tm_shape(points_samp.sf) + tm_dots("treated1", palette = "Set1")  + tm_shape(placeboborderpoints.1) + tm_symbols(shape = 4, size = .3) + tm_shape(placebocut_off.1) + tm_lines()
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
 
 After plotting the points again, we can visually infer that the right villages got assign the "treated" dummy. Further we can compute the number of villages that change their status. This helps us to decide whether the bordershift was big enough (if e.g. only a handful of observations switched, then we would expect this to have little to no impact on our point estimates and thus would dub such a robustness exercise as not very meaningful).   
 In this case 60 villages changed. Given the initial number of treated observations, this seems a change of a big enough magnitude and thus a meaningful robustness exercise.   
@@ -552,7 +563,7 @@ results1 <- SpatialRD(y = "education", data = points_samp.sf, cutoff.points = pl
 plotspatialrd(results1, map = T)
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 ### Robustness Polynomial Specification
 
@@ -640,7 +651,7 @@ tm_shape(polygon_full.sf) + tm_polygons() + tm_shape(cut_off.sf) + tm_lines() +
   tm_shape(tm_rotate.sf45) + tm_lines(col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
 
 
 ### Scale
@@ -661,7 +672,7 @@ tm_shape(polygon_full.sf) + tm_polygons() + tm_shape(cut_off.sf) + tm_lines() +
   tm_shape(tm_scale.sf1.5) + tm_lines(col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
 
 
 ### Shift
@@ -692,7 +703,7 @@ tm_shape(polygon_full.sf) + tm_polygons() + tm_shape(cut_off.sf) + tm_lines() +
   tm_shape(tm_shift.sf_4) + tm_lines(col = "blue")  
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-32-1.png)![](spatialrdd_vignette_files/figure-html/unnamed-chunk-32-2.png)
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-33-1.png)![](spatialrdd_vignette_files/figure-html/unnamed-chunk-33-2.png)
 
 From the last shifted line we can already see that a movement along the x-axis quite often requires also a correction on the y-axis for the cut-off movement to be meaningful. This is going to be explored in detail in the following section together with all the other operations.
 
@@ -716,7 +727,7 @@ tm_shape(polygon_full.sf) + tm_polygons() + tm_shape(cut_off.sf) + tm_lines() +
   tm_shape(tm_placebo.sf3) + tm_lines(col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
 
 ```r
 
@@ -727,18 +738,24 @@ tm_shift.sf <- placebo_border(border = cut_off.sf, operation = c("shift", "rotat
 tm_shape(cut_off.sf) + tm_lines() + tm_shape(tm_shift.sf) + tm_lines(col = "red")
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-33-2.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-34-2.png)<!-- -->
 
 And the according polygons to assign the treated dummies:
 
 
 ```r
-polygon1 <- cutoff2polygons(data = points_samp.sf, cutoff = tm_placebo.sf1, orientation = "West-West",
-                                crs = 32643, upside = F)
-polygon2 <- cutoff2polygons(data = points_samp.sf, cutoff = tm_placebo.sf2, orientation = "West-West",
-                                crs = 32643, upside = F)
-polygon3 <- cutoff2polygons(data = points_samp.sf, cutoff = tm_placebo.sf3, orientation = "West-West",
-                                crs = 32643, upside = F)
+polygon1 <- cutoff2polygons(data = points_samp.sf, cutoff = tm_placebo.sf1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2),
+                                crs = 32643)
+#> 
+#>  No corners selected, both extensions will end in the same side.
+polygon2 <- cutoff2polygons(data = points_samp.sf, cutoff = tm_placebo.sf2, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2),
+                                crs = 32643)
+#> 
+#>  No corners selected, both extensions will end in the same side.
+polygon3 <- cutoff2polygons(data = points_samp.sf, cutoff = tm_placebo.sf3, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2),
+                                crs = 32643)
+#> 
+#>  No corners selected, both extensions will end in the same side.
 
 tm_shape(polygon_full.sf) + tm_polygons() + 
   tm_shape(polygon_treated.sf) + tm_polygons(col = "grey") + 
@@ -748,7 +765,7 @@ tm_shape(polygon_full.sf) + tm_polygons() +
   tm_shape(polygon3) + tm_polygons(alpha = .3) 
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-35-1.png)<!-- -->
 
 # Spatial Predictions
 
@@ -766,7 +783,7 @@ plot(rasterize(points_samp.sf, raster_template, field = "education", fun = mean)
 lines(as(cut_off.sf, "Spatial")) # converting the cut-off to sp format for plotting with base-R
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-35-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-36-1.png)<!-- -->
 
 To also obtain values for neighbouring cells that do not contain any observations, we **manually** choose a simple weighting function, based on 3 cells around and a weight of 0.9:
 
@@ -777,7 +794,7 @@ plot(focal(raster_mean, matrix(.9, nc = 3, nr = 3), fun = mean, NAonly = T, na.r
 lines(as(cut_off.sf, "Spatial")) # converting the cut-off to sp format for plotting with base-R
 ```
 
-![](spatialrdd_vignette_files/figure-html/unnamed-chunk-36-1.png)<!-- -->
+![](spatialrdd_vignette_files/figure-html/unnamed-chunk-37-1.png)<!-- -->
 
 Here we just made use of very basic and standard spatial interpolation techniques that can be easily carried out with `raster`, a spatial workhorse package in **R**. One could think of many more sophisticated ways such as kriging.
 

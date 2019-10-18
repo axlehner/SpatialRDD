@@ -43,7 +43,8 @@ discretise_border <- function(cutoff = cut_off.sf, n = 10, random = F, range = F
       cutoff <- cutoff %>% sf::st_cast("LINESTRING")
       #cutoff <- sf::st_combine(cutoff) # again?
       # this is the dirty hack when someone puts in 4326
-      if (sf::st_crs(cutoff)[1] == 4326) {
+      if (sf::st_crs(cutoff)[1] == 4326 | is.na(st_crs(cutoff)[1])) {
+        # second condition is needed because some CRS don't have an EPSG code
         cutoff <- sf::st_transform(cutoff, 3857) # transform it
         cutoff <- sf::st_combine(cutoff) # again?
         cutoff <- cutoff %>% sf::st_cast("LINESTRING") # cast again

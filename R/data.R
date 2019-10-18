@@ -1,49 +1,31 @@
 #' Dataset with boundaries and polygons for the SpatialRDD vignette.
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#' diamonds.
+#' sf multilinestring representing a spatial RD cut-off
 #'
+#' @usage data(cut_off.sf)
+#' @format A spatial data.frame of class sf
 #' @docType data
-#' @format A data frame with 3 sf objects:
-#' \describe{
-#'   \item{test}{text}
-#'   \item{test}{text}
-#'   ...
-#' }
-#' @docType data
-#' @source Lehner2019
+#' @source Lehner, A. (2019) 450 Years of Portuguese Colonialism in India: Missionaries, Education, and the Roots of Gender Inequality 
 "cut_off.sf"
 
 
 #' Dataset with boundaries and polygons for the SpatialRDD vignette.
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#' diamonds.
+#' sf multipolygon 
 #'
+#' @usage data(polygon_full.sf)
+#' @format A spatial data.frame of class sf
 #' @docType data
-#' @format A data frame with 3 sf objects:
-#' \describe{
-#'   \item{test}{text}
-#'   \item{test}{text}
-#'   ...
-#' }
-#' @docType data
-#' @source Lehner2019
+#' @source Lehner, A. (2019) 450 Years of Portuguese Colonialism in India: Missionaries, Education, and the Roots of Gender Inequality 
 "polygon_full.sf"
 
 
 #' Dataset with boundaries and polygons for the SpatialRDD vignette.
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#' diamonds.
+#' sf multipolygon
 #'
+#' @usage data(polygon_treated.sf)
+#' @format A spatial data.frame of class sf
 #' @docType data
-#' @format A data frame with 3 sf objects:
-#' \describe{
-#'   \item{test}{text}
-#'   \item{test}{text}
-#'   ...
-#' }
-#' @docType data
-#' @source Lehner2019
+#' @source Lehner, A. (2019) 450 Years of Portuguese Colonialism in India: Missionaries, Education, and the Roots of Gender Inequality 
 "polygon_treated.sf"

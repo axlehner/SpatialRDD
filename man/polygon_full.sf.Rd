@@ -4,20 +4,14 @@
 \name{polygon_full.sf}
 \alias{polygon_full.sf}
 \title{Dataset with boundaries and polygons for the SpatialRDD vignette.}
-\format{A data frame with 3 sf objects:
-\describe{
-  \item{test}{text}
-  \item{test}{text}
-  ...
-}}
+\format{A spatial data.frame of class sf}
 \source{
-Lehner2019
+Lehner, A. (2019) 450 Years of Portuguese Colonialism in India: Missionaries, Education, and the Roots of Gender Inequality
 }
 \usage{
-polygon_full.sf
+data(polygon_full.sf)
 }
 \description{
-A dataset containing the prices and other attributes of almost 54,000
-diamonds.
+sf multipolygon
 }
 \keyword{datasets}
