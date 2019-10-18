@@ -29,7 +29,7 @@ cutoff2polygons <- function(data = bbox, cutoff = lines.sf,
     return()
     }
 
-  if (is.na(corners)) {cat("\n No corners selected, both extensions will end in the same side.\n")
+  if (is.na(corners) | corners[1] == 0) {cat("\n No corners selected, both extensions will end in the same side.\n")
     corners <- c(0)
     poly_c_start <- c(NA, NA)
     }
