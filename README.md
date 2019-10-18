@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') -->
 
-# Spatial<span style="color:blue">R</span>DD
+# Spatial[R]()DD
 
 # Introduction
 

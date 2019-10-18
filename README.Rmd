@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 is_online = curl::has_internet()
 ```
 
-# Spatial<span style="color:blue">R</span>DD
+# Spatial[R]()DD
 
 
 # Introduction
