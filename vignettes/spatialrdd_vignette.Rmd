@@ -26,6 +26,7 @@ knitr::opts_chunk$set(
 options("scipen" = 100, "digits" = 2)
 # WRITE ON STATA AND THAT ITS EASY TO DO THAT IN R ALSO FOR STATA USERS
 # IN ADDITION I HAVE THE MOVEMENT OF BORDER THING, first one, very useful for other identification designs or placebo checks
+# write this vignette with ctrl shift D, that builds all the vignettes
 ```
 
 

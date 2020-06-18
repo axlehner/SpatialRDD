@@ -21,13 +21,14 @@ vignette: >
 
 
 Within the last years spatial versions of Regression Discontinuity Designs (RDDs) have increased tremendously in popularity in the social sciences. Executing spatial RDDs, especially the many required robustness- and sensitivity checks, in practice is quite cumbersome though. It requires knowledge of both statistical programming and how to handle and work with geographic objects (points, lines, polygons). Practitioners typically carry out these GIS tasks in a GUI like ArcGIS or QGIS and then manually export these data into the statistical environment of their choice and then carry out the analysis in an "aspatial way". This is sub-optimal for several reasons:
+
 * it is very time consuming and cumbersome
 * it is prone to errors
 * it is not reproducible (which is especially annoying for oneself when it comes to e.g. revisions)
 * it is not very flexible and makes it harder to understand our own data
 
-`SpatialRDD` is the first (geo-)statistical package of its kind that unifies the geographic tasks that are needed for spatial RDDs with all potential parametric and non-parametric estimation techniques that have been put forward (see Lehner2019). It makes it very easy to understand the critical assumptions (in terms of bandwith, sparse border points)
-Furthermore, the flexibility of the `shift_border` function makes it attractive for all sorts of identification strategies that rely on shifting placebo borders.
+`SpatialRDD` is the first (geo-)statistical package of its kind that unifies the geographic tasks that are needed for spatial RDDs with all potential parametric and non-parametric estimation techniques that have been put forward [see Lehner(forthcoming)]. It makes it very easy to understand the critical assumptions (in terms of bandwith, sparse border points).
+Furthermore, the flexibility of the `shift_border` function makes it attractive for all sorts of identification strategies outside of the RD literature that rely on shifting placebo borders.
 
 Geographic objects are treated as [simple features](https://en.wikipedia.org/wiki/Simple_Features) throughout, making heavy use of the novel `sf` package by Edzer Pebesma which revolutionised spatial data analysis in **R** and is bound to supersede the older and less versatile `sp` package.  
 `SpatialRDD` facilitates analysis inter alia because it contains all necessary functions to automatise otherwise very tedious tasks that are tipically carried out in GUIs such as QGIS or ArcGIS. Due to the fact that these GIS interfaces are not able to carry out appropriate statistical analysis, the researcher is tipically forced to migrate the obtained results to statistical software. This makes reproducibility difficult and most importantly is a very inefficient workflow.  
@@ -58,7 +59,7 @@ Throughout the vignette we will use the geographic boundaries on Goa, India, fro
 2. a polygon that defines the "treated" area
 3. a polygon that defines the full study area (which is going to be useful as this defines the bounding box)
 
-For your own RD design you need 1. in the form of either a line (as a single feature) or a finely spaced set of points on your border. Furthermore you need the polygon that specifies the treated area, and, of course, the dataset that contains your units of observation.
+For your own RD design you need 1. in the form of either a line (as a single feature, i.e. all potential segments merged together) or a finely spaced set of points on your border. Furthermore you need the polygon that specifies the treatment area, and, of course, the dataset that contains your units of observation, including the x- and y-coordinate for each unit of observation. This way it is easy to convert the data to an sf data.frame.
 
 
 ```r
