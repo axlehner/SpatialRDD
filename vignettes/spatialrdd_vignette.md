@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette:
     keep_md: true 
     toc: true
-    #toc_float: true
+    ##toc_float: true
     #number_sections: true
     df_print: paged #does the html table thing
     #theme: simplex
