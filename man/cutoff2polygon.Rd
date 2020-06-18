@@ -30,7 +30,7 @@ a polygon as an sf object
 Creates an approximation of a "treated/untreated polygon" to assign the status again to each observation after the border has been shifted.
 The function extends both ends of the provided cutoff to the edge of the (imaginary) bounding box of the provided data (this ensures all observations will be included).
 When these sides differ, at this early stage of the package, it needs to know how many corners are inbetween the sides.
-E.g. for \code{c("west", "north)} it would be \code{2} and for \code{c("west", "east")} it would be \code{2}.
+E.g. for \code{c("west", "north")} it would be \code{2} and for \code{c("west", "east")} it would be \code{2}.
 }
 \examples{
 \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))}
