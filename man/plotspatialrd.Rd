@@ -18,5 +18,5 @@ plots produced with ggplot2
 Produces plot of GRDDseries and optionally of a map that visualises every point estimate in space.
 }
 \examples{
-plotspatialrd(results.spatialrd)
+\dontrun{plotspatialrd(results.spatialrd)}
 }

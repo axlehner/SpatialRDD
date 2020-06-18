@@ -5,7 +5,7 @@
 \title{Shift, shrink/grow, and rotate borders around}
 \usage{
 shift_border(
-  border = cut_off.sf,
+  border,
   operation = c("shift", "scale", "rotate"),
   shift = c(0, 0),
   scale = 1,
@@ -32,7 +32,7 @@ This usually takes a bit of trial and error, so make sure to plot the result eac
 For a detailed walk through check out the according vignette: \code{vignette(shifting_borders)}.
 }
 \examples{
-placebo_border(border = cut_off.sf, operation = c("shift", "scale"), shift = c(-5000, -3000), scale = .85)
-placebo_border(border = cut_off.sf, operation = "rotate", angle = 10)
+\dontrun{placebo_border(border = cut_off.sf, operation = c("shift", "scale"), shift = c(-5000, -3000), scale = .85)}
+\dontrun{placebo_border(border = cut_off.sf, operation = "rotate", angle = 10)}
 
 }

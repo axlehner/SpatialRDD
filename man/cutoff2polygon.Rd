@@ -9,9 +9,7 @@ cutoff2polygon(
   cutoff,
   orientation = NA,
   endpoints = c(0, 0),
-  corners = NA,
-  difference = F,
-  upside = T
+  corners = NA
 )
 }
 \arguments{
@@ -19,19 +17,23 @@ cutoff2polygon(
 
 \item{cutoff}{sf object of the (placebo) cut-off}
 
-\item{orientation}{how is the discontinuity oriented (e.g. "west-west" means both ends of the line go to the western end of the bounding box)}
+\item{orientation}{in which side of the bounding box does each of the extensions of the cutoff go into? (two of "north", "east", "south", "west" in a vector, e.g. \code{c("west", "north")})}
 
-\item{endpoints}{at what position on the edge should each polygon end (between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)}
+\item{endpoints}{at what position on the edge should each polygon end? (vector with two numbers between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)}
 
 \item{corners}{clockwise 1-4 (numbers refer to quadrant corners i.e. 1 is top right). 2 corners max. If you need 3 go the other way round with 1 and take the spatial difference with the bounding box afterwards.}
-
-\item{upside}{deprecated, this is replaced by doing an intersect with the bounding box to get the difference}
-
-\item{crs}{epsg number if project crs}
 }
 \value{
 a polygon as an sf object
 }
 \description{
-Creates an approximation of a "treated/untreated polygon" to assign the status again to each observation after the border has been shifted
+Creates an approximation of a "treated/untreated polygon" to assign the status again to each observation after the border has been shifted.
+The function extends both ends of the provided cutoff to the edge of the (imaginary) bounding box of the provided data (this ensures all observations will be included).
+When these sides differ, at this early stage of the package, it needs to know how many corners are inbetween the sides.
+E.g. for \code{c("west", "north)} it would be \code{2} and for \code{c("west", "east")} it would be \code{2}.
+}
+\examples{
+\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))}
+\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "east"), endpoints = c(.5, .5), corners = 1)}
+\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "south"), endpoints = c(.5, .5), corners = c(1, 2))}
 }
