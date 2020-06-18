@@ -3,15 +3,16 @@
 
 #' Plot SpatialRD output
 #'
-#'Produces plot of GRDDseries and optionally of a map that visualises every point estimate in space
-#' @param SpatialRDoutput spatial obkect that is produce by an estimation with \code{\link{SpatialRD}}
-#' @param map T/F depending on whether mapplot is desired
+#'Produces plot of GRDDseries and optionally of a map that visualises every point estimate in space.
 #'
-#' @return plots produced with ggplot 2
+#' @param SpatialRDoutput spatial obkect that is produce by an estimation with \code{\link{SpatialRD}}
+#' @param map T/F depending on whether mapplot is desired (make sure to set \code{spatial.objcet = T} in the \code{\link{spatialrd}} function)
+#'
+#' @return plots produced with ggplot2
 #' @export
 #'
-#' @examples
-plotspatialrd <- function(SpatialRDoutput = results, map = T) {
+#' @examples \dontrun{plotspatialrd(results.spatialrd)}
+plotspatialrd <- function(SpatialRDoutput, map = F) {
 
   # replaced Courier New with Courier for now
   # TODO

@@ -1,35 +1,51 @@
 
-
-
-
-#' Create treated polygon from (placebo) line
+#' Create (treated) polygon from line
 #'
-#' Creates an approximation of a "treated/untreated polygon" to assign the status again to each observation after the border has been shifted
+#' Creates an approximation of a "treated/untreated polygon" to assign the status again to each observation after the border has been shifted.
+#' The function extends both ends of the provided cutoff to the edge of the (imaginary) bounding box of the provided data (this ensures all observations will be included).
+#' When these sides differ, at this early stage of the package, it needs to know how many corners are inbetween the sides.
+#' E.g. for \code{c("west", "north)} it would be \code{2} and for \code{c("west", "east")} it would be \code{2}.
 #'
 #' @param data study dataset to determine the bounding box (so that all observations are covered by the new polygons) in sf format
 #' @param cutoff sf object of the (placebo) cut-off
-#' @param orientation how is the discontinuity oriented (e.g. "west-west" means both ends of the line go to the western end of the bounding box)
-#' @param endpoints at what position on the edge should each polygon end (between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)
-#' @param upside deprecated, this is replaced by doing an intersect with the bounding box to get the difference
-#' @param crs epsg number if project crs
+#' @param orientation in which side of the bounding box does each of the extensions of the cutoff go into? (two of "north", "east", "south", "west" in a vector, e.g. \code{c("west", "north")})
+#' @param endpoints at what position on the edge should each polygon end? (vector with two numbers between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)
 #' @param corners clockwise 1-4 (numbers refer to quadrant corners i.e. 1 is top right). 2 corners max. If you need 3 go the other way round with 1 and take the spatial difference with the bounding box afterwards.
 #'
-#' @return
+#' @return a polygon as an sf object
 #' @export
 #'
 #' @examples
-cutoff2polygons <- function(data = bbox, cutoff = lines.sf,
-                            orientation = NA, endpoints = c(0, 0), corners = NA,
-                            difference = F, upside = T, crs = crs) {
+#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))}
+#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "east"), endpoints = c(.5, .5), corners = 1)}
+#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "south"), endpoints = c(.5, .5), corners = c(1, 2))}
+
+cutoff2polygon <- function(data, cutoff,
+                            orientation = NA, endpoints = c(0, 0), corners = NA) {
 
   # TODO
   # - FIX the loop issue: the condition has length > 1 and only the first element will be used
+  # - simplyfiy the corner problem
+  # this does not work when corner in reverse order cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "south"), corners = c(3,2,1), endpoints = c(.2, .4))
+
+  # CHECKS ON SF OBJECTS
+  stopifnot(
+    "data frame is not an sf object"        = inherits(data, "sf"),
+    "cutoff line is not an sf object"       = inherits(cutoff, "sf"),
+    "CRS not matching between objects, transform them accordingly!"
+    = st_crs(data)$input == st_crs(cutoff)$input,
+
+    "Orientation not specified correctly. Is it a string?" = inherits(orientation, "character"),
+    "Provide two elements in the orientation vector. One for each side in which the extended boundary should go into." = length(orientation) == 2
+  )
+
+  crs <- st_crs(cutoff)$input
 
   if (is.na(orientation)) {cat("Please provide the orientation of the border for a better approximation.\n")
     return()
     }
 
-  if (is.na(corners) | corners[1] == 0) {cat("\n No corners selected, both extensions will end in the same side.\n")
+  if (is.na(corners) | corners[1] == 0) {cat("\n No corners selected, thus both extensions will end in the same side.\n")
     corners <- c(0)
     poly_c_start <- c(NA, NA)
     }

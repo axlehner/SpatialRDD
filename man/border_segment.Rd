@@ -2,12 +2,12 @@
 % Please edit documentation in R/border_segment.R
 \name{border_segment}
 \alias{border_segment}
-\title{Border Segment creation}
+\title{Border Segment Creation for FE-estimation}
 \usage{
-border_segment(data = points.sf, cutoff = cut_off.sf, n = 10)
+border_segment(data, cutoff, n = 10)
 }
 \arguments{
-\item{data}{sf object containing point data}
+\item{data}{sf data frame containing point data}
 
 \item{cutoff}{the RDD border in the form of a line (preferred) or borderpoints}
 
@@ -17,9 +17,10 @@ border_segment(data = points.sf, cutoff = cut_off.sf, n = 10)
 a vector with factors, each category representing one segment
 }
 \description{
-This function assigns the closest border segment for each observation in the sf object. It takes in the border, cuts it into n segments, and finally assigns each observation the relevant segment as factor. Thus allows the researcher then to carry out fixed-effects regressions. (i.e. allow for different intercepts and only exploit within segment variation).
-Computationally these tasks are quite demand when the sample size is big and thus might take a few seconds to complete.
+Creates \code{n} segments of a line (the RD cut-off) and assigns the closest border segment for each observation in the sf data frame.
+Computationally these tasks are quite demanding when the sample size is big and thus might take a few seconds to complete.
 }
 \examples{
 points.sf$segment10 <- border_segment(points.sf, cut_off.sf, 10)
+
 }

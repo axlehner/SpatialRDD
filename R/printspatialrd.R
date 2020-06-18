@@ -1,21 +1,22 @@
 
 
 
-#' Print SpatialRD output
+#' Print spatialrd output
 #'
-#' preliminary function using kable and kableextra
+#' Preliminary function using kable and kableextra.
+#' You could also just use the package of your choice to print out columns of the output from \code{\link{spatialrd}}.
 #'
-#' @param SpatialRDoutput
-#' @param label
-#' @param caption
-#' @param footnote
+#' @param SpatialRDoutput output file from the \code{\link{spatialrd}} function
+#' @param format for now only latex
 #'
-#' @return
+#' @return A formatted table with results from the \code{\link{spatialrd}} function
 #' @export
 #'
-#' @examples
-printspatialrd <- function(SpatialRDoutput = results, label = NA, caption = NA, footnote = NA,
-                           McCrary = F, RATest = F) {
+#' @examples printspatialrd(results.spatialrd)
+printspatialrd <- function(SpatialRDoutput = results, #label = NA, caption = NA, footnote = NA,
+                           format = "latex"
+                           #McCrary = F, RATest = F
+                           ) {
 
   # TODO
 
@@ -30,7 +31,8 @@ printspatialrd <- function(SpatialRDoutput = results, label = NA, caption = NA, 
   SpatialRDoutput <- SpatialRDoutput %>% mutate_at(vars(Ntr:Nco), funs(round(.,0)))
 
 
-  sf::st_set_geometry(SpatialRDoutput, NULL) %>% # make the non-spatiality on the fly here so that I don't have to estimate it again for the mapplot
+  # sf::st_set_geometry(SpatialRDoutput, NULL) %>% # make the non-spatiality on the fly here so that I don't have to estimate it again for the mapplot
+  SpatialRDoutput %>% # if the object is non-spatial
     dplyr::select(-c(pvalC, pvalR)) %>% # kick the pvalues (need them for plot later)
     dplyr::select(-c(McCrary)) %>% # kick McCrary
     dplyr::select(-c(RATest)) %>% # kick RATest

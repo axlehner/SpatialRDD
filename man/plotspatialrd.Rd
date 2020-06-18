@@ -4,16 +4,19 @@
 \alias{plotspatialrd}
 \title{Plot SpatialRD output}
 \usage{
-plotspatialrd(SpatialRDoutput = results, map = T)
+plotspatialrd(SpatialRDoutput, map = F)
 }
 \arguments{
 \item{SpatialRDoutput}{spatial obkect that is produce by an estimation with \code{\link{SpatialRD}}}
 
-\item{map}{T/F depending on whether mapplot is desired}
+\item{map}{T/F depending on whether mapplot is desired (make sure to set \code{spatial.objcet = T} in the \code{\link{spatialrd}} function)}
 }
 \value{
-plots produced with ggplot 2
+plots produced with ggplot2
 }
 \description{
-Produces plot of GRDDseries and optionally of a map that visualises every point estimate in space
+Produces plot of GRDDseries and optionally of a map that visualises every point estimate in space.
+}
+\examples{
+plotspatialrd(results.spatialrd)
 }

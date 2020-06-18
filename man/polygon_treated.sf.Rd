@@ -4,7 +4,9 @@
 \name{polygon_treated.sf}
 \alias{polygon_treated.sf}
 \title{Dataset with boundaries and polygons for the SpatialRDD vignette.}
-\format{A spatial data.frame of class sf}
+\format{
+A spatial data.frame of class sf
+}
 \source{
 Lehner, A. (2019) 450 Years of Portuguese Colonialism in India: Missionaries, Education, and the Roots of Gender Inequality
 }

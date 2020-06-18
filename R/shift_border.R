@@ -1,32 +1,33 @@
-
-# input should be able to be point or line
-# lonlat plus utm local
-# need to assign treated, then report how many treated ones flipped the status
-## how? polygon (rescale equally), or with the above/under rule from stackexchange?
-
-## also for the SpatialRD this matters quite a lot
-
-# putput should always be a polygon so that we can assign the treated!
-
-#' Title
+#' Shift, shrink/grow, and rotate borders around
 #'
-#' @param border
-#' @param operation
-#' @param shift
-#' @param scale
-#' @param angle
+#' This functions takes in a border and can either shift, shrink, or rotate it. All of them can be done together as well.
+#' This usually takes a bit of trial and error, so make sure to plot the result each time.
+#' For a detailed walk through check out the according vignette: \code{vignette(shifting_borders)}.
 #'
-#' @return
+#' @param border sf object with line geometry
+#' @param operation \code{"shift"}, \code{"rotate"}, \code{"scale"} - or a combination of them
+#' @param shift if \code{operation = "shift"}, shift distance in CRS units (if UTM it is metres) for x and y coordinates as \code{c(dist_x, dist_y)}
+#' @param angle if \code{operation = "rotate"}, provide angle in degrees
+#' @param scale if \code{operation = "scale"}, provide shrinkage/growth factor: e.g. \code{.9} to shrink by 10perc. and \code{1.1} to increase by 10perc.
+#'
+#' @return a new border in the form of an sf object
 #' @export
 #'
 #' @examples
-placebo_border <- function(border = cut_off.sf, operation = c("shift", "scale", "rotate"),
+#' \dontrun{placebo_border(border = cut_off.sf, operation = c("shift", "scale"), shift = c(-5000, -3000), scale = .85)}
+#' \dontrun{placebo_border(border = cut_off.sf, operation = "rotate", angle = 10)}
+#'
+shift_border <- function(border, operation = c("shift", "scale", "rotate"),
                            shift = c(0, 0), scale = 1, angle = 0) {
 
   # TODO
   # - make the function more generic and let user decide on which fraction of the side she wants the line to end
+  # - naming not consistent here with other functions (here used border instead of cutoff) -> minor issue
 
-  cat("Pay attention to CRS! If in 4326 then degrees have to be provided. For precision we would prefer a local CRS!\n")
+  stopifnot(
+    "cutoff is not an sf object"            = inherits(border, "sf")
+  )
+  cat("Pay attention to CRS! If you work in lon/lat then degrees have to be provided. Local UTM CRS is preferable!\n")
 
   # first we take out the geometry and the centroid
   border_sfc <- sf::st_geometry(border)
@@ -68,7 +69,7 @@ placebo_border <- function(border = cut_off.sf, operation = c("shift", "scale", 
   #border_new <- sf::st_set_geometry(border, border_sfc)
   #sf::st_crs(border_new) <- sf::st_crs(border)
   sf::st_crs(border_sfc) <- sf::st_crs(border)
-  border_sfc
+  st_sf(border_sfc) # changed this to sf in June20
 }
 
 

@@ -4,22 +4,24 @@
 \alias{assign_treated}
 \title{Let the package know which observations were treated}
 \usage{
-assign_treated(data.sf = points.sf, polygon.sf = polygon_treated.sf,
-  id = NA)
+assign_treated(data, polygon, id = NA)
 }
 \arguments{
-\item{data.sf}{sf object containing point data}
+\item{data}{sf data frame containing point data (if you have polygons, convert first with sf::st_centroid())}
 
-\item{polygon.sf}{sf object with polygon geometry that fully describes the area(s) that contain the treated points}
+\item{polygon}{sf object with polygon geometry that fully describes the area(s) that contain the treated points}
 
-\item{id}{string that represents the name of the column in the points object that represents the unique identifier for each observation}
+\item{id}{string that represents the name of the column in the data that represents the unique identifier for each observation}
 }
 \value{
 A vector of type factor with 0's and 1's. Convert with as.numeric() if you want real numbers/integers.
 }
 \description{
 Creates a vector with 0's and 1's to determine on which side of the cut-off each observation is. For this it is useful to have a polygon that fully describes the "treated area".
-If you do not have such a polygon there is a (very preliminary and patchy) way implemented in the package via \code{\link{points2line}} and \code{\link{cutoff2polygon}} that let's you go from points to line to "treated polygon" in a very crude way.
+If you do not have such a polygon there is a (preliminary and patchy) way implemented in the package via \code{\link{points2line}} and \code{\link{cutoff2polygon}} that lets you go from points to line to "treated polygon" in a very crude way.
+}
+\note{
+This is essentially a wrapper of \link[sf]{st_intersection()}.
 }
 \examples{
 points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")

@@ -2,14 +2,13 @@
 
 
 #' Title
-#'
-#' @param border
-#' @param crs
+#' this is just a test function, export was removed for now
+#' @param border test
+#' @param crs test
 #'
 #' @return
-#' @export
 #'
-#' @examples
+#' @examples test
 points2line <- function(border = borderpoints, crs = projectcrs) {
 
 

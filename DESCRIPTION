@@ -4,7 +4,7 @@ Title: Spatial Regression Discontinuity Designs
 Version: 0.0.0.9000
 Authors@R: person("Alexander", "Lehner", email = "alexander.lehner@unibo.it", role = c("aut", "cre"))
 Description: Carries out the necessary spatial and econometric tasks that are needed
-	for state of the art implementations of Spatial- or Geographic Regression 		Discontinuity Designs.
+	for state of the art implementations of Spatial- or Geographic Regression Discontinuity Designs.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -18,7 +18,7 @@ Imports:
     cowplot,
     magrittr,
     rdd
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Suggests: 
     knitr,
     rmarkdown,

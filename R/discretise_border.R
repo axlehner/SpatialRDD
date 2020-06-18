@@ -1,7 +1,8 @@
-#' Discretise the RDD cut-off
+
+#' Split the RD cut-off into borderpoints
 #'
 #' Takes in a border in the form of a polyline (or borderpoints) and converts it into point data.
-#' These points are later used to calculate a heterogenous treatment effect alongside the border (i.e. the cut-off)
+#' These points are later used to run separate non-parametric RD estimations which eventually allows to visualise potential heterogeneous treatment effects alongside the cut-off.
 #'
 #'
 #'
@@ -14,12 +15,13 @@
 #' @param xmax if range = T: x coordinates
 #' @param xmin if range = T: x coordinates
 #'
-#' @return an sf object with selected and evenly spaced borderpoints
+#' @return an sf object with selected (and evenly spaced) borderpoints
 #' @export
 #'
 #' @examples
 #' borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
-discretise_border <- function(cutoff = cut_off.sf, n = 10, random = F, range = F, ymax = NA, ymin = NA, xmax = NA, xmin = NA) {
+#'
+discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, ymin = NA, xmax = NA, xmin = NA) {
 
   # TODO
   # - fix the discrepancies btween just sfc and a full sf with multiple columns (length doesn't work then)
@@ -28,10 +30,14 @@ discretise_border <- function(cutoff = cut_off.sf, n = 10, random = F, range = F
   # THIS RESULTED IN A CRACY MESS
   # - resolve the length vs nrow issue in the bottom for POINTS
 
+  stopifnot(
+    "cutoff is not an sf object"            = inherits(cutoff, "sf")
+  )
+
   # do I need to prepare for other cases where the input is neither linestring nor multilinestring?
   # here the case for line data
   if (sf::st_geometry_type(cutoff)[1] == "LINESTRING" | sf::st_geometry_type(cutoff)[1] == "MULTILINESTRING") {
-    cat("Starting to create", n, "borderpoints. Approximately every", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres we can run an estimation then.\n")
+    cat("Starting to create", n, "borderpoints from the given set of borderpoints. Approximately every", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres we can run an estimation then.\n")
 
     # first let's make the line a one feature object so that the sampling works (it draws n elements per feature with st_line_sample)
     # using combine in this version, might be risky because of errors
@@ -43,7 +49,7 @@ discretise_border <- function(cutoff = cut_off.sf, n = 10, random = F, range = F
       cutoff <- cutoff %>% sf::st_cast("LINESTRING")
       #cutoff <- sf::st_combine(cutoff) # again?
       # this is the dirty hack when someone puts in 4326
-      if (sf::st_crs(cutoff)[1] == 4326 | is.na(st_crs(cutoff)[1])) {
+      if (sf::st_crs(cutoff)$input == "EPSG:4326" | is.na(st_crs(cutoff)[1])) {
         # second condition is needed because some CRS don't have an EPSG code
         cutoff <- sf::st_transform(cutoff, 3857) # transform it
         cutoff <- sf::st_combine(cutoff) # again?
@@ -64,7 +70,7 @@ discretise_border <- function(cutoff = cut_off.sf, n = 10, random = F, range = F
     #if ()
     cutoff$id <- 1:length(cutoff) # was this the hack to make the nrow work?
     borderpoints.sf <- cutoff[seq(1, nrow(cutoff), round(nrow(cutoff) / n, 0)), ] # subset according to this rule
-    cat("Starting to create", n, "borderpoints. Approximately every", round(as.numeric(sf::st_distance(borderpoints.sf[1], borderpoints.sf[2]))/1000/n, 0), "kilometres we can run an estimation then.\n")
+    cat("Starting to create", n, "borderpoints from the given line. Approximately every", round(as.numeric(sf::st_distance(borderpoints.sf[1], borderpoints.sf[2]))/1000/n, 0), "kilometres we can run an estimation then.\n")
 
 
   }
@@ -77,6 +83,6 @@ discretise_border <- function(cutoff = cut_off.sf, n = 10, random = F, range = F
   # need single points so we can loop over them afterwards
   borderpoints.sf <- borderpoints.sf %>% sf::st_cast("POINT")
   #st_crs(borderpoints.sf) <- st_crs(cutoff) # just to be sure that we are getting the right crs, hope this doesn't create conflict with vignette example
-  borderpoints.sf
+  st_sf(borderpoints.sf)
 
 }

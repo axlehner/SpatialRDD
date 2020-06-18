@@ -2,10 +2,18 @@
 % Please edit documentation in R/discretise_border.R
 \name{discretise_border}
 \alias{discretise_border}
-\title{Discretise the RDD cut-off}
+\title{Split the RD cut-off into borderpoints}
 \usage{
-discretise_border(cutoff = cut_off.sf, n = 10, random = F,
-  range = F, ymax = NA, ymin = NA, xmax = NA, xmin = NA)
+discretise_border(
+  cutoff,
+  n = 10,
+  random = F,
+  range = F,
+  ymax = NA,
+  ymin = NA,
+  xmax = NA,
+  xmin = NA
+)
 }
 \arguments{
 \item{cutoff}{sf object of the RD cut-off in the form of a line (not preferred, but also boundarypoints are possible)}
@@ -25,12 +33,13 @@ discretise_border(cutoff = cut_off.sf, n = 10, random = F,
 \item{xmin}{if range = T: x coordinates}
 }
 \value{
-an sf object with selected and evenly spaced borderpoints
+an sf object with selected (and evenly spaced) borderpoints
 }
 \description{
 Takes in a border in the form of a polyline (or borderpoints) and converts it into point data.
-These points are later used to calculate a heterogenous treatment effect alongside the border (i.e. the cut-off)
+These points are later used to run separate non-parametric RD estimations which eventually allows to visualise potential heterogeneous treatment effects alongside the cut-off.
 }
 \examples{
 borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
+
 }

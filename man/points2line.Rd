@@ -2,13 +2,23 @@
 % Please edit documentation in R/points2line.R
 \name{points2line}
 \alias{points2line}
-\title{Title}
+\title{Title
+this is just a test function, export was removed for now}
 \usage{
 points2line(border = borderpoints, crs = projectcrs)
 }
 \arguments{
-\item{crs}{}
+\item{border}{test}
+
+\item{crs}{test}
+}
+\value{
+
 }
 \description{
 Title
+this is just a test function, export was removed for now
+}
+\examples{
+test
 }

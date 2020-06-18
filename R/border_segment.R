@@ -1,11 +1,11 @@
 
 
-#' Border Segment creation
+#' Border Segment Creation for FE-estimation
 #'
-#' This function assigns the closest border segment for each observation in the sf object. It takes in the border, cuts it into n segments, and finally assigns each observation the relevant segment as factor. Thus allows the researcher then to carry out fixed-effects regressions. (i.e. allow for different intercepts and only exploit within segment variation).
-#' Computationally these tasks are quite demand when the sample size is big and thus might take a few seconds to complete.
+#' Creates \code{n} segments of a line (the RD cut-off) and assigns the closest border segment for each observation in the sf data frame.
+#' Computationally these tasks are quite demanding when the sample size is big and thus might take a few seconds to complete.
 #'
-#' @param data  sf object containing point data
+#' @param data  sf data frame containing point data
 #' @param cutoff the RDD border in the form of a line (preferred) or borderpoints
 #' @param n the number of segments to be produced
 #'
@@ -13,12 +13,21 @@
 #' @export
 #'
 #' @examples
-#' points.sf$segment10 <- border_segment(points.sf, cut_off.sf, 10)
-border_segment <- function(data = points.sf, cutoff = cut_off.sf, n = 10) {
+#' \dontrun{points.sf$segment10 <- border_segment(points.sf, cut_off.sf, 10)}
+#'
+border_segment <- function(data, cutoff, n = 10) {
 
+  # CHECKS ON SF OBJECTS
+  stopifnot(
+    "data frame is not an sf object"        = inherits(data, "sf"),
+    "cutoff is not an sf object"            = inherits(cutoff, "sf"),
+    "CRS not matching between objects, transform them accordingly!"
+                                            = st_crs(data)$input == st_crs(cutoff)$input
+  )
 
-  # first bifurcation depending on input type
+  # first bifurcation depending on input type (POINT or LINE)
   if (sf::st_geometry_type(cutoff)[1] == "POINT" | sf::st_geometry_type(cutoff)[1] == "MULTIPOINT") {
+    cat("Drawing", n, "points out of the given set of boundarypoints.")
     # only random sampling implemented for now in st_sample
     # thus i cook up standard subsetting
     cutoff$id <- 1:nrow(cutoff) # create a unique id
@@ -37,8 +46,10 @@ border_segment <- function(data = points.sf, cutoff = cut_off.sf, n = 10) {
     closest
 
   } else { # this is when it is a line
-    cat("Starting to create", n, "border segments with an approximate length of", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres each.\n")
+    # this ensures that cutoffs with linegeometries that are not suited get transformed without braking the ones that are actually fine
     cutoff <- cutoff %>% sf::st_cast("LINESTRING")
+    #cutoff <- cutoff %>% st_union() %>% st_as_sf() %>% st_transform(3857)
+    cat("Starting to create", n, "border segments with an approximate length of", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres each.\n")
     borderpoints.sf <- sf::st_line_sample(cutoff, n)
     borderpoints.sf <- borderpoints.sf %>% sf::st_cast("POINT") # cast to POINT in order to get the rownumber right
     borderpoints.sf <- sf::st_sf(borderpoints.sf) # then we need to make it an sf data frame again
@@ -51,3 +62,7 @@ border_segment <- function(data = points.sf, cutoff = cut_off.sf, n = 10) {
     closest
   }
 }
+
+# v 0.1.0 done
+# TODO
+# - make border segments random?
