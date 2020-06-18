@@ -56,14 +56,6 @@ e.g. `mapview::mapview()`.
 
 ## Quick Guide
 
-    #> Warning: attribute variables are assumed to be spatially constant throughout all geometries
-    #> Warning in rnorm(NTr, mean = 0, sd = 0.1) + points_samp.sf$education[points_samp.sf$treated == : longer object length
-    #> is not a multiple of shorter object length
-    #> Warning in rnorm(NCo, mean = 0, sd = 0.1) + points_samp.sf$education[points_samp.sf$treated == : longer object length
-    #> is not a multiple of shorter object length
-    #> Warning in points_samp.sf$education[points_samp.sf$treated == 0] <- rnorm(NCo, : number of items to replace is not a
-    #> multiple of replacement length
-
 Adding border segment for transparent fixed effect category creation
 (for the non-parametric specification that is just OLS with `lm()` or
 `lfe::felm()`):
@@ -85,85 +77,6 @@ results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = bor
 #> We have 1000 observations of which 215 are treated observations.
 #> We are iterating over 50 Boundarypoints.
 #> The dependent variable is education .
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-
-#> Warning in log(fhatl): NaNs produced
-
-#> Warning in log(fhatl): NaNs produced
-
-#> Warning in log(fhatl): NaNs produced
-
-#> Warning in log(fhatl): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatr): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
-#> Warning in log(fhatl): NaNs produced
-#> Warning in sqrt((1/(rn * bw)) * (24/5) * ((1/fhatr) + (1/fhatl))): NaNs produced
 plotspatialrd(results, map = T)
 ```
 

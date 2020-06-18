@@ -54,7 +54,7 @@ You could verify the "geographic validity" of your objects with e.g. `mapview::m
 
 ## Quick Guide
 
-```{r load_pkg, echo = F}
+```{r load_pkg, echo = F, message = F, warning = F}
 library(SpatialRDD); data(cut_off.sf, polygon_full.sf, polygon_treated.sf)
 # simulate some data
 set.seed(1088) # set a seed to make the results replicable
@@ -71,14 +71,14 @@ points_samp.sf$education[points_samp.sf$treated == 0] <- rnorm(NCo, mean = 0, sd
 
 Adding border segment for transparent fixed effect category creation (for the non-parametric specification that is just OLS with `lm()` or `lfe::felm()`):
 
-```{r border_segment}
+```{r border_segment, message = F, warning = F}
 points_samp.sf$segment5 <- border_segment(points_samp.sf, cut_off.sf, 5)
 tm_shape(points_samp.sf) + tm_dots("segment5", size = 0.1) + tm_shape(cut_off.sf) + tm_lines()
 ```
 
 Create points alongside border and run GRD to explore heterogeneity:
 
-```{r grd}
+```{r grd, message = F, warning = F}
 borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
 results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 10)
 plotspatialrd(results, map = T)
