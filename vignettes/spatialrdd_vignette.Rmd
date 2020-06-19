@@ -4,18 +4,18 @@ author: "Alexander Lehner"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-    keep_md: true 
-    toc: true
+    #keep_md: true 
+    #toc: true
     #toc_float: true
     #number_sections: true
-    df_print: paged #does the html table thing
+    #df_print: paged #does the html table thing
     #theme: simplex
 #self_contained: no
 # one should use: rmarkdown::render instead of knitr::rmarkdown in the YAML preambule. (this solved the vignette rebuild error or st. - even though outside the vignette compiled normally)
 # then back to knitr::knitr because of the warning: Files in the 'vignettes' directory but no files in 'inst/doc':
 vignette: >
   %\VignetteIndexEntry{SpatialRDD: get started}
-  %\VignetteEngine{rmarkdown::render}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
