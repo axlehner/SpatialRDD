@@ -18,9 +18,9 @@ is_online = curl::has_internet()
 
 # Spatial[R]()DD
 
-  <!-- badges: start -->
-  [![Travis build status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD)
-  <!-- badges: end -->
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD)
+<!-- badges: end -->
 
 This repository hosts the code underlying the R package `SpatialRDD`. The workhorse functions in a nutshell are:
 
@@ -60,14 +60,16 @@ You could verify the "geographic validity" of your objects with e.g. `mapview::m
 ## Quick Guide
 
 ```{r load_pkg, echo = F, message = F, warning = F}
-library(SpatialRDD); data(cut_off.sf, polygon_full.sf, polygon_treated.sf)
+library(SpatialRDD); data(cut_off.sf, polygon_full.sf, polygon_treated.sf); library(tmap)
 # simulate some data
 set.seed(1088) # set a seed to make the results replicable
 points_samp.sf <- sf::st_sample(polygon_full.sf, 1000)
 points_samp.sf <- sf::st_sf(points_samp.sf) # make it an sf object bc st_sample only created the geometry list-column (sfc)
 points_samp.sf$id <- 1:nrow(points_samp.sf) # add a unique ID to each observation
 points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated.sf, id = "id") # assign treated
-
+# first we define a variable for the number of "treated" and control which makes the code more readable in the future
+NTr <- length(points_samp.sf$id[points_samp.sf$treated == 1])
+NCo <- length(points_samp.sf$id[points_samp.sf$treated == 0])
 points_samp.sf$education[points_samp.sf$treated == 1] <- 0.7
 points_samp.sf$education[points_samp.sf$treated == 0] <- 0.6
 points_samp.sf$education[points_samp.sf$treated == 1] <- rnorm(NTr, mean = 0, sd = .1) + points_samp.sf$education[points_samp.sf$treated == 1]

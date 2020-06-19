@@ -3,7 +3,9 @@
 
 # Spatial[R]()DD
 
-<!-- badges: start --> [![Travis build
+<!-- badges: start -->
+
+[![Travis build
 status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD)
 <!-- badges: end -->
 
