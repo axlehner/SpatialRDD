@@ -32,7 +32,8 @@ This usually takes a bit of trial and error, so make sure to plot the result eac
 For a detailed walk through check out the according vignette: \code{vignette(shifting_borders)}.
 }
 \examples{
-\dontrun{placebo_border(border = cut_off.sf, operation = c("shift", "scale"), shift = c(-5000, -3000), scale = .85)}
+\dontrun{placebo_border(border = cut_off.sf, operation = c("shift", "scale"),
+shift = c(-5000, -3000), scale = .85)}
 \dontrun{placebo_border(border = cut_off.sf, operation = "rotate", angle = 10)}
 
 }

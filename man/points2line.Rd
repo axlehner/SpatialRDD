@@ -5,20 +5,20 @@
 \title{Title
 this is just a test function, export was removed for now}
 \usage{
-points2line(border = borderpoints, crs = projectcrs)
+points2line(borderpoints, crs)
 }
 \arguments{
-\item{border}{test}
+\item{borderpoints}{test}
 
 \item{crs}{test}
 }
 \value{
-
+a line as an sf object
 }
 \description{
 Title
 this is just a test function, export was removed for now
 }
 \examples{
-test
+\dontrun{test}
 }

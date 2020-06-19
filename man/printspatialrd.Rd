@@ -4,7 +4,7 @@
 \alias{printspatialrd}
 \title{Print spatialrd output}
 \usage{
-printspatialrd(SpatialRDoutput = results, format = "latex")
+printspatialrd(SpatialRDoutput, format = "latex")
 }
 \arguments{
 \item{SpatialRDoutput}{output file from the \code{\link{spatialrd}} function}
@@ -19,5 +19,5 @@ Preliminary function using kable and kableextra.
 You could also just use the package of your choice to print out columns of the output from \code{\link{spatialrd}}.
 }
 \examples{
-printspatialrd(results.spatialrd)
+\dontrun{printspatialrd(results.spatialrd)}
 }

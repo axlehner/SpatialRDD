@@ -12,10 +12,10 @@
 #' @return A vector of type factor with 0's and 1's. Convert with as.numeric() if you want real numbers/integers.
 #' @export
 #'
-#' @note This is essentially a wrapper of \link[sf]{st_intersection()}.
+#' @note This is essentially a wrapper of \code{\link[sf]{st_intersection}}.
 #'
 #' @examples
-#' points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")
+#' \dontrun{points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")}
 #'
 assign_treated <- function(data, polygon, id = NA) {
 
@@ -35,7 +35,7 @@ assign_treated <- function(data, polygon, id = NA) {
     "data frame is not an sf object"        = inherits(data, "sf"),
     "treatment polygon is not an sf object" = inherits(polygon, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-    = st_crs(data)$input == st_crs(polygon)$input
+    = sf::st_crs(data)$input == sf::st_crs(polygon)$input
   )
 
   # retrieving the id's that were treated (this function effectively subsets the whole df/sf object, we extract only one column of that)

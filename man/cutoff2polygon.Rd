@@ -33,7 +33,10 @@ When these sides differ, at this early stage of the package, it needs to know ho
 E.g. for \code{c("west", "north")} it would be \code{2} and for \code{c("west", "east")} it would be \code{2}.
 }
 \examples{
-\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))}
-\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "east"), endpoints = c(.5, .5), corners = 1)}
-\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "south"), endpoints = c(.5, .5), corners = c(1, 2))}
+\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
+orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))}
+\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
+orientation = c("north", "east"), endpoints = c(.5, .5), corners = 1)}
+\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
+orientation = c("north", "south"), endpoints = c(.5, .5), corners = c(1, 2))}
 }

@@ -21,9 +21,9 @@ Creates a vector with 0's and 1's to determine on which side of the cut-off each
 If you do not have such a polygon there is a (preliminary and patchy) way implemented in the package via \code{\link{points2line}} and \code{\link{cutoff2polygon}} that lets you go from points to line to "treated polygon" in a very crude way.
 }
 \note{
-This is essentially a wrapper of \link[sf]{st_intersection()}.
+This is essentially a wrapper of \code{\link[sf]{st_intersection}}.
 }
 \examples{
-points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")
+\dontrun{points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")}
 
 }

@@ -7,7 +7,7 @@
 plotspatialrd(SpatialRDoutput, map = F)
 }
 \arguments{
-\item{SpatialRDoutput}{spatial obkect that is produce by an estimation with \code{\link{SpatialRD}}}
+\item{SpatialRDoutput}{spatial obkect that is produced by an estimation with \code{\link{spatialrd}}}
 
 \item{map}{T/F depending on whether mapplot is desired (make sure to set \code{spatial.objcet = T} in the \code{\link{spatialrd}} function)}
 }

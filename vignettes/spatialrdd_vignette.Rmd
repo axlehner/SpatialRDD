@@ -11,9 +11,11 @@ output:
     df_print: paged #does the html table thing
     #theme: simplex
 #self_contained: no
+# one should use: rmarkdown::render instead of knitr::rmarkdown in the YAML preambule. (this solved the vignette rebuild error or st. - even though outside the vignette compiled normally)
+# then back to knitr::knitr because of the warning: Files in the 'vignettes' directory but no files in 'inst/doc':
 vignette: >
   %\VignetteIndexEntry{SpatialRDD: get started}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{rmarkdown::render}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -162,7 +164,7 @@ From the above histograms we can see that we were successful in creating differe
 
 ```{r}
 list(lm(education ~ treated, data = points_samp.sf),
-     lm(placebo   ~ treated, data = points_samp.sf)) %>% stargazer(type = "text")
+     lm(placebo   ~ treated, data = points_samp.sf)) %>% stargazer::stargazer(type = "text")
 ```
 where the intercept tells us that the average in the non-treated areas is 0.6 and treated villages have on average 0.1 more education (10 percentage points).
 
@@ -184,7 +186,7 @@ tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("educati
 And to run the univariate regression from above also just within a bandwith (this specification is already starting to resemble the RDD idea of Dell 2010). As we know the exact data generating process (no "spatial gradient" but a rather uniform assignment), it is obvious to us that this of course leaves the point estimate essentially unchanged:
 
 ```{r}
-lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) %>% stargazer(type = "text")
+lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) %>% stargazer::stargazer(type = "text")
 ```
 
 
@@ -255,9 +257,9 @@ Simple OLS estimates, using the segments that we just obtained as categories for
 
 ```{r}
 library(lfe)
-list(felm(education ~ treated | factor(segment15) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]),
-felm(education ~ treated | factor(segment5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ])
-) %>% stargazer(type = "text")
+list(lfe::felm(education ~ treated | factor(segment15) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]),
+lfe::felm(education ~ treated | factor(segment5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ])
+) %>% stargazer::stargazer(type = "text")
 
 ```
 
@@ -355,7 +357,7 @@ points_samp.sf$dist2cutoff1 <- as.numeric(sf::st_distance(points_samp.sf, placeb
 list(
   lm(education ~ treated1, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ]),
   lfe::felm(education ~ treated1 | factor(segment.1.5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ])
-) %>% stargazer(type = "text")
+) %>% stargazer::stargazer(type = "text")
 ```
 
 

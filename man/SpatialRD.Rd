@@ -36,9 +36,13 @@ spatialrd(
 
 \item{samplesize}{if random, how many points}
 
+\item{sparse.exclusion}{in case we want to try to exclude sparse border points before the estimation (should reduce warnings)}
+
 \item{spatial.object}{return a spatial object (needed if you want to plot the point estimates on a map)?}
 
 \item{RATestvec}{vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired}
+
+\item{...}{in addition you can use all options in \code{\link[rdrobust]{rdrobust}}}
 }
 \value{
 a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
@@ -57,5 +61,6 @@ Check the documentation in the \code{rdrobust} package for details.
 To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{plotspatialrd}}.
 }
 \examples{
-results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 10, spatial.object = F)
+\dontrun{results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
+treated = "treated", minobs = 10, spatial.object = F)}
 }

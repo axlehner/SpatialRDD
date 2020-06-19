@@ -14,7 +14,8 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{placebo_border(border = cut_off.sf, operation = c("shift", "scale"), shift = c(-5000, -3000), scale = .85)}
+#' \dontrun{placebo_border(border = cut_off.sf, operation = c("shift", "scale"),
+#' shift = c(-5000, -3000), scale = .85)}
 #' \dontrun{placebo_border(border = cut_off.sf, operation = "rotate", angle = 10)}
 #'
 shift_border <- function(border, operation = c("shift", "scale", "rotate"),
@@ -69,7 +70,7 @@ shift_border <- function(border, operation = c("shift", "scale", "rotate"),
   #border_new <- sf::st_set_geometry(border, border_sfc)
   #sf::st_crs(border_new) <- sf::st_crs(border)
   sf::st_crs(border_sfc) <- sf::st_crs(border)
-  st_sf(border_sfc) # changed this to sf in June20
+  sf::st_sf(border_sfc) # changed this to sf in June20
 }
 
 

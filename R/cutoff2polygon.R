@@ -14,11 +14,15 @@
 #'
 #' @return a polygon as an sf object
 #' @export
+#' @importFrom rlang .data
 #'
 #' @examples
-#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))}
-#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "east"), endpoints = c(.5, .5), corners = 1)}
-#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "south"), endpoints = c(.5, .5), corners = c(1, 2))}
+#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
+#' orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))}
+#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
+#' orientation = c("north", "east"), endpoints = c(.5, .5), corners = 1)}
+#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
+#' orientation = c("north", "south"), endpoints = c(.5, .5), corners = c(1, 2))}
 
 cutoff2polygon <- function(data, cutoff,
                             orientation = NA, endpoints = c(0, 0), corners = NA) {
@@ -28,18 +32,21 @@ cutoff2polygon <- function(data, cutoff,
   # - simplyfiy the corner problem
   # this does not work when corner in reverse order cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("north", "south"), corners = c(3,2,1), endpoints = c(.2, .4))
 
+  # global vars to avoid "no visible binding" error when doing R CMD check
+  #utils::globalVariables(c("X"))
+  # use .data$ (provided that you’ve also imported rlang::.data with @importFrom rlang .data )."
   # CHECKS ON SF OBJECTS
   stopifnot(
     "data frame is not an sf object"        = inherits(data, "sf"),
     "cutoff line is not an sf object"       = inherits(cutoff, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-    = st_crs(data)$input == st_crs(cutoff)$input,
+    = sf::st_crs(data)$input == sf::st_crs(cutoff)$input,
 
     "Orientation not specified correctly. Is it a string?" = inherits(orientation, "character"),
     "Provide two elements in the orientation vector. One for each side in which the extended boundary should go into." = length(orientation) == 2
   )
 
-  crs <- st_crs(cutoff)$input
+  crs <- sf::st_crs(cutoff)$input
 
   if (is.na(orientation)) {cat("Please provide the orientation of the border for a better approximation.\n")
     return()
@@ -149,7 +156,7 @@ cutoff2polygon <- function(data, cutoff,
 
   # REMOVE NA'S RESULTING FROM NO CORNER CASES (even if no corner we take NA's in because cleaning them out here is easier than excluding them in the first place with)
 
-  no_NAs <- as.data.frame(list(as.matrix(rbind(poly_1, poly_2)))) %>% dplyr::filter(!is.na(X))
+  no_NAs <- as.data.frame(list(as.matrix(rbind(poly_1, poly_2)))) %>% dplyr::filter(!is.na(.data$X))
 
   # TIE EVERYTHING UP AND MAKE IT AN SF OBJECT
   poly_full <- sf::st_sf("location" = paste(orientation[1], "-", orientation[2]),

@@ -40,6 +40,6 @@ Takes in a border in the form of a polyline (or borderpoints) and converts it in
 These points are later used to run separate non-parametric RD estimations which eventually allows to visualise potential heterogeneous treatment effects alongside the cut-off.
 }
 \examples{
-borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
+\dontrun{borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)}
 
 }

@@ -5,6 +5,7 @@ Version: 0.0.0.9000
 Authors@R: person("Alexander", "Lehner", email = "alexander.lehner@unibo.it", role = c("aut", "cre"))
 Description: Carries out the necessary spatial and econometric tasks that are needed
 	for state of the art implementations of Spatial- or Geographic Regression Discontinuity Designs.
+Depends: R (>= 2.10)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -17,10 +18,13 @@ Imports:
     RATest,
     cowplot,
     magrittr,
-    rdd
+    rlang,
+    rdd,
+    utils
 RoxygenNote: 7.1.0
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    kableExtra
 VignetteBuilder: knitr

@@ -1,7 +1,11 @@
 
-<!-- README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') -->
+<!-- This brief doc/description is only for the github page. README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') -->
 
 # Spatial[R]()DD
+
+<!-- badges: start --> [![Travis build
+status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD)
+<!-- badges: end -->
 
 This repository hosts the code underlying the R package `SpatialRDD`.
 The workhorse functions in a nutshell are:
@@ -37,19 +41,28 @@ install.packages("devtools")
 devtools::install_github("axlehner/SpatialRDD")
 ```
 
-What you need to run you own spatial RD with `SpatialRDD`: 1. An RD
-boundary as a single line (the simplest way is to cut this by hand in
-e.g. ArcGIS or QGIS by just splitting the features - also make sure to
-merge all features together in case there are multiple left, this will
-be important and prevent annoying troubles in the RD process) 2. The
-data frame containing the columns with x- and y-coordinates. Read in
-with `read.csv()` or with `readstata13::read.dta13()`. Make them an sf
-object with `st_as_sf(data, coords = c("x", "y"), crs = 4326)` if you
-have longitude/latitude as coordinates. If this is the case use
-`st_transform()` on all your objects into a local UTM projection (not
-necessary but recommended for several reasons) 3. Ideally also a polygon
-that covers the treated areas (this could be created within the package
-with `cutoff2polygon` though)
+What you need to run you own spatial RD with `SpatialRDD`:
+
+1.  An RD boundary as a single line (the simplest way is to cut this by
+    hand in e.g. ArcGIS or QGIS by just splitting a line off a polygon
+    for example - also make sure to merge all features together in case
+    there are multiple left, this will be important and prevent annoying
+    troubles later on)
+2.  The data frame containing the columns with x- and y-coordinates.
+    Read in with `read.csv()` or with `readstata13::read.dta13()`. Make
+    them an sf object with `st_as_sf(data, coords = c("x", "y"), crs
+    = 4326)` if you have longitude/latitude as coordinates (which is
+    reflected by the 4326 EPSG). If this is the case use
+    `st_transform()` on all your objects into a local UTM projection
+    (not necessary but recommended for several reasons). Note: In case
+    your data comes as a shapefile/geopackage/etc. directly, just read
+    it in with `st_read("path/to/file.shp")`. If these are polygons it
+    is advised to work with the centroids straightaway (extract with
+    `st_centroid()`). If you need zonal statistics (on
+    elevation/ruggednes etc.) for e.g. checking identifying assumptions,
+    do these before converting to centroids.
+3.  Ideally also a polygon that covers the treated areas (this could be
+    created within the package with `cutoff2polygon` though)
 
 You could verify the “geographic validity” of your objects with
 e.g. `mapview::mapview()`.

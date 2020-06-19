@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples
-#' borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
+#' \dontrun{borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)}
 #'
 discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, ymin = NA, xmax = NA, xmin = NA) {
 
@@ -49,7 +49,7 @@ discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, 
       cutoff <- cutoff %>% sf::st_cast("LINESTRING")
       #cutoff <- sf::st_combine(cutoff) # again?
       # this is the dirty hack when someone puts in 4326
-      if (sf::st_crs(cutoff)$input == "EPSG:4326" | is.na(st_crs(cutoff)[1])) {
+      if (sf::st_crs(cutoff)$input == "EPSG:4326" | is.na(sf::st_crs(cutoff)[1])) {
         # second condition is needed because some CRS don't have an EPSG code
         cutoff <- sf::st_transform(cutoff, 3857) # transform it
         cutoff <- sf::st_combine(cutoff) # again?
@@ -82,7 +82,7 @@ discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, 
   }
   # need single points so we can loop over them afterwards
   borderpoints.sf <- borderpoints.sf %>% sf::st_cast("POINT")
-  #st_crs(borderpoints.sf) <- st_crs(cutoff) # just to be sure that we are getting the right crs, hope this doesn't create conflict with vignette example
-  st_sf(borderpoints.sf)
+  #sf::st_crs(borderpoints.sf) <- sf::st_crs(cutoff) # just to be sure that we are getting the right crs, hope this doesn't create conflict with vignette example
+  sf::st_sf(borderpoints.sf)
 
 }

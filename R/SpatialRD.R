@@ -23,11 +23,14 @@
 #' @param samplesize if random, how many points
 #' @param spatial.object return a spatial object (needed if you want to plot the point estimates on a map)?
 #' @param RATestvec vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired
+#' @param sparse.exclusion in case we want to try to exclude sparse border points before the estimation (should reduce warnings)
+#' @param ... in addition you can use all options in \code{\link[rdrobust]{rdrobust}}
 #'
 #' @return a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
 #' @export
 #'
-#' @examples results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 10, spatial.object = F)
+#' @examples \dontrun{results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
+#' treated = "treated", minobs = 10, spatial.object = F)}
 
 
 spatialrd <- function(y,
@@ -56,7 +59,7 @@ spatialrd <- function(y,
     "data frame is not an sf object"        = inherits(data, "sf"),
     "treatment polygon is not an sf object" = inherits(cutoff.points, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-    = st_crs(data)$input == st_crs(cutoff.points)$input,
+    = sf::st_crs(data)$input == sf::st_crs(cutoff.points)$input,
 
     "treated column not specified correctly. Is it a string?" = inherits(treated, "character"),
     "dependent variable not specified correctly. Is it a string?" = inherits(y, "character")
@@ -87,14 +90,14 @@ spatialrd <- function(y,
 
 
   #######################################
+  # this was the initial way of excluding points, but the more direct way is
+  #  to just run the estimation and then exclude afterwards (even though it creates annoying warnings)
+  # excluding this once caused during R CMD check: Error in process_get_error_connection(self, private) : stderr is not a pipe.
   if (sparse.exclusion == T) {
     # Triangular or Edge kernel function
     Kt = function(u) {
       (1-abs(u)) * (abs(u) <= 1)
     }
-
-
-
   }
   ########################################
   # after this we also define the number of points newly
@@ -149,14 +152,14 @@ spatialrd <- function(y,
     }
 
     # RD testing
-    #invisible(capture.output(mccrary <- dc_test(data[["dist2cutoff"]]), plot = F))
+    #invisible(utils::capture.output(mccrary <- dc_test(data[["dist2cutoff"]]), plot = F))
     # switch to another mccrary, probably from the rdd itself, or the RDDtools?
     # is based on the DCdensity from rdd
     mccrary <- rdd::DCdensity(data[["dist2cutoff"]], 0, plot = F)
     # mccrary <- rddapp::dc_test(data[["dist2cutoff"]], verbose = F, plot = F, ext.out = F), same results, bad output, the rdd:: is the original one in any case
 
     if (!is.na(RATestvec)) {
-      invisible(capture.output(permtest <- RATest::RDperm(W = RATestvec, z = "dist2cutoff", data = as.data.frame(data))))
+      invisible(utils::capture.output(permtest <- RATest::RDperm(W = RATestvec, z = "dist2cutoff", data = as.data.frame(data))))
     }
     # store results
     #========================
@@ -189,13 +192,13 @@ spatialrd <- function(y,
   # this is bruteforce, but kick the McCr n RA this way, later we decide if we want them
 
   results <- results %>%
-    dplyr::select(-c(McCrary)) %>% # kick McCrary
-    dplyr::select(-c(RATest)) # kick RATest
+    dplyr::select(-c(.data$McCrary)) %>% # kick McCrary
+    dplyr::select(-c(.data$RATest)) # kick RATest
 
   # set the geometry of the borderpoints before subsetting according to the minobs criterion
   if (spatial.object == T) {results <- sf::st_set_geometry(results, sf::st_geometry(cutoff.points))}
   # this selects ultimately only the boundarypoint estimates that have a large enough sample size on both sides in order to ensure proper inference
-  results %>% dplyr::filter(Nco > minobs & Ntr > minobs)
+  results %>% dplyr::filter(.data$Nco > minobs & .data$Ntr > minobs)
 
   # MAKE THIS RESULTS LIST A LIST
   # AND THEN PRODUCE ALSO STANDARD OUPUT! that is printed when u run it
