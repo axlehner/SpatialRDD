@@ -1,7 +1,7 @@
 Package: SpatialRDD
 Type: Package
 Title: Spatial Regression Discontinuity Designs
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Alexander", "Lehner", email = "alexander.lehner@unibo.it", role = c("aut", "cre"))
 Description: Carries out the necessary spatial and econometric tasks that are needed
 	for state of the art implementations of Spatial- or Geographic Regression Discontinuity Designs.
