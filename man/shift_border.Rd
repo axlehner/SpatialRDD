@@ -9,7 +9,8 @@ shift_border(
   operation = c("shift", "scale", "rotate"),
   shift = c(0, 0),
   scale = 1,
-  angle = 0
+  angle = 0,
+  messages = T
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ shift_border(
 \item{scale}{if \code{operation = "scale"}, provide shrinkage/growth factor: e.g. \code{.9} to shrink by 10perc. and \code{1.1} to increase by 10perc.}
 
 \item{angle}{if \code{operation = "rotate"}, provide angle in degrees}
+
+\item{messages}{set to \code{FALSE} if you don't want them}
 }
 \value{
 a new border in the form of an sf object

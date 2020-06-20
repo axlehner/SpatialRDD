@@ -3,6 +3,7 @@
 export("%>%")
 export(assign_treated)
 export(border_segment)
+export(create_placebos)
 export(cutoff2polygon)
 export(discretise_border)
 export(plotspatialrd)

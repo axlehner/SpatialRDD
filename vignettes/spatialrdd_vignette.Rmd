@@ -322,7 +322,7 @@ After the border shift we now have to re-assign the new treatment status in orde
 ```{r}
 placebo.poly.1 <- cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))
 
-tm_shape(placebo.poly.1) + tm_polygons(alpha = .3) #+ tm_shape(polySideDown) + tm_polygons(alpha = .3)
+tm_shape(placebo.poly.1) + tm_polygons(alpha = .3)
 
 ```
 

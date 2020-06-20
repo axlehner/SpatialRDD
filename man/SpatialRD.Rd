@@ -63,4 +63,8 @@ To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{p
 \examples{
 \dontrun{results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
 treated = "treated", minobs = 10, spatial.object = F)}
+
+}
+\references{
+Calonico, Cattaneo and Titiunik (2014): Robust Nonparametric Confidence Intervals for Regression-Discontinuity Designs, Econometrica 82(6): 2295-2326.
 }

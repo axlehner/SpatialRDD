@@ -31,6 +31,9 @@
 #'
 #' @examples \dontrun{results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
 #' treated = "treated", minobs = 10, spatial.object = F)}
+#'
+#' @references
+#' Calonico, Cattaneo and Titiunik (2014): Robust Nonparametric Confidence Intervals for Regression-Discontinuity Designs, Econometrica 82(6): 2295-2326.
 
 
 spatialrd <- function(y,
@@ -57,7 +60,7 @@ spatialrd <- function(y,
   # CHECKS ON SF OBJECTS
   stopifnot(
     "data frame is not an sf object"        = inherits(data, "sf"),
-    "treatment polygon is not an sf object" = inherits(cutoff.points, "sf"),
+    "borderpoints not an sf object" = inherits(cutoff.points, "sf"),
     "CRS not matching between objects, transform them accordingly!"
     = sf::st_crs(data)$input == sf::st_crs(cutoff.points)$input,
 

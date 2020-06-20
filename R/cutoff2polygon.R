@@ -11,6 +11,7 @@
 #' @param orientation in which side of the bounding box does each of the extensions of the cutoff go into? (two of "north", "east", "south", "west" in a vector, e.g. \code{c("west", "north")})
 #' @param endpoints at what position on the edge should each polygon end? (vector with two numbers between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)
 #' @param corners clockwise 1-4 (numbers refer to quadrant corners i.e. 1 is top right). 2 corners max. If you need 3 go the other way round with 1 and take the spatial difference with the bounding box afterwards.
+#' @param messages set to \code{FALSE} if you don't want them
 #'
 #' @return a polygon as an sf object
 #' @export
@@ -25,7 +26,8 @@
 #' orientation = c("north", "south"), endpoints = c(.5, .5), corners = c(1, 2))}
 
 cutoff2polygon <- function(data, cutoff,
-                            orientation = NA, endpoints = c(0, 0), corners = NA) {
+                            orientation = NA, endpoints = c(0, 0), corners = NA,
+                           messages = T) {
 
   # TODO
   # - FIX the loop issue: the condition has length > 1 and only the first element will be used
@@ -52,7 +54,7 @@ cutoff2polygon <- function(data, cutoff,
     return()
     }
 
-  if (is.na(corners) | corners[1] == 0) {cat("\n No corners selected, thus both extensions will end in the same side.\n")
+  if (is.na(corners) | corners[1] == 0) {if (messages == T) cat("\n No corners selected, thus both extensions will end in the same side.\n")
     corners <- c(0)
     poly_c_start <- c(NA, NA)
     }

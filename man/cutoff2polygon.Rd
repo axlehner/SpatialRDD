@@ -9,7 +9,8 @@ cutoff2polygon(
   cutoff,
   orientation = NA,
   endpoints = c(0, 0),
-  corners = NA
+  corners = NA,
+  messages = T
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ cutoff2polygon(
 \item{endpoints}{at what position on the edge should each polygon end? (vector with two numbers between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)}
 
 \item{corners}{clockwise 1-4 (numbers refer to quadrant corners i.e. 1 is top right). 2 corners max. If you need 3 go the other way round with 1 and take the spatial difference with the bounding box afterwards.}
+
+\item{messages}{set to \code{FALSE} if you don't want them}
 }
 \value{
 a polygon as an sf object

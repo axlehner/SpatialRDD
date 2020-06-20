@@ -3,8 +3,9 @@ Type: Package
 Title: Spatial Regression Discontinuity Designs
 Version: 0.1.0
 Authors@R: person("Alexander", "Lehner", email = "alexander.lehner@unibo.it", role = c("aut", "cre"))
-Description: Carries out the necessary spatial and econometric tasks that are needed
-	for state of the art implementations of Spatial- or Geographic Regression Discontinuity Designs.
+Description: Spatial versions of Regression Discontinuity Designs (RDDs) are rising in popularity in the social sciences as a tool for causal inference. 
+    Most of the required steps to produce state-of-the-art analysis, though, are cumbersome and time consuming. This package includes all functionalities to carry out the necessary spatial and econometric tasks in a unified fashion.
+    It further gives researchers the ability to carry out the crucial placebo- and balancing checks in a detailed and thorough way. The fact that researchers do not have to rely on any outside software such as GIS APIs ensures replicability, and raises the standard for spatial RDDs.
 Depends: R (>= 2.10)
 License: GPL-3
 Encoding: UTF-8
@@ -20,11 +21,14 @@ Imports:
     magrittr,
     rlang,
     rdd,
-    utils
+    utils,
+    broom
 RoxygenNote: 7.1.0
 Suggests: 
     knitr,
     rmarkdown,
     testthat,
-    kableExtra
+    kableExtra,
+    lfe,
+    stargazer
 VignetteBuilder: knitr
