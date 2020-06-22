@@ -277,6 +277,9 @@ First of all we have to cut the border into equally spaced segments. For each of
 
 ```{r}
 borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
+borderpoints.sf$id <- 1:nrow(borderpoints.sf)
+# exclude some of the borderpoints with little n so that the vignette can compile without warning:
+#borderpoints.sf <- borderpoints.sf %>% slice(c(5,10,20,30,40))
 tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("education", palette = "RdYlGn", size = .1) +
   tm_shape(cut_off.sf) + tm_lines() +
   tm_shape(borderpoints.sf) + tm_symbols(shape = 4, size = .3)
@@ -320,7 +323,7 @@ After the border shift we now have to re-assign the new treatment status in orde
 
 
 ```{r}
-placebo.poly.1 <- cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), corners = 0, endpoints = c(.8, .2))
+placebo.poly.1 <- cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1, orientation = c("west", "west"), endpoints = c(.8, .2))
 
 tm_shape(placebo.poly.1) + tm_polygons(alpha = .3)
 
