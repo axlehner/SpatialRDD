@@ -8,3 +8,9 @@ addons:
     packages:
       - libudunits2-dev # this is from https://stackoverflow.com/questions/54678006/rstudio-and-travis-ci-build-check-do-not-match-libudunits2-so
       - libgdal-dev # for the missing gdal.config and subseq sf install problem
+
+r_packages:
+  - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
