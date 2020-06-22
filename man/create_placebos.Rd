@@ -25,7 +25,7 @@ either a coefplot or data.frame containing results of placeboregressions
 \description{
 Unifies \code{\link{shift_border}}, \code{\link{cutoff2polygon}}, \code{\link{assign_treated}} in one function to carry out a myriad of placebo checks at once.
 The output is either a data.frame (with or without geometry of the respective placeboline) or a coefplot.
-Requires operations data.frame that contains all desired operations (columns shift.x, shift.y, scale, angle, orientation.1, orientation.2, corners, endpoint.1, endpoint.2),
+Requires operations data.frame that contains all desired operations (columns shift.x, shift.y, scale, angle, orientation.1, orientation.2, endpoint.1, endpoint.2),
 if you don't need a certain operation just use default values (e.g. 0 for angle and 1 for scale), but the column has to be there.
 }
 \examples{

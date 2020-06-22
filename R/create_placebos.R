@@ -5,7 +5,7 @@
 #'
 #' Unifies \code{\link{shift_border}}, \code{\link{cutoff2polygon}}, \code{\link{assign_treated}} in one function to carry out a myriad of placebo checks at once.
 #' The output is either a data.frame (with or without geometry of the respective placeboline) or a coefplot.
-#' Requires operations data.frame that contains all desired operations (columns shift.x, shift.y, scale, angle, orientation.1, orientation.2, corners, endpoint.1, endpoint.2),
+#' Requires operations data.frame that contains all desired operations (columns shift.x, shift.y, scale, angle, orientation.1, orientation.2, endpoint.1, endpoint.2),
 #' if you don't need a certain operation just use default values (e.g. 0 for angle and 1 for scale), but the column has to be there.
 #'
 #' @param data sf data.frame that contains all units of observation
@@ -63,7 +63,6 @@ create_placebos <- function(data, cutoff, formula, operations,
                                   messages = F)
     polygon.1     <- cutoff2polygon(data = data, cutoff = cutoff.1,
                                     orientation = c(operations$orientation.1[i], operations$orientation.2[i]),
-                                    corners     = operations$corners[i],
                                     endpoints   = c(operations$endpoint.1[i], operations$endpoint.2[i]),
                                     messages = F)
     data$treated <- assign_treated(data = data, polygon = polygon.1, id = "id")

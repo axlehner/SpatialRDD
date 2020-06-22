@@ -59,9 +59,10 @@ The workhorse functions of `SpatialRDD` in a nutshell are:
 
 and they are going to be introduced here in precisely this order.
 
-# Some words of caution
+## Some words of caution
 
-all the projections system importance plus the story mit GADM is dangerous (visualise with leaflet odersowas auf openstreetmap)
+You (obviously) have to pay attention that you have an RD border that is fine-grained enough so that it resembles the true cutoff. Something at the degree of e.g. the widely used GADM boundaries (just as an example, because administrative boundaries themselves are usually never valid RD cutoffs due to the compound treatment problem) is most probably not detailed enough.
+Furthermore it is suggested to always work in a localised projection system that has metres as units - as opposed to e.g. degrees (you can check that with `st_crs(data)$units`). A good choice would be UTM: find the right grid [here](http://www.dmap.co.uk/utmworld.htm), then get the corresponding `EPSG` number and use this in `st_transform()` after you imported your data.
 
 # Setup and Propaedeutics
 
@@ -80,7 +81,7 @@ library(stargazer) # easy way to make model output look more appealing (R-inline
 library(sf)
 ```
 
-These come in the EPSG `r sf::st_crs(cut_off.sf)$input` projection system, which is a "localised" [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) coordinate system. These are generally prefereable for exercises like a Spatial RDD, as they are more precise and also allow us to work in metres (the "classic" longitude/latitude CRS, EPSG 4326, works in degrees). If your study area is small, you should reproject your data into the CRS of the according UTM zone (simply use `st_transform()`). To verify the units of our CRS we could simply run `st_crs(cut_off.sf)$units`.
+These come in EPSG `r sf::st_crs(cut_off.sf)$input`, which is a "localised" [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) coordinate reference system (CRS). These are generally prefereable for exercises like a Spatial RDD, as they are more precise and also allow us to work in metres (the "classic" longitude/latitude CRS, EPSG 4326, works in degrees). If your study area is small, you should reproject your data into the CRS of the according UTM zone (simply use `st_transform()`). To verify the units of our CRS we could simply run `st_crs(cut_off.sf)$units`.
 
 All the spatial objects are of class `sf` from the [sf package](https://CRAN.R-project.org/package=sf). This means they are just a `data.frame` with a special column that contains a geometry for each row. The big advantage is, no matter if you prefer base R, `dplyr`, or any other way to handle and wrangle your data, the `sf` object can be treated just like a standard `data.frame`. The one single step that transforms these spatial objects back to a standard `data.frame` is just dropping the geometry column with
 ```{r, eval = F}

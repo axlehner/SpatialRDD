@@ -29,8 +29,8 @@ a polygon as an sf object
 \description{
 Creates an approximation of a "treated/untreated polygon" to assign the status again to each observation after the border has been shifted.
 The function extends both ends of the provided cutoff to the edge of the (imaginary) bounding box of the provided data (this ensures all observations will be included).
-Key is that you provide a 2-tuple that indicate in which side of the bounding box the end should go. Always check the output by plotting the polygon (e.g. with \code{tm_shape(your.polygon) + tm_polygons()}).
-If the outcoming polygon looks odd, a first check should be to just switch the elements from the orientation vector around! See \code{vignette(shifting_borders)} for details and illustrative examples.
+Key is that you provide a 2-tuple that indicates in which side of the bounding box each end should go (1st element is the one with lower x-coordinate, i.e. leftern most). Always check the output manually by plotting the polygon (e.g. with \code{tm_shape(your.polygon) + tm_polygons()}).
+If the output polygon looks odd, a first check should be to just switch the elements from the orientation vector around! See \code{vignette(shifting_borders)} for details and illustrative examples.
 }
 \examples{
 \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
