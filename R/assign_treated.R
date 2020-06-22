@@ -12,7 +12,7 @@
 #' @return A vector of type factor with 0's and 1's. Convert with as.numeric() if you want real numbers/integers.
 #' @export
 #'
-#' @note This is essentially a wrapper of \code{\link[sf]{st_intersection}}.
+#' @note This is essentially a wrapper of \code{\link[sf:geos_binary_ops]{st_intersection}}.
 #'
 #' @examples
 #' \dontrun{points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")}
