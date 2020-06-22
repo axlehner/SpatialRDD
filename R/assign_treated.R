@@ -12,13 +12,13 @@
 #' @return A vector of type factor with 0's and 1's. Convert with as.numeric() if you want real numbers/integers.
 #' @export
 #'
-#' @note This is essentially a wrapper of \code{\link[sf:geos_binary_ops]{st_intersection}}.
+#' @note This is essentially a wrapper of \code{sf::st_intersection}.
 #'
 #' @examples
 #' \dontrun{points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")}
 #'
 assign_treated <- function(data, polygon, id = NA) {
-
+  # \code{\link[sf:geos_binary_ops]{st_intersection}}.
   # no deparse(substitute(colname)), require the string directly
 
   # PRECHECKS on the id col

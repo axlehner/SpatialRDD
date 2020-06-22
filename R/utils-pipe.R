@@ -1,6 +1,6 @@
 #' Pipe operator
 #'
-#' See \code{magrittr::\%>\%} for details.
+#' See magrittr pkg documentation for details.
 #'
 #' @name %>%
 #' @rdname pipe
