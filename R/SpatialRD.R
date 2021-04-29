@@ -47,6 +47,7 @@ spatialrd <- function(y,
                        ) {
 
   # TODO
+  # - find elegant way to ex-ante eliminate sparse borderpoints and thus avoid errormessages
   # - fix the issue at the dist2cutoff st_crs dimension error with st_distance when different types of borderpoints come into play
   # - this plays also in the np determination (length vs nrow in the KTcase)
   # - solution to exclude sparse borderpoints before rdrobust(), check within buffer of c. 10km, if too little, jump the loop iteration
@@ -62,7 +63,7 @@ spatialrd <- function(y,
     "data frame is not an sf object"        = inherits(data, "sf"),
     "borderpoints not an sf object" = inherits(cutoff.points, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-    = sf::st_crs(data)$input == sf::st_crs(cutoff.points)$input,
+    = sf::st_crs(data) == sf::st_crs(cutoff.points),
 
     "treated column not specified correctly. Is it a string?" = inherits(treated, "character"),
     "dependent variable not specified correctly. Is it a string?" = inherits(y, "character")

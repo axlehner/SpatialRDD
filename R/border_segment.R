@@ -22,7 +22,7 @@ border_segment <- function(data, cutoff, n = 10) {
     "data frame is not an sf object"        = inherits(data, "sf"),
     "cutoff is not an sf object"            = inherits(cutoff, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-                                            = sf::st_crs(data)$input == sf::st_crs(cutoff)$input
+                                            = sf::st_crs(data) == sf::st_crs(cutoff)
   )
 
   # first bifurcation depending on input type (POINT or LINE)

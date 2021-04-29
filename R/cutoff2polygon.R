@@ -43,7 +43,7 @@ cutoff2polygon <- function(data, cutoff,
     "data frame is not an sf object"        = inherits(data, "sf"),
     "cutoff line is not an sf object"       = inherits(cutoff, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-    = sf::st_crs(data)$input == sf::st_crs(cutoff)$input,
+    = sf::st_crs(data) == sf::st_crs(cutoff),
 
     "Orientation not specified correctly. Is it a string?" = inherits(orientation, "character"),
     "Provide two elements in the orientation vector. One for each side in which the extended boundary should go into." = length(orientation) == 2
@@ -188,7 +188,9 @@ cutoff2polygon <- function(data, cutoff,
                         sf::st_sfc(sf::st_polygon(list(as.matrix(no_NAs))),
                         crs = crs))
 
-  if (sf::st_is_valid(poly_full) == F) cat("Polygon invalid, have yout tried switching the position of the two endpoints? \n If you think it is a false flag, try to make it valid with sf::st_make_valid().")
+  if (sf::st_is_valid(poly_full) == F) cat("Polygon invalid, have yout tried switching the position of the two endpoints? \n If you think it is a false flag, try to make it valid with sf::st_make_valid().\n")
+  if (sf::st_is_valid(poly_full) == F) poly_full <- sf::st_make_valid(poly_full)
+
   # HERE WE COULD ADD, to you want the negation of the result? and then just do cookie cutting with the polygon of the full bbox
 
 

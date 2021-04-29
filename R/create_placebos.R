@@ -14,6 +14,7 @@
 #' @param operations container that has all the information in it on how to change the border for each placeboregression
 #' @param coefplot provide coefplot instead of a data.frame
 #' @param geometry set to \code{TRUE} if you want to plot all the lines of the used placebo borders
+#' @param bw_dist what is the distance for the bandwith (in CRS units, thus ideally metres)
 #'
 #' @return either a coefplot or data.frame containing results of placeboregressions
 #' @export
@@ -22,7 +23,7 @@
 #' \dontrun{create_placebos(data = points_samp.sf, cutoff = cut_off.sf,
 #' formula = education ~ 1, operations = operations)}
 
-create_placebos <- function(data, cutoff, formula, operations,
+create_placebos <- function(data, cutoff, formula, operations, bw_dist,
                              coefplot = F, geometry = F
                              ) {
 
@@ -35,45 +36,72 @@ create_placebos <- function(data, cutoff, formula, operations,
     "data frame is not an sf object"        = inherits(data, "sf"),
     "cutoff not an sf object" = inherits(cutoff, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-    = sf::st_crs(data)$input == sf::st_crs(cutoff)$input,
+    = sf::st_crs(data) == sf::st_crs(cutoff),
 
     "formula not provided correctly" = rlang::is_formula(formula)
   )
 
-  bw_dist <- 3000 # make this a parameter later
+  #bw_dist <- 3000 # make this a parameter later
   # create the container -------------------------
   nruns <- nrow(operations)
-  columnames <- c("id", "estimate", "std.error", "statistic", "p.value", "geometry") # should we extract Ntr + Nco?
+  columnames <- c("id", "estimate", "std.error", "statistic", "p.value") # should we extract Ntr + Nco?
   results <- data.frame(matrix(ncol = length(columnames), nrow = nruns))
   colnames(results) <- columnames
   results$id <- 1:nruns
 
+  # add multiple standard errors ----------------
+  SE_types <- c("const", "HC0", "HC1", "HC2", "HC3", "HC4")
+  SEs <- data.frame(matrix(ncol = length(SE_types), nrow = nruns))
+  colnames(SEs) <- SE_types
+  results <- cbind(results, SEs)
+
+  # more SEs:
+  # - cluster (come in w formula)
+  # - Conley
+
+  # geometry comes last:
+  if (geometry == T) results$geometry <- rep(NA, nrow(results))
+
   # create formula from input ------------
   # could equally well say: provide formula and then automatically update in the treated.1 in first posi
   formula <- stats::update(formula, ~ treated + .) # treated is always put on second position
+  # KEY for all the following is that treated is on the 1st postion in the formula and thus 2nd coefficient in all the outputs (after the constant)
 
   # loop over the placeboregressions -------------------------
   # ... later: option to parallelise! foreach or just make this loop one function and run it on parLapply or the purrr equiv? (since we have many params)
   for (i in 1:nrow(operations)) {
-    print(operations[i,])
-    cutoff.1      <- shift_border(cutoff, operation = c("shift", "angle", "scale"),
+    #print(operations$angle[i])
+    cutoff.1      <- shift_border(cutoff, operation = c("shift", "rotate", "scale"),
                                   shift = c(operations$shift.x[i], operations$shift.y[i]),
                                   scale = operations$scale[i],
                                   angle = operations$angle[i],
                                   messages = F)
-    polygon.1     <- cutoff2polygon(data = data, cutoff = cutoff.1,
+    polygon.1     <- try(cutoff2polygon(data = data, cutoff = cutoff.1,
                                     orientation = c(operations$orientation.1[i], operations$orientation.2[i]),
                                     endpoints   = c(operations$endpoint.1[i], operations$endpoint.2[i]),
-                                    messages = F)
-    data$treated <- assign_treated(data = data, polygon = polygon.1, id = "id")
+                                    messages = F))
+    # if the polygon comes out invalid we jump the loop, this is a safe fallback.
+    if (sf::st_is_valid(polygon.1) == F) {cat("invalid treated polygon, jumping to next iteration! \n"); next}
 
-    data$dist2cutoff.1 <- as.numeric(sf::st_distance(data, cutoff.1)) # compute distance to new border
-    results[i, 2:5] <- broom::tidy(stats::lm(formula, data = data[data$dist2cutoff.1 < bw_dist, ]))[2, 2:5] # second regressor extracted (the treated)
-    if (geometry == T) results$geometry[i] <- sf::st_geometry(cutoff.1)
+    err <- NA # here we introduce some errorhandling
+    #print(err)
+    data$treated <- tryCatch({assign_treated(data = data, polygon = polygon.1, id = "id")}, error=function(err){assign("err", err, envir = globalenv())})
+    if (inherits(err, "error")) {print("err, next loop!"); next}
+    data$dist2cutoff.1 <- as.numeric(sf::st_distance(data, cutoff.1)) %>% try() # compute distance to new border
+    # second regressor extracted (the treated):
+    tryCatch({lm.obj <- stats::lm(formula, data = data[data$dist2cutoff.1 < bw_dist, ])
+              results[i, 2:5] <- broom::tidy(lm.obj)[2, 2:5]
+              results[i, 6:(5+length(SE_types))] <- sapply(SE_types, function(x) lmtest::coeftest(lm.obj, vcov = sandwich::vcovHC, type = x)[2, "t value"]) %>% t()
+              #print(results[i, 6:(5+length(SE_types))])
+              }, error=function(err){assign("err", err, envir = globalenv())})
+    #print(err)
+    if (inherits(err, "error")) {print("err, next loop!"); next}
+    if (geometry == T) results$geometry[i] <- sf::st_geometry(cutoff.1) %>% try()
   }
   # make it an sf object if we want to plot the lines on a map
-  if (geometry == T) results <- sf::st_sf(results, crs = sf::st_crs(data)$input) # this finds the geom column automatically
+  if (geometry == T) results <- sf::st_sf(results, crs = sf::st_crs(data)) # this finds the geom column automatically
 
+  results <- cbind(results, operations)
 
   if (coefplot == T) {
     results %>% ggplot2::ggplot(mapping = ggplot2::aes(x = .data$id, y = .data$estimate,
