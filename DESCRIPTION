@@ -16,6 +16,8 @@ Imports:
     ggplot2,
     tmap,
     rdrobust,
+    lmtest,
+    sandwich,
     RATest,
     cowplot,
     magrittr,

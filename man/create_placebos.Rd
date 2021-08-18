@@ -4,7 +4,15 @@
 \alias{create_placebos}
 \title{Multiple placebocheks unified in just one list or coefplot}
 \usage{
-create_placebos(data, cutoff, formula, operations, coefplot = F, geometry = F)
+create_placebos(
+  data,
+  cutoff,
+  formula,
+  operations,
+  bw_dist,
+  coefplot = F,
+  geometry = F
+)
 }
 \arguments{
 \item{data}{sf data.frame that contains all units of observation}
@@ -14,6 +22,8 @@ create_placebos(data, cutoff, formula, operations, coefplot = F, geometry = F)
 \item{formula}{provide the formula you want to use for OLS, omit the treatetment dummy (if you want a univariate regression just on "treated", then provide y ~ 1 as formula)}
 
 \item{operations}{container that has all the information in it on how to change the border for each placeboregression}
+
+\item{bw_dist}{what is the distance for the bandwith (in CRS units, thus ideally metres)}
 
 \item{coefplot}{provide coefplot instead of a data.frame}
 

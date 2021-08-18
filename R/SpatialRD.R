@@ -149,12 +149,14 @@ spatialrd <- function(y,
     # estimation
     #----------------------
     # if else with BW being the first decision
-    if (bwfix == T) {
-      rdrob_bwflex <- rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, h = bw, ...)
-    } else { # this is the same, just with MSE-optimal bandwidth
-      rdrob_bwflex <- try(rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, ...))
-    }
+    err <- FALSE # errorflag reset
 
+      if (bwfix == T) {
+        rdrob_bwflex <- tryCatch(rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, h = bw, ...), error = function(e) { err <<- TRUE})
+      } else { # this is the same, just with MSE-optimal bandwidth
+        rdrob_bwflex <- tryCatch(rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, ...), error = function(e) { err <<- TRUE})
+      }
+    if(err) { next }  # break the loop if we have an error
     # RD testing
     #invisible(utils::capture.output(mccrary <- dc_test(data[["dist2cutoff"]]), plot = F))
     # switch to another mccrary, probably from the rdd itself, or the RDDtools?

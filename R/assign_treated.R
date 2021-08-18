@@ -35,7 +35,7 @@ assign_treated <- function(data, polygon, id = NA) {
     "data frame is not an sf object"        = inherits(data, "sf"),
     "treatment polygon is not an sf object" = inherits(polygon, "sf"),
     "CRS not matching between objects, transform them accordingly!"
-    = sf::st_crs(data)$input == sf::st_crs(polygon)$input
+    = sf::st_crs(data) == sf::st_crs(polygon)
   )
 
   # retrieving the id's that were treated (this function effectively subsets the whole df/sf object, we extract only one column of that)

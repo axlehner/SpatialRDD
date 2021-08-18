@@ -44,7 +44,7 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
   #bw_dist <- 3000 # make this a parameter later
   # create the container -------------------------
   nruns <- nrow(operations)
-  columnames <- c("id", "estimate", "std.error", "statistic", "p.value") # should we extract Ntr + Nco?
+  columnames <- c("id", "estimate", "std.error", "statistic", "p.value", "rd.estimate") # should we extract Ntr + Nco?
   results <- data.frame(matrix(ncol = length(columnames), nrow = nruns))
   colnames(results) <- columnames
   results$id <- 1:nruns
@@ -66,6 +66,8 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
   # could equally well say: provide formula and then automatically update in the treated.1 in first posi
   formula <- stats::update(formula, ~ treated + .) # treated is always put on second position
   # KEY for all the following is that treated is on the 1st postion in the formula and thus 2nd coefficient in all the outputs (after the constant)
+  y.string <- stats::formula(formula)[[2]]
+  print(y.string)
 
   # loop over the placeboregressions -------------------------
   # ... later: option to parallelise! foreach or just make this loop one function and run it on parLapply or the purrr equiv? (since we have many params)
@@ -83,19 +85,25 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
     # if the polygon comes out invalid we jump the loop, this is a safe fallback.
     if (sf::st_is_valid(polygon.1) == F) {cat("invalid treated polygon, jumping to next iteration! \n"); next}
 
-    err <- NA # here we introduce some errorhandling
+    err <- FALSE # here we introduce some errorhandling
     #print(err)
-    data$treated <- tryCatch({assign_treated(data = data, polygon = polygon.1, id = "id")}, error=function(err){assign("err", err, envir = globalenv())})
-    if (inherits(err, "error")) {print("err, next loop!"); next}
+    data$treated <- tryCatch({assign_treated(data = data, polygon = polygon.1, id = "id")}, error = function(e) {err <<- TRUE})
+    if (err) {print("err, next loop!"); next}
     data$dist2cutoff.1 <- as.numeric(sf::st_distance(data, cutoff.1)) %>% try() # compute distance to new border
+    # NOW FOR THE NON-PARAMETRIC
+    data$distrunning <- data$dist2cutoff.1
+    # give the non-treated one's a negative score BECAUSE rdrobust recognizes positive score as treated
+    data$distrunning[data$treated == 0] <- -1 * data$distrunning[data$treated == 0]
     # second regressor extracted (the treated):
     tryCatch({lm.obj <- stats::lm(formula, data = data[data$dist2cutoff.1 < bw_dist, ])
               results[i, 2:5] <- broom::tidy(lm.obj)[2, 2:5]
               results[i, 6:(5+length(SE_types))] <- sapply(SE_types, function(x) lmtest::coeftest(lm.obj, vcov = sandwich::vcovHC, type = x)[2, "t value"]) %>% t()
               #print(results[i, 6:(5+length(SE_types))])
-              }, error=function(err){assign("err", err, envir = globalenv())})
+              rd.obj <- rdrobust::rdrobust(data[[y.string]], data$distrunning, c = 0, p = 1)
+              results$rd.estimate[i] <- rd.obj$Estimate[[1]]
+              }, error = function(e) {err <<- TRUE})
     #print(err)
-    if (inherits(err, "error")) {print("err, next loop!"); next}
+    if (err) {print("err, next loop!"); next}
     if (geometry == T) results$geometry[i] <- sf::st_geometry(cutoff.1) %>% try()
   }
   # make it an sf object if we want to plot the lines on a map
