@@ -27,7 +27,7 @@ plotspatialrd <- function(SpatialRDoutput, map = F) {
                  mapping = ggplot2::aes(x = .data$Point, y = .data$Estimate, ymin = .data$CI_Conv_l, ymax = .data$CI_Conv_u)) +
     ggplot2::geom_errorbar(color = "grey") +
     ggplot2::geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-    ggplot2::geom_point(ggplot2::aes(colour = cut(.data$pvalC, c(-Inf, .11, Inf))), size = 1, shape = 19) +
+    ggplot2::geom_point(ggplot2::aes(colour = cut(.data$p_Conv, c(-Inf, .11, Inf))), size = 1, shape = 19) +
     ggplot2::scale_color_manual(values = c("palegreen2", "lightcoral")) +
     # Here comes the styling
     ggplot2::theme_bw() + # needs to go before any other individual styling, otherwise it overwrites it
@@ -40,7 +40,7 @@ plotspatialrd <- function(SpatialRDoutput, map = F) {
                     mapping = ggplot2::aes(x = .data$Point, y = .data$Estimate, ymin = .data$CI_Rob_l, ymax = .data$CI_Rob_u)) +
     ggplot2::geom_errorbar(color = "grey") +
     ggplot2::geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-    ggplot2::geom_point(ggplot2::aes(colour = cut(.data$pvalR, c(-Inf, .11, Inf))), size = 1, shape = 19) +
+    ggplot2::geom_point(ggplot2::aes(colour = cut(.data$p_Rob, c(-Inf, .11, Inf))), size = 1, shape = 19) +
     ggplot2::scale_color_manual(values = c("palegreen2", "lightcoral")) +
     # Here comes the styling
     ggplot2::theme_bw() + # needs to go before any other individual styling, otherwise it overwrites it
@@ -52,7 +52,7 @@ plotspatialrd <- function(SpatialRDoutput, map = F) {
   # MAPPLOT OF BORDERPOINTS
   mapplot <- ggplot2::ggplot() +
     #geom_sf(data = polygon_full.sf, alpha = 0.5) + # u need the data = !
-    ggplot2::geom_sf(data = SpatialRDoutput, ggplot2::aes(colour = cut(.data$pvalC, c(-Inf, .11, Inf))), size = 1, shape = 19) + #coord_equal() +
+    ggplot2::geom_sf(data = SpatialRDoutput, ggplot2::aes(colour = cut(.data$p_Conv, c(-Inf, .11, Inf))), size = 1, shape = 19) + #coord_equal() +
     ggplot2::scale_color_manual(values = c("palegreen2", "lightcoral")) +
     #geom_point(data = data, ggplot2::aes(longitude, latitude), size = 0.5) +
     # Here comes the styling

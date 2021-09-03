@@ -33,11 +33,11 @@ printspatialrd <- function(SpatialRDoutput, #label = NA, caption = NA, footnote 
 
   # sf::st_set_geometry(SpatialRDoutput, NULL) %>% # make the non-spatiality on the fly here so that I don't have to estimate it again for the mapplot
   SpatialRDoutput %>% # if the object is non-spatial
-    dplyr::select(-c(.data$pvalC, .data$pvalR)) %>% # kick the pvalues (need them for plot later)
-    dplyr::select(-c(.data$McCrary)) %>% # kick McCrary
-    dplyr::select(-c(.data$RATest)) %>% # kick RATest
+    dplyr::select(-c(.data$p_Conv, .data$p_Rob)) %>% # kick the pvalues (need them for plot later)
+    #dplyr::select(-c(.data$McCrary)) %>% # kick McCrary
+    #dplyr::select(-c(.data$RATest)) %>% # kick RATest
     kableExtra::kable(label = .data$label, caption = .data$caption,
-          digits = 2, row.names = F, format = "latex", booktabs = T, align = "c", longtable = T) %>% # "latex"
+          digits = 2, row.names = F, format = format, booktabs = T, align = "c", longtable = T) %>% # "latex"
     kableExtra::kable_styling(full_width = T, latex_options = c("repeat_header")) %>% # "hold_position" removed temp, "repeat_header" prob not needed atm
     kableExtra::column_spec(1, width = ".5cm") %>% # point column
     kableExtra::column_spec(3:5, width = ".5cm") %>% #Ntr to bw columns

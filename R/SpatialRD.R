@@ -8,7 +8,7 @@
 #' The treated dummy variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
 #'
 #' This function nests \code{\link[rdrobust]{rdrobust}}. All its options (aside from running variable \code{x} and cutoff \code{c}) are available here as well (e.g. bw selection, cluster level, kernel, weights).
-#' Check the documentation in the \code{rdrobust} package for details.
+#' Check the documentation in the \code{rdrobust} package for details. (bandwidth selection default in \code{rdrobust} is bwselect = 'mserd')
 #'
 #' To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{plotspatialrd}}.
 #'
@@ -43,7 +43,7 @@ spatialrd <- function(y,
                        sample = FALSE, samplesize = NA,
                        sparse.exclusion = FALSE,
                        #cluster = NA, # string required
-                       print.msg = FALSE,
+                       print.msg = FALSE, store.CIs = FALSE,
                        spatial.object = TRUE, # if this is 1, function will return an sf object
                        RATestvec = NA, ...
                        ) {
@@ -111,7 +111,7 @@ spatialrd <- function(y,
   # create storage for final results
   #columnames <- c("Point", "Estimate", "pvalC", "pvalR", "Ntr", "Nco", "bw", "CI_Conv", "CI_Rob", "McCrary", "RATest")
   # the version where the CIs have upper and lower in a separate column
-  columnames <- c("Point", "Estimate", "pvalC", "pvalR", "Ntr", "Nco", "bw", "CI_Conv_l", "CI_Conv_u", "CI_Rob_l", "CI_Rob_u", "McCrary", "RATest")
+  columnames <- c("Point", "Estimate", "SE_Conv", "SE_Rob", "p_Conv", "p_Rob", "Ntr", "Nco", "bw_l", "bw_r", "CI_Conv_l", "CI_Conv_u", "CI_Rob_l", "CI_Rob_u")#, "McCrary", "RATest") # keep McC and RA as placeholder for now
   results <- data.frame(matrix(ncol = length(columnames), nrow = np))
   colnames(results) <- columnames
 
@@ -165,21 +165,23 @@ spatialrd <- function(y,
     # mccrary <- rdd::DCdensity(data[["dist2cutoff"]], 0, plot = FALSE)
     # mccrary <- rddapp::dc_test(data[["dist2cutoff"]], verbose = F, plot = F, ext.out = F), same results, bad output, the rdd:: is the original one in any case
 
-    if (!is.na(RATestvec)) {
-      invisible(utils::capture.output(permtest <- RATest::RDperm(W = RATestvec, z = "dist2cutoff", data = as.data.frame(data))))
-    }
+    #if (!is.na(RATestvec)) {
+    #  invisible(utils::capture.output(permtest <- RATest::RDperm(W = RATestvec, z = "dist2cutoff", data = as.data.frame(data))))
+    #}
 
     # store results
     #========================
     results[i, "Point"] <- i
     results[i, "Estimate"] <- round(rdrob_bwflex[["coef"]][["Conventional", 1]], 2)
-    results[i, "pvalC"] <- round(rdrob_bwflex[["pv"]][["Conventional", 1]], 2)
-    #results[i, "pvalB-C"] <- round(rdrob_bwflex[["pv"]][["Bias-Corrected", 1]], 2)
-    results[i, "pvalR"] <- round(rdrob_bwflex[["pv"]][["Robust", 1]], 2)
+    results[i, "SE_Conv"] <- round(rdrob_bwflex[["se"]][["Conventional", 1]], 2)
+    results[i, "SE_Rob"] <- round(rdrob_bwflex[["se"]][["Robust", 1]], 2)
+    results[i, "p_Conv"] <- round(rdrob_bwflex[["pv"]][["Conventional", 1]], 2)
+    results[i, "p_Rob"] <- round(rdrob_bwflex[["pv"]][["Robust", 1]], 2)
     # N_h is eff sample size, what is N_b?
     results[i, "Ntr"] <- rdrob_bwflex[["N_h"]][[1]]
     results[i, "Nco"] <- rdrob_bwflex[["N_h"]][[2]]
-    results[i, "bw"] <- round(rdrob_bwflex[["bws"]][["h", 1]] / 1000, 1)
+    results[i, "bw_l"] <- round(rdrob_bwflex[["bws"]][["h", 1]] / 1000, 1)
+    results[i, "bw_r"] <- round(rdrob_bwflex[["bws"]][["h", 2]] / 1000, 1)
     #results[i, "CI_Conv"] <- paste0("[",round(rdrob_bwflex$ci["Conventional", 1], 2), ";", round(rdrob_bwflex$ci["Conventional", 2], 2), "]", sep = "")
     #results[i, "CI_Rob"] <- paste0("[",round(rdrob_bwflex$ci["Robust", 1], 2), ";", round(rdrob_bwflex$ci["Robust", 2], 2), "]", sep = "")
     # this is for the version with lower upper CIs separated:
@@ -189,7 +191,7 @@ spatialrd <- function(y,
     results[i, "CI_Rob_u"] <- round(rdrob_bwflex$ci["Robust", 2], 2)
 
     #results[i, "McCrary"] <- round(mccrary, 2)
-    if (!is.na(RATestvec)) {results[i, "RATest"] <- round(permtest$results[2], 2)}
+    #if (!is.na(RATestvec)) {results[i, "RATest"] <- round(permtest$results[2], 2)}
   }
   # subset away what we don't want (can put if condition as function argument lateron)
   # results <- results %>% select(-c(pvalC, pvalR)) # no p-values, but for now we have to keep them otherwise cannot make the plots
@@ -199,9 +201,10 @@ spatialrd <- function(y,
 
   # this is bruteforce, but kick the McCr n RA this way, later we decide if we want them
 
-  results <- results %>%
+  #results <- results %>%
     #dplyr::select(-c(.data$McCrary)) %>% # kick McCrary
-    dplyr::select(-c(.data$RATest)) # kick RATest
+    #dplyr::select(-c(.data$RATest)) # kick RATest
+
 
   # set the geometry of the borderpoints before subsetting according to the minobs criterion
   if (spatial.object == T) {results <- sf::st_set_geometry(results, sf::st_geometry(cutoff.points))}
