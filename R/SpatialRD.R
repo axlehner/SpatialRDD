@@ -2,12 +2,12 @@
 #'
 #'
 #' This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
-#' using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014) Econometrica.
-#' It takes in the discretised cut-off point file (the RDcut-off linestring chopped into parts by the \code{\link{discretise_border}} function)
+#' using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014).
+#' It takes in the discretized cutoff point file (the RDcutoff linestring chopped into parts by the \code{\link{discretise_border}} function)
 #' and the sf object (which essentially is just a conventional data.frame with a geometry() column) containing all the observations (treated and untreated).
 #' The treated dummy variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
 #'
-#' This function nests \code{\link[rdrobust]{rdrobust}}. All its options (aside from running variable \code{x} and cutoff \code{c}) are available here as well (e.g. cluster level, kernel, weights).
+#' This function nests \code{\link[rdrobust]{rdrobust}}. All its options (aside from running variable \code{x} and cutoff \code{c}) are available here as well (e.g. bw selection, cluster level, kernel, weights).
 #' Check the documentation in the \code{rdrobust} package for details.
 #'
 #' To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{plotspatialrd}}.
@@ -18,12 +18,13 @@
 #' @param cutoff.points sf object of borderpoints (provided by user or obtained with \code{\link{discretise_border}})
 #' @param treated column that contains the treated dummy (as string)
 #' @param minobs the minimum amount of observations in each estimation for the point estimate to be included (default is 50)
-#' @param bwfix_m fixed bandwidth in meters
+#' @param bwfix_m fixed bandwidth in meters (in case you want to impose one yourself)
 #' @param sample draw a random sample of points T/F
 #' @param samplesize if random, how many points
 #' @param spatial.object return a spatial object (needed if you want to plot the point estimates on a map)?
 #' @param RATestvec vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired
 #' @param sparse.exclusion in case we want to try to exclude sparse border points before the estimation (should reduce warnings)
+#' @param print.msg set to TRUE if you want to receive printed info
 #' @param ... in addition you can use all options in \code{\link[rdrobust]{rdrobust}}
 #'
 #' @return a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
@@ -39,20 +40,20 @@
 spatialrd <- function(y,
                        data, cutoff.points, treated, # data in, plus specify the name of the column where the dummy is AS STRING
                        minobs = 50, bwfix_m = NA, # here we define parameters, minobs that have to be selected, bwfix in metres
-                       sample = F, samplesize = NA,
-                       sparse.exclusion = F,
+                       sample = FALSE, samplesize = NA,
+                       sparse.exclusion = FALSE,
                        #cluster = NA, # string required
-                       spatial.object = T, # if this is 1, function will return an sf object
+                       print.msg = FALSE,
+                       spatial.object = TRUE, # if this is 1, function will return an sf object
                        RATestvec = NA, ...
                        ) {
 
   # TODO
-  # - find elegant way to ex-ante eliminate sparse borderpoints and thus avoid errormessages
+  # - find elegant way to ex-ante eliminate sparse borderpoints and thus avoid errormessages (done with errorcatcher)
   # - fix the issue at the dist2cutoff st_crs dimension error with st_distance when different types of borderpoints come into play
   # - this plays also in the np determination (length vs nrow in the KTcase)
   # - solution to exclude sparse borderpoints before rdrobust(), check within buffer of c. 10km, if too little, jump the loop iteration
   # --- LIKE KT16 propose!
-  # - incorporate the swagger (separate function or righthere?)
   # - color for pvalue intensity?
   # - option to kick pvalue from results table
 
@@ -72,24 +73,24 @@ spatialrd <- function(y,
   # message 1
 
   n <- nrow(data)
-  cat("We have", n, "observations of which", sum(as.numeric(as.character(data[[treated]]))), "are treated observations.\n")
+  if (print.msg) message("We have", n, "observations of which", sum(as.numeric(as.character(data[[treated]]))), "are treated observations.\n")
 
 
   bwfix <- F
-  if (!is.na(bwfix_m)) {bwfix <- T}
+  if (!is.na(bwfix_m)) {bwfix <- TRUE}
 
   # bordersamplesize
-  if (sample == T) {
-    if(is.na(samplesize)) {cat("Random border point sampling chosen: provide desired samplesize!\n")}
+  if (sample == TRUE) {
+    if(is.na(samplesize)) {message("Random border point sampling chosen: provide desired samplesize!\n")}
     border_id <- sample(1:nrow(cutoff.points), samplesize)
     # sort it so we loop beginning from the first one
     border_id <- border_id[order(border_id)]
     cutoff.points <- cutoff.points[border_id, ]
     np <- length(cutoff.points)
-    cat("Choosing", np, "random points on the border to iterate over.\n")
+    if (print.msg) message("Choosing", np, "random points on the border to iterate over.\n")
   } else {
     np <- nrow(cutoff.points) #replaced the nrow with length. why? need nrow. NO only for points., hae?
-    cat("We are iterating over", np, "Boundarypoints.\n")
+    if (print.msg) message("We are iterating over", np, "Boundarypoints.\n")
   }
 
 
@@ -97,7 +98,7 @@ spatialrd <- function(y,
   # this was the initial way of excluding points, but the more direct way is
   #  to just run the estimation and then exclude afterwards (even though it creates annoying warnings)
   # excluding this once caused during R CMD check: Error in process_get_error_connection(self, private) : stderr is not a pipe.
-  if (sparse.exclusion == T) {
+  if (sparse.exclusion == TRUE) {
     # Triangular or Edge kernel function
     Kt = function(u) {
       (1-abs(u)) * (abs(u) <= 1)
@@ -106,7 +107,7 @@ spatialrd <- function(y,
   ########################################
   # after this we also define the number of points newly
 
-  cat("The dependent variable is", y,".\n")
+  if (print.msg) message("The dependent variable is", y,".\n")
   # create storage for final results
   #columnames <- c("Point", "Estimate", "pvalC", "pvalR", "Ntr", "Nco", "bw", "CI_Conv", "CI_Rob", "McCrary", "RATest")
   # the version where the CIs have upper and lower in a separate column
@@ -123,11 +124,11 @@ spatialrd <- function(y,
     #----------------------
     # create distance to boundarypoint (using sf package and making the vector numeric, drop units [m])
 
-    if (bwfix == T) {bw <- bwfix_m}
+    if (bwfix == TRUE) {bw <- bwfix_m}
 
     # this would be the dplyr vector way, NON-CLUMSY
     # as.numeric(st_distance(data, cutoff.points[i, ], drop = T)) %>% .[. < bwfix_m]
-    data[["dist2cutoff"]] <- as.numeric(sf::st_distance(data, cutoff.points[i,], drop = T)) # rewrote the subsetting from [i, ]
+    data[["dist2cutoff"]] <- as.numeric(sf::st_distance(data, cutoff.points[i,], drop = TRUE)) # rewrote the subsetting from [i, ]
 
     # this is after the KT replication. need to choose min
     # May19, this doesn't work with the simulated data. different boundarypoint format. have to convert the KT boundarypoints?
@@ -151,7 +152,7 @@ spatialrd <- function(y,
     # if else with BW being the first decision
     err <- FALSE # errorflag reset
 
-      if (bwfix == T) {
+      if (bwfix == TRUE) {
         rdrob_bwflex <- tryCatch(rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, h = bw, ...), error = function(e) { err <<- TRUE})
       } else { # this is the same, just with MSE-optimal bandwidth
         rdrob_bwflex <- tryCatch(rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, ...), error = function(e) { err <<- TRUE})
@@ -161,12 +162,13 @@ spatialrd <- function(y,
     #invisible(utils::capture.output(mccrary <- dc_test(data[["dist2cutoff"]]), plot = F))
     # switch to another mccrary, probably from the rdd itself, or the RDDtools?
     # is based on the DCdensity from rdd
-    mccrary <- rdd::DCdensity(data[["dist2cutoff"]], 0, plot = F)
+    # mccrary <- rdd::DCdensity(data[["dist2cutoff"]], 0, plot = FALSE)
     # mccrary <- rddapp::dc_test(data[["dist2cutoff"]], verbose = F, plot = F, ext.out = F), same results, bad output, the rdd:: is the original one in any case
 
     if (!is.na(RATestvec)) {
       invisible(utils::capture.output(permtest <- RATest::RDperm(W = RATestvec, z = "dist2cutoff", data = as.data.frame(data))))
     }
+
     # store results
     #========================
     results[i, "Point"] <- i
@@ -186,7 +188,7 @@ spatialrd <- function(y,
     results[i, "CI_Rob_l"] <- round(rdrob_bwflex$ci["Robust", 1], 2)
     results[i, "CI_Rob_u"] <- round(rdrob_bwflex$ci["Robust", 2], 2)
 
-    results[i, "McCrary"] <- round(mccrary, 2)
+    #results[i, "McCrary"] <- round(mccrary, 2)
     if (!is.na(RATestvec)) {results[i, "RATest"] <- round(permtest$results[2], 2)}
   }
   # subset away what we don't want (can put if condition as function argument lateron)
@@ -198,7 +200,7 @@ spatialrd <- function(y,
   # this is bruteforce, but kick the McCr n RA this way, later we decide if we want them
 
   results <- results %>%
-    dplyr::select(-c(.data$McCrary)) %>% # kick McCrary
+    #dplyr::select(-c(.data$McCrary)) %>% # kick McCrary
     dplyr::select(-c(.data$RATest)) # kick RATest
 
   # set the geometry of the borderpoints before subsetting according to the minobs criterion
