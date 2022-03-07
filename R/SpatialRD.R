@@ -24,6 +24,7 @@
 #' @param spatial.object return a spatial object (needed if you want to plot the point estimates on a map)?
 #' @param RATestvec vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired
 #' @param sparse.exclusion in case we want to try to exclude sparse border points before the estimation (should reduce warnings)
+#' @param store.CIs set TRUE of confidence intervals should be stored
 #' @param print.msg set to TRUE if you want to receive printed info
 #' @param ... in addition you can use all options in \code{\link[rdrobust]{rdrobust}}
 #'

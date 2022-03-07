@@ -11,10 +11,12 @@ spatialrd(
   treated,
   minobs = 50,
   bwfix_m = NA,
-  sample = F,
+  sample = FALSE,
   samplesize = NA,
-  sparse.exclusion = F,
-  spatial.object = T,
+  sparse.exclusion = FALSE,
+  print.msg = FALSE,
+  store.CIs = FALSE,
+  spatial.object = TRUE,
   RATestvec = NA,
   ...
 )
@@ -30,13 +32,15 @@ spatialrd(
 
 \item{minobs}{the minimum amount of observations in each estimation for the point estimate to be included (default is 50)}
 
-\item{bwfix_m}{fixed bandwidth in meters}
+\item{bwfix_m}{fixed bandwidth in meters (in case you want to impose one yourself)}
 
 \item{sample}{draw a random sample of points T/F}
 
 \item{samplesize}{if random, how many points}
 
 \item{sparse.exclusion}{in case we want to try to exclude sparse border points before the estimation (should reduce warnings)}
+
+\item{print.msg}{set to TRUE if you want to receive printed info}
 
 \item{spatial.object}{return a spatial object (needed if you want to plot the point estimates on a map)?}
 
@@ -49,14 +53,14 @@ a data.frame or spatial data.frame (sf object) in case spatial.object = T (defau
 }
 \description{
 This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
-using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014) Econometrica.
-It takes in the discretised cut-off point file (the RDcut-off linestring chopped into parts by the \code{\link{discretise_border}} function)
+using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014).
+It takes in the discretized cutoff point file (the RDcutoff linestring chopped into parts by the \code{\link{discretise_border}} function)
 and the sf object (which essentially is just a conventional data.frame with a geometry() column) containing all the observations (treated and untreated).
 The treated dummy variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
 }
 \details{
-This function nests \code{\link[rdrobust]{rdrobust}}. All its options (aside from running variable \code{x} and cutoff \code{c}) are available here as well (e.g. cluster level, kernel, weights).
-Check the documentation in the \code{rdrobust} package for details.
+This function nests \code{\link[rdrobust]{rdrobust}}. All its options (aside from running variable \code{x} and cutoff \code{c}) are available here as well (e.g. bw selection, cluster level, kernel, weights).
+Check the documentation in the \code{rdrobust} package for details. (bandwidth selection default in \code{rdrobust} is bwselect = 'mserd')
 
 To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{plotspatialrd}}.
 }
