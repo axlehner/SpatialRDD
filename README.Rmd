@@ -20,7 +20,7 @@ is_online = curl::has_internet()
 # Spatial[R]()DD
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD)
+<!-- some dependency does not work, I have 0 error 0 warning [![Travis build status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD) -->
 <!-- badges: end -->
 
 This repository hosts the code underlying the R package `SpatialRDD`. The workhorse functions in a nutshell are:
@@ -41,13 +41,13 @@ For full guidance check out the different vignettes in the vignettes folder here
 * `vignette(spatialrdd_vignette)`
 * `vignette(shifting_borders)`
 
-in the R console. 
+in the R console. The functions that are presented in the latter are potentially useful for other research designs that rely on (randomly) shifting (many) borders.
 
 ## Installation
 
 ```{r install_pkg, eval = FALSE}
 install.packages("devtools")
-devtools::install_github("axlehner/SpatialRDD")
+devtools::install_github("axlehner/SpatialRDD") # add build_vignettes = TRUE if you want to have access to them via R, otherwise just look at the .Rmd on github in \vignettes 
 ```
 
 What you need to run you own spatial RD with `SpatialRDD`:

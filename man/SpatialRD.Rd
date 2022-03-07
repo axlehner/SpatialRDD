@@ -42,6 +42,8 @@ spatialrd(
 
 \item{print.msg}{set to TRUE if you want to receive printed info}
 
+\item{store.CIs}{set TRUE of confidence intervals should be stored}
+
 \item{spatial.object}{return a spatial object (needed if you want to plot the point estimates on a map)?}
 
 \item{RATestvec}{vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired}
