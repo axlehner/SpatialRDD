@@ -34,3 +34,4 @@ Suggests:
     lfe,
     stargazer
 VignetteBuilder: knitr
+URL: https://axlehner.github.io/SpatialRDD/
