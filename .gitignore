@@ -7,3 +7,6 @@ Vignette_SpatialRDD.R
 doc
 Meta
 docs
+# the annoying hidden files
+.DS_Store
+.Rapp.history
