@@ -26,7 +26,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   warning = F
 )
-options("scipen" = 100, "digits" = 2)
+# change options for readable regression output (changed back at the end of vignette!)
+old <- options("scipen" = 100, "digits" = 2)
 # write this vignette with ctrl shift D, that builds all the vignettes
 ```
 
@@ -359,6 +360,11 @@ list(
   lm(education ~ treated1, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ]),
   lfe::felm(education ~ treated1 | factor(segment.1.5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ])
 ) %>% stargazer::stargazer(type = "text")
+```
+
+```{r, include = FALSE}
+# change back options
+options(old)
 ```
 
 
