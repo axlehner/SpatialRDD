@@ -68,7 +68,7 @@ Furthermore it is suggested to always work in a localised projection system that
 
 Throughout the vignette we will use the geographic boundaries on Goa, India, from Lehner (2019). The data, included in the package, contains
 
-1. a line called `cut_off.sf` which describes the spatial discontinuity
+1. a line called `cut_off` which describes the spatial discontinuity
 2. a polygon that defines the "treated" area
 3. a polygon that defines the full study area (which is going to be useful as this defines the bounding box)
 
@@ -79,9 +79,10 @@ library(SpatialRDD)
 library(dplyr) # more intuitive data wrangling
 library(stargazer) # easy way to make model output look more appealing (R-inline, html, or latex)
 library(sf)
+data(cut_off)
 ```
 
-These come in EPSG `r sf::st_crs(cut_off.sf)$input`, which is a "localised" [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) coordinate reference system (CRS). These are generally prefereable for exercises like a Spatial RDD, as they are more precise and also allow us to work in metres (the "classic" longitude/latitude CRS, EPSG 4326, works in degrees). If your study area is small, you should reproject your data into the CRS of the according UTM zone (simply use `st_transform()`). To verify the units of our CRS we could simply run `st_crs(cut_off.sf)$units`.
+These come in EPSG `r sf::st_crs(cut_off)$input`, which is a "localised" [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) coordinate reference system (CRS). These are generally prefereable for exercises like a Spatial RDD, as they are more precise and also allow us to work in metres (the "classic" longitude/latitude CRS, EPSG 4326, works in degrees). If your study area is small, you should reproject your data into the CRS of the according UTM zone (simply use `st_transform()`). To verify the units of our CRS we could simply run `st_crs(cut_off)$units`.
 
 All the spatial objects are of class `sf` from the [sf package](https://CRAN.R-project.org/package=sf). This means they are just a `data.frame` with a special column that contains a geometry for each row. The big advantage is, no matter if you prefer base R, `dplyr`, or any other way to handle and wrangle your data, the `sf` object can be treated just like a standard `data.frame`. The one single step that transforms these spatial objects back to a standard `data.frame` is just dropping the geometry column with
 ```{r, eval = F}
@@ -108,11 +109,11 @@ For more thorough information I suggest to consult the documentation and vignett
 
 ## Inspecting the Study Area & simulating Data
 ```{r}
-data(cut_off.sf, polygon_full.sf, polygon_treated.sf)
+data(cut_off, polygon_full, polygon_treated)
 library(tmap)
-tm_shape(polygon_full.sf) + tm_polygons() + 
-  tm_shape(polygon_treated.sf) + tm_polygons(col = "grey") + 
-  tm_shape(cut_off.sf) + tm_lines(col = "red")
+tm_shape(polygon_full) + tm_polygons() + 
+  tm_shape(polygon_treated) + tm_polygons(col = "grey") + 
+  tm_shape(cut_off) + tm_lines(col = "red")
 
 ```
 
@@ -121,11 +122,11 @@ Above we see the simple map, visualising the "treated polygon" in a darker grey,
 Let's simulate some random points within the polygon that describes the full study area:
 ```{r}
 set.seed(1088) # set a seed to make the results replicable
-points_samp.sf <- sf::st_sample(polygon_full.sf, 1000)
+points_samp.sf <- sf::st_sample(polygon_full, 1000)
 points_samp.sf <- sf::st_sf(points_samp.sf) # make it an sf object bc st_sample only created the geometry list-column (sfc)
 points_samp.sf$id <- 1:nrow(points_samp.sf) # add a unique ID to each observation
 # visualise results together with the line that represents our RDD cut-off
-tm_shape(points_samp.sf) + tm_dots() + tm_shape(cut_off.sf) + tm_lines(col = "red")
+tm_shape(points_samp.sf) + tm_dots() + tm_shape(cut_off) + tm_lines(col = "red")
 ```
 
 ## Assign Treatment
@@ -133,8 +134,8 @@ tm_shape(points_samp.sf) + tm_dots() + tm_shape(cut_off.sf) + tm_lines(col = "re
 Now we use the first function of the `SpatialRDD` package. `assign_treated()` in essence just does a spatial intersection and returns a column vector that contains `0` or `1`, depending on whether the observation is inside or outside the treatment area. Thus, we just add it as a new column to the points object. The function requires the name of the points object, the name of the polygon that defines the treated area, and the id that uniquely identifies each observation in the points object:
 
 ```{r, warning = F}
-points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated.sf, id = "id")
-tm_shape(points_samp.sf) + tm_dots("treated", palette = "Set1") + tm_shape(cut_off.sf) + tm_lines(col = "red")
+points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated, id = "id")
+tm_shape(points_samp.sf) + tm_dots("treated", palette = "Set1") + tm_shape(cut_off) + tm_lines(col = "red")
 ```
 
 As a next step we add an outcome of interest that we are going to use as dependent variable in our Spatial Regression Discontinuity Design. Let's call this variable `education`, measuring the literacy rate that ranges from 0 to 1 (0%, meaning everyone illiterate to 100%, meaning everyone in the population can read and write). We assume that the units, call them villages, in the "treated" polygon have on average a higher literacy rate because they received some sort of "treatment". Let's just assume aliens dropped (better) schools in all of these villages, but NOT in any of the outside villages, and everything else is constant and identical across the two territories. 
@@ -174,13 +175,13 @@ where the intercept tells us that the average in the non-treated areas is 0.6 an
 The next essential step before we start to do proper Spatial RDD analysis, is to determine how far each of these points is away from the cut-off. Here we just make use of a function from `sf` called `st_distance()` that returns a vector with units (that we have to convert to real numbers by `as.numeric()`):
 
 ```{r}
-points_samp.sf$dist2cutoff <- as.numeric(sf::st_distance(points_samp.sf, cut_off.sf))
+points_samp.sf$dist2cutoff <- as.numeric(sf::st_distance(points_samp.sf, cut_off))
 ```
 
 This allows us now to investigate villages only within a certain range, say 3 kilometres, around our "discontinuity":
 ```{r, warning = F, message = F}
 tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("education", palette = "RdYlGn", size = .1) + 
-  tm_shape(cut_off.sf) + tm_lines()
+  tm_shape(cut_off) + tm_lines()
 
 ```
 
@@ -239,19 +240,19 @@ This method, popularised by Dell2010 in her JMP on the Peruvian Mining Mita, exa
 The (computationally a bit demanding) function `border_segment()` only needs the points layer and the cut-off as input (preferrably as line, but also an input in the form of boundarypoint works). The last parameter of the function lets us determine how many segments we want. As with the `assign_treated()` function, the output is a vector of factors.
 
 ```{r, fig.show='hold'}
-points_samp.sf$segment10 <- border_segment(points_samp.sf, cut_off.sf, 10)
-points_samp.sf$segment15 <- border_segment(points_samp.sf, cut_off.sf, 15)
-tm_shape(points_samp.sf) + tm_dots("segment10", size = 0.1) + tm_shape(cut_off.sf) + tm_lines()
-tm_shape(points_samp.sf) + tm_dots("segment15", size = 0.1) + tm_shape(cut_off.sf) + tm_lines()
+points_samp.sf$segment10 <- border_segment(points_samp.sf, cut_off, 10)
+points_samp.sf$segment15 <- border_segment(points_samp.sf, cut_off, 15)
+tm_shape(points_samp.sf) + tm_dots("segment10", size = 0.1) + tm_shape(cut_off) + tm_lines()
+tm_shape(points_samp.sf) + tm_dots("segment15", size = 0.1) + tm_shape(cut_off) + tm_lines()
 ```
 
 It is worth noting that the researcher has to pay attention to how the fixed effects are assigned. It could, e.g. due to odd bendings of the cut-off, be the case that for some segment only one side actually gets assigned point. These situations are undesireable for estimation. It is thus paramount to always plot the fixed-effect categories on a map!
-The `border_segment()` already gives the researcher a feeling for how meaningful the choice for the number of segments was. In the above example we have a segment for every `r round(as.numeric(st_length(cut_off.sf))/1000/10, 0)` kilometres, which seems not too unreasonable. We could see however, that some of the FE categories contain verly little observations which is not very desireable for several reasons.  
+The `border_segment()` already gives the researcher a feeling for how meaningful the choice for the number of segments was. In the above example we have a segment for every `r round(as.numeric(st_length(cut_off))/1000/10, 0)` kilometres, which seems not too unreasonable. We could see however, that some of the FE categories contain verly little observations which is not very desireable for several reasons.  
 In the following example we thus choose less borderpoints, leading to more observations on each side of the border for every segment and thus to more meaningful point estimates:
 
 ```{r}
-points_samp.sf$segment5 <- border_segment(points_samp.sf, cut_off.sf, 5)
-tm_shape(points_samp.sf) + tm_dots("segment5", size = 0.1) + tm_shape(cut_off.sf) + tm_lines()
+points_samp.sf$segment5 <- border_segment(points_samp.sf, cut_off, 5)
+tm_shape(points_samp.sf) + tm_dots("segment5", size = 0.1) + tm_shape(cut_off) + tm_lines()
 ```
 
 Simple OLS estimates, using the segments that we just obtained as categories for our fixed effects, show these differences:
@@ -277,12 +278,12 @@ A future version of `SpatialRDD` will also incorporate the "Optimized RDD" appro
 First of all we have to cut the border into equally spaced segments. For each of these segments, or rather boundarypoints, we will later obtain a point estimate. The `discretise_border()` function just requires the sf object that represent the cut-off (polyline preferred but also points possible) and the number of desired boundarypoints:
 
 ```{r}
-borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)
+borderpoints.sf <- discretise_border(cutoff = cut_off, n = 50)
 borderpoints.sf$id <- 1:nrow(borderpoints.sf)
 # exclude some of the borderpoints with little n so that the vignette can compile without warning:
 #borderpoints.sf <- borderpoints.sf %>% slice(c(5,10,20,30,40))
 tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("education", palette = "RdYlGn", size = .1) +
-  tm_shape(cut_off.sf) + tm_lines() +
+  tm_shape(cut_off) + tm_lines() +
   tm_shape(borderpoints.sf) + tm_symbols(shape = 4, size = .3)
 ```
 
@@ -315,7 +316,7 @@ In Spatial Regression Discontinuity exercises, the researcher usually also has t
 Here we are going to apply a standard tool that we got to know in linear algebra 1 classes: an affine transformation of the type $f(x) = x\mathbf{A}+b$, where the matrix $\mathbf{A}$ is the projection matrix to shift, (re-)scale, or rotate the border. For simplicity we now only apply a shift by 3000 metres in both the x and y coordinates of the border.
 
 ```{r}
-placebocut_off.1 <- shift_border(cut_off.sf, operation = "shift", shift = c(3000, 3000))
+placebocut_off.1 <- shift_border(cut_off, operation = "shift", shift = c(3000, 3000))
 placeboborderpoints.1 <- discretise_border(cutoff = placebocut_off.1, n = 50)
 tm_shape(points_samp.sf) + tm_dots("treated", palette = "Set1")  + tm_shape(placeboborderpoints.1) + tm_symbols(shape = 4, size = .3) + tm_shape(placebocut_off.1) + tm_lines()
 ```
