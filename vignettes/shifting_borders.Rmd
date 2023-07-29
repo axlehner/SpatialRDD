@@ -4,7 +4,7 @@ output: rmarkdown::html_vignette
 # one should use: rmarkdown::render instead of knitr::rmarkdown in the YAML preambule.
 vignette: >
   %\VignetteIndexEntry{Shifting Borders}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 
@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 ```
 
 
-One of the most tedious tasks when it comes to geographic RDDs is the execution of so-called placebo checks. With these one has to show that the postulated effect disappears when the RD cutoff is shifted around. In other words, the "treated dummy" has to be insignificant when the RD estimation is carried out on any other border.
-Already the shifting around of the border would be very cumbersome when it is carried out in a GIS API such as QGIS or ArcGIS. Here in R, thanks to the `sf` package and its simple features, this is not that much of a problem as we saw in the main vignette of `SpatialRDD` already. Even though it is not as straightforward as it sounds because shifting a cutoff by a certain distance up or down and left or right is not quite enough most of the time as borders are never straight lines. Thus we tipically also need a shrinkage or enlargement and quite often also a transformation to change the "angle".
-Furthermore we need to determine which dots on the map are the newly treated ones after we moved our cutoff. And this is where it gets tricky. Simple distance calculations to the border do not help because they don't tell us on which side of the cutoff a point is. Since borders are never straight lines and always have odd shapes we also cannot just come up with a rule based on x- and y-coordinates. And even if we could it would be very tedious to figure out after every shift which were the exact positions in space below/above the units count as treated. Thus the only generalizeable solution left is to come up with a polygon shape that covers the "placebo treated" area. This is where the `SpatialRDD` package comes in with a very generic solution that allows to carry out a myriad of such placebochecks without having to worry about details.
+One of the most tedious tasks regarding spatial RDDs is the execution of so-called placebo checks. With these, one has to show that the postulated effect disappears when the RD cutoff is shifted around. In other words, the regression coefficient on the treatment indicator has to be statistically insignificant when the RD estimation is carried out on any additional border.
+Just shifting around the border would be already very cumbersome when it is carried out in a "point and click fashtion" in a GIS API such as QGIS or ArcGIS. Here in R, thanks to the `sf` package and its simple features, this is not that much of a problem as we saw in the main vignette of `SpatialRDD` already^[Even though it is not as straightforward as it sounds because shifting a cutoff by a certain distance up or down and left or right is not quite enough. This is because most of the time borders are not straight lines. Thus we typically also need a shrinkage or enlargement and quite often also a transformation to change the "angle".].
+The more tedious task, however, is that we need to determine which dots on the map are the newly (placebo-)treated ones - after we moved our cutoff. Simple distance calculations to the border do not help because they don't tell us on which side of the cutoff a point is. Since borders are never straight lines and always have odd shapes, we also cannot just come up with a rule based on x- and y-coordinates. And even if we could it would be very tedious to figure out after every shift which were the exact positions in space below/above the units count as treated. Thus the only generalizeable solution left is to come up with a polygon vector that covers the placebo-treated area. This vector can then be used to do a spatial intersect and assign placebo-treatment and placebo-control for every shifted border. That's where the `SpatialRDD` package comes in with a very generic solution that allows the user to carry out a myriad of such placebo checks without having to worry much about details.
 
-```{r setup, warning = F, message = F}
+```{r setup, warning = FALSE, message = FALSE}
 library(SpatialRDD); data(cut_off, polygon_full, polygon_treated)
 library(tmap)
 set.seed(1088) # set a seed to make the results replicable
@@ -35,7 +35,7 @@ points_samp.sf$id <- 1:nrow(points_samp.sf) # add a unique ID to each observatio
 
 ## More on placebo bordering
 
-When the border is not approximating a line in space but is curving and bending (i.e. in most cases), "placebo bordering" can be tricky and is not straightforward. The simple substraction/addition of a specified distance from the `distance2cutoff` variable is also not a very accurate description of placebo boundary. On top of that with such a simple transformation of the distance column we can at best do a placebo check on the "pooled" polynomial specification as the border segments change and thus the assignment of categories for fixed effects. A placebo GRD design with an iteration over the boundarypoints is literally impossible in such a case.   
+When the border is not approximating a line in space but is curving and bending (i.e. in most cases), "placebo bordering" can be tricky and is not straightforward. The simple subtraction/addition of a specified distance from the `distance2cutoff` variable is also not a very accurate description of a placebo boundary. On top of that, with such a simple transformation of the distance column we can at best do a placebo check on the "pooled" polynomial specification as the border segments change and thus the assignment of fixed effect categories. A placebo GRD design with an iteration over the boundarypoints is literally impossible in such a case.   
 For a proper robustness check we thus have to create a new cut-off from which we then can extract the corresponding borderpoints (with `discretise_border()`) and also assign the border segment categories for fixed effects estimations (with `border_segment()`).   
 The `shift_border()` function can execute three different (affine) transformations at the same time:
 
@@ -52,7 +52,7 @@ $$
 
 ### Rotate
 
-```{r, message = F}
+```{r, message = FALSE}
 
 tm_rotate.sf10 <- shift_border(border = cut_off, operation = "rotate", angle = 10)
 tm_rotate.sf25 <- shift_border(border = cut_off, operation = "rotate", angle = 25)
@@ -68,7 +68,7 @@ tm_shape(polygon_full) + tm_polygons() + tm_shape(cut_off) + tm_lines() +
 
 ### Scale
 
-```{r, message = F}
+```{r, message = FALSE}
 
 tm_scale.sf.4 <- shift_border(border = cut_off, operation = "scale", scale = .4)
 tm_scale.sf.7 <- shift_border(border = cut_off, operation = "scale", scale = .7)
@@ -84,7 +84,7 @@ tm_shape(polygon_full) + tm_polygons() + tm_shape(cut_off) + tm_lines() +
 
 ### Shift
 
-```{r, fig.show='hold', message = F}
+```{r, fig.show='hold', message = FALSE}
 
 tm_shift.sf3 <- shift_border(border = cut_off, operation = "shift", shift = c(3000, 0))
 tm_shift.sf6 <- shift_border(border = cut_off, operation = "shift", shift = c(6000, 0))
@@ -106,7 +106,7 @@ tm_shape(polygon_full) + tm_polygons() + tm_shape(cut_off) + tm_lines() +
   tm_shape(tm_shift.sf_4) + tm_lines(col = "blue")  
 ```
 
-From the last shifted line we can already see that a movement along the x-axis quite often requires also a correction on the y-axis for the cut-off movement to be meaningful. This is going to be explored in detail in the following section together with all the other operations.
+From the last shifted line, we can already see that a movement along the x-axis quite often requires also a correction on the y-axis for the cut-off movement to be meaningful. This will be explored in the following section, together with all the other operations.
 
 
 ### Full fledged "placebo bordering"

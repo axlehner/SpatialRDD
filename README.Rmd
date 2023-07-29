@@ -36,7 +36,7 @@ This repository hosts the code underlying the R package `SpatialRDD`. The workho
 
 The package can estimate heterogeneous treatment effects alongside an RD cutoff. Moreover it provides powerful spatial functions to carry out placebo exercises (move borders and reassign (placebo) treatment status). These functionalities are also useful for different empirical identification strategies that rely on flexibly changing geographic boundaries. 
 
-For full guidance check out the different vignettes in the vignettes folder here on github or with
+For full guidance check out the different vignettes on the [package website](https://axlehner.github.io/SpatialRDD/articles/spatialrdd_vignette.html) or with
 
 * `vignette(spatialrdd_vignette)`
 * `vignette(shifting_borders)`
@@ -61,7 +61,7 @@ You could verify the "geographic validity" of your objects with e.g. `mapview::m
 ## Quick Guide
 
 ```{r load_pkg, echo = F, message = F, warning = F}
-library(SpatialRDD); data(cut_off.sf, polygon_full.sf, polygon_treated.sf); library(tmap)
+library(SpatialRDD); data(cut_off, polygon_full, polygon_treated); library(tmap)
 # simulate some data
 set.seed(1088) # set a seed to make the results replicable
 points_samp.sf <- sf::st_sample(polygon_full.sf, 1000)
