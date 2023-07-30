@@ -8,9 +8,9 @@ this is just a test function, export was removed for now}
 points2line(borderpoints, crs)
 }
 \arguments{
-\item{borderpoints}{test}
+\item{borderpoints}{a set of points on a boundary}
 
-\item{crs}{test}
+\item{crs}{set the coordinate reference system (CRS)}
 }
 \value{
 a line as an sf object

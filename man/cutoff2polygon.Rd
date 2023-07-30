@@ -4,13 +4,7 @@
 \alias{cutoff2polygon}
 \title{Create (treated) polygon from line}
 \usage{
-cutoff2polygon(
-  data,
-  cutoff,
-  orientation = NA,
-  endpoints = c(0, 0),
-  messages = T
-)
+cutoff2polygon(data, cutoff, orientation = NA, endpoints = c(0, 0))
 }
 \arguments{
 \item{data}{study dataset to determine the bounding box (so that all observations are covered by the new polygons) in sf format}
@@ -20,8 +14,6 @@ cutoff2polygon(
 \item{orientation}{in which side of the bounding box does each of the extensions of the cutoff go into? First element refers to endpoint of border with smaller x-coordinate ("westernmost") (takes two of "north", "east", "south", "west" in a vector, e.g. \code{c("west", "north")})}
 
 \item{endpoints}{at what position on the edge should each polygon end? (vector with two numbers between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)}
-
-\item{messages}{set to \code{FALSE} if you don't want them}
 }
 \value{
 a polygon as an sf object
@@ -33,10 +25,11 @@ Key is that you provide a 2-tuple that indicates in which side of the bounding b
 If the output polygon looks odd, a first check should be to just switch the elements from the orientation vector around! See \code{vignette(shifting_borders)} for details and illustrative examples.
 }
 \examples{
-\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
-orientation = c("west", "west"), endpoints = c(.8, .2))}
-\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
-orientation = c("north", "east"), endpoints = c(.5, .5))}
-\dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
-orientation = c("north", "south"), endpoints = c(.5, .5))}
+points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+# make it an sf object bc st_sample only created the geometry list-column (sfc):
+points_samp.sf <- sf::st_sf(points_samp.sf)
+# add a unique ID to each observation:
+points_samp.sf$id <- 1:nrow(points_samp.sf)
+cutoff2polygon(data = points_samp.sf, cutoff = cut_off,
+orientation = c("west", "west"), endpoints = c(.8, .2))
 }

@@ -7,8 +7,8 @@
 discretise_border(
   cutoff,
   n = 10,
-  random = F,
-  range = F,
+  random = FALSE,
+  range = FALSE,
   ymax = NA,
   ymin = NA,
   xmax = NA,
@@ -22,15 +22,15 @@ discretise_border(
 
 \item{random}{whether they are randomly chosen (not desireable in most cases)}
 
-\item{range}{default = F, if there is a specific range (N-S or E-W) for which the points are to be drawn (useful in order to exclude sparse borderpoints with little/no oberservations around because the non-parametric RD estimation will fail)}
+\item{range}{default = FALSE, if there is a specific range (N-S or E-W) for which the points are to be drawn (useful in order to exclude sparse borderpoints with little/no oberservations around because the non-parametric RD estimation will fail)}
 
-\item{ymax}{if range = T: y coordinates}
+\item{ymax}{if range = TRUE: y coordinates}
 
-\item{ymin}{if range = T: y coordinates}
+\item{ymin}{if range = TRUE: y coordinates}
 
-\item{xmax}{if range = T: x coordinates}
+\item{xmax}{if range = TRUE: x coordinates}
 
-\item{xmin}{if range = T: x coordinates}
+\item{xmin}{if range = TRUE: x coordinates}
 }
 \value{
 an sf object with selected (and evenly spaced) borderpoints
@@ -40,6 +40,6 @@ Takes in a border in the form of a polyline (or borderpoints) and converts it in
 These points are later used to run separate non-parametric RD estimations which eventually allows to visualise potential heterogeneous treatment effects alongside the cut-off.
 }
 \examples{
-\dontrun{borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)}
+borderpoints <- discretise_border(cutoff = cut_off, n = 10)
 
 }

@@ -24,7 +24,7 @@
 #' formula = education ~ 1, operations = operations)}
 
 create_placebos <- function(data, cutoff, formula, operations, bw_dist,
-                             coefplot = F, geometry = F
+                             coefplot = FALSE, geometry = FALSE
                              ) {
 
   # TODO
@@ -60,7 +60,7 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
   # - Conley
 
   # geometry comes last:
-  if (geometry == T) results$geometry <- rep(NA, nrow(results))
+  if (geometry == TRUE) results$geometry <- rep(NA, nrow(results))
 
   # create formula from input ------------
   # could equally well say: provide formula and then automatically update in the treated.1 in first posi
@@ -76,14 +76,12 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
     cutoff.1      <- shift_border(cutoff, operation = c("shift", "rotate", "scale"),
                                   shift = c(operations$shift.x[i], operations$shift.y[i]),
                                   scale = operations$scale[i],
-                                  angle = operations$angle[i],
-                                  messages = F)
+                                  angle = operations$angle[i])
     polygon.1     <- try(cutoff2polygon(data = data, cutoff = cutoff.1,
                                     orientation = c(operations$orientation.1[i], operations$orientation.2[i]),
-                                    endpoints   = c(operations$endpoint.1[i], operations$endpoint.2[i]),
-                                    messages = F))
+                                    endpoints   = c(operations$endpoint.1[i], operations$endpoint.2[i])))
     # if the polygon comes out invalid we jump the loop, this is a safe fallback.
-    if (sf::st_is_valid(polygon.1) == F) {cat("invalid treated polygon, jumping to next iteration! \n"); next}
+    if (sf::st_is_valid(polygon.1) == FALSE) {cat("invalid treated polygon, jumping to next iteration! \n"); next}
 
     err <- FALSE # here we introduce some errorhandling
     #print(err)
@@ -104,14 +102,14 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
               }, error = function(e) {err <<- TRUE})
     #print(err)
     if (err) {print("err, next loop!"); next}
-    if (geometry == T) results$geometry[i] <- sf::st_geometry(cutoff.1) %>% try()
+    if (geometry == TRUE) results$geometry[i] <- sf::st_geometry(cutoff.1) %>% try()
   }
   # make it an sf object if we want to plot the lines on a map
-  if (geometry == T) results <- sf::st_sf(results, crs = sf::st_crs(data)) # this finds the geom column automatically
+  if (geometry == TRUE) results <- sf::st_sf(results, crs = sf::st_crs(data)) # this finds the geom column automatically
 
   results <- cbind(results, operations)
 
-  if (coefplot == T) {
+  if (coefplot == TRUE) {
     results %>% ggplot2::ggplot(mapping = ggplot2::aes(x = .data$id, y = .data$estimate,
                                                        ymin = (.data$estimate - 1.96 * .data$std.error),
                                                        ymax = (.data$estimate + 1.96 * .data$std.error))) +
@@ -128,3 +126,6 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
   } else results # if no coefplot requested we just return the data.frame with results
 
 }
+
+# replaced all T/F with TRUE/FALSE
+# some error messages are remaining - they are needed

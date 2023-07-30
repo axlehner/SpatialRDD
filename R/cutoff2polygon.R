@@ -10,23 +10,23 @@
 #' @param cutoff sf object of the (placebo) cut-off
 #' @param orientation in which side of the bounding box does each of the extensions of the cutoff go into? First element refers to endpoint of border with smaller x-coordinate ("westernmost") (takes two of "north", "east", "south", "west" in a vector, e.g. \code{c("west", "north")})
 #' @param endpoints at what position on the edge should each polygon end? (vector with two numbers between 0 and 1, where 0.5 e.g. means right in the middle of the respective edge)
-#' @param messages set to \code{FALSE} if you don't want them
 #'
 #' @return a polygon as an sf object
 #' @export
 #' @importFrom rlang .data
 #'
 #' @examples
-#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
-#' orientation = c("west", "west"), endpoints = c(.8, .2))}
-#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
-#' orientation = c("north", "east"), endpoints = c(.5, .5))}
-#' \dontrun{cutoff2polygon(data = points_samp.sf, cutoff = placebocut_off.1,
-#' orientation = c("north", "south"), endpoints = c(.5, .5))}
+#' points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+#' # make it an sf object bc st_sample only created the geometry list-column (sfc):
+#' points_samp.sf <- sf::st_sf(points_samp.sf)
+#' # add a unique ID to each observation:
+#' points_samp.sf$id <- 1:nrow(points_samp.sf)
+#' cutoff2polygon(data = points_samp.sf, cutoff = cut_off,
+#' orientation = c("west", "west"), endpoints = c(.8, .2))
+
 
 cutoff2polygon <- function(data, cutoff,
-                            orientation = NA, endpoints = c(0, 0),
-                           messages = T) {
+                            orientation = NA, endpoints = c(0, 0)) {
   # CHANGELOG
   # - hardcoded the corner(s) for each of the 16 possible combinations (4 for each side)
 
@@ -79,7 +79,7 @@ cutoff2polygon <- function(data, cutoff,
   offsetX <- 0
   offsetY <- 0
 
-  # OLD CORNERING GRAVEYARD:
+  # OLD CORNERING GRAVEYARD (keep for future reference):
   # if (is.na(corners) | corners[1] == 0) {if (messages == T) cat("\n No corners selected, thus both extensions will end in the same side.\n")
   #   corners <- c(0)
   #   poly_c_start <- c(NA, NA)
@@ -188,11 +188,16 @@ cutoff2polygon <- function(data, cutoff,
                         sf::st_sfc(sf::st_polygon(list(as.matrix(no_NAs))),
                         crs = crs))
 
-  if (sf::st_is_valid(poly_full) == F) cat("Polygon invalid, have yout tried switching the position of the two endpoints? \n If you think it is a false flag, try to make it valid with sf::st_make_valid().\n")
-  if (sf::st_is_valid(poly_full) == F) poly_full <- sf::st_make_valid(poly_full)
+  # print this messages even though we are fixing the problem internally - but we want to use this opportunity to raise the user's awareness that his geographic objects might be invalid
+  if (sf::st_is_valid(poly_full) == FALSE) cat("Polygon invalid, have yout tried switching the position of the two endpoints? \n If you think it is a false flag, try to make it valid with sf::st_make_valid().\n")
+  if (sf::st_is_valid(poly_full) == FALSE) poly_full <- sf::st_make_valid(poly_full)
 
   # HERE WE COULD ADD, to you want the negation of the result? and then just do cookie cutting with the polygon of the full bbox
 
 
   poly_full
 }
+
+# corrected T/F
+# kept one needed warning message
+# removed dontrun{} for the example

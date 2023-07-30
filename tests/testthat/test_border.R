@@ -1,7 +1,6 @@
 context("Border Tests")
 library(SpatialRDD); data(cut_off, polygon_full)
 # create some points
-set.seed(1088) # set a seed to make the results replicable
 points_samp.sf    <- sf::st_sample(polygon_full, 100)
 points_samp.sf    <- sf::st_sf(points_samp.sf) # make it an sf object bc st_sample only created the geometry list-column (sfc)
 points_samp.sf$id <- 1:nrow(points_samp.sf) # add a unique ID to each observation

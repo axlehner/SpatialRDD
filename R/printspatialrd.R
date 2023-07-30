@@ -15,7 +15,6 @@
 #' @examples \dontrun{printspatialrd(results.spatialrd)}
 printspatialrd <- function(SpatialRDoutput, #label = NA, caption = NA, footnote = NA,
                            format = "latex"
-                           #McCrary = F, RATest = F
                            ) {
 
   # TODO
@@ -37,16 +36,18 @@ printspatialrd <- function(SpatialRDoutput, #label = NA, caption = NA, footnote 
     #dplyr::select(-c(.data$McCrary)) %>% # kick McCrary
     #dplyr::select(-c(.data$RATest)) %>% # kick RATest
     kableExtra::kable(label = .data$label, caption = .data$caption,
-          digits = 2, row.names = F, format = format, booktabs = T, align = "c", longtable = T) %>% # "latex"
-    kableExtra::kable_styling(full_width = T, latex_options = c("repeat_header")) %>% # "hold_position" removed temp, "repeat_header" prob not needed atm
+          digits = 2, row.names = FALSE, format = format, booktabs = TRUE, align = "c", longtable = TRUE) %>% # "latex"
+    kableExtra::kable_styling(full_width = TRUE, latex_options = c("repeat_header")) %>% # "hold_position" removed temp, "repeat_header" prob not needed atm
     kableExtra::column_spec(1, width = ".5cm") %>% # point column
     kableExtra::column_spec(3:5, width = ".5cm") %>% #Ntr to bw columns
     kableExtra::column_spec(6:9, width = "1.4cm") %>% #the confidence intervals
     kableExtra::column_spec(10:11, width = ".9cm") %>% #McCrary and RAtest column
-    kableExtra::row_spec(nrow(SpatialRDoutput)-1, hline_after = T) %>% # then we go in with summary stats etc
+    kableExtra::row_spec(nrow(SpatialRDoutput)-1, hline_after = TRUE) %>% # then we go in with summary stats etc
     kableExtra::footnote(general = .data$footnote,
              #alphabet = "The rows below .", # how to deal with this multiple stuff
-             threeparttable = T)
+             threeparttable = TRUE)
 
 
 }
+
+# corrected T/F

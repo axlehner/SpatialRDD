@@ -2,8 +2,8 @@
 #' Title
 #' this is just a test function, export was removed for now
 #'
-#' @param borderpoints test
-#' @param crs test
+#' @param borderpoints a set of points on a boundary
+#' @param crs set the coordinate reference system (CRS)
 #'
 #' @return a line as an sf object
 #'

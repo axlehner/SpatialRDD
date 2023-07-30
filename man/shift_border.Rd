@@ -9,8 +9,7 @@ shift_border(
   operation = c("shift", "scale", "rotate"),
   shift = c(0, 0),
   scale = 1,
-  angle = 0,
-  messages = T
+  angle = 0
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ shift_border(
 \item{scale}{if \code{operation = "scale"}, provide shrinkage/growth factor: e.g. \code{.9} to shrink by 10perc. and \code{1.1} to increase by 10perc.}
 
 \item{angle}{if \code{operation = "rotate"}, provide angle in degrees}
-
-\item{messages}{set to \code{FALSE} if you don't want them}
 }
 \value{
 a new border in the form of an sf object
@@ -35,8 +32,10 @@ This usually takes a bit of trial and error, so make sure to plot the result eac
 For a detailed walk through check out the according vignette: \code{vignette(shifting_borders)}.
 }
 \examples{
-\dontrun{placebo_border(border = cut_off.sf, operation = c("shift", "scale"),
-shift = c(-5000, -3000), scale = .85)}
-\dontrun{placebo_border(border = cut_off.sf, operation = "rotate", angle = 10)}
+shift_border(border = cut_off, operation = c("shift", "scale"),
+shift = c(-5000, -3000), scale = .85)
+
+shift_border(border = cut_off, operation = "rotate", angle = 10)
+
 
 }

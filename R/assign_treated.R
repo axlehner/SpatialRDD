@@ -15,7 +15,12 @@
 #' @note This is essentially a wrapper of \code{sf::st_intersection}.
 #'
 #' @examples
-#' \dontrun{points.sf$treated <- assign_treated(points.sf, polygon_treated.sf, id = "id")}
+#' points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+#' # make it an sf object bc st_sample only created the geometry list-column (sfc):
+#' points_samp.sf <- sf::st_sf(points_samp.sf)
+#' # add a unique ID to each observation:
+#' points_samp.sf$id <- 1:nrow(points_samp.sf)
+#' points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated, id = "id")
 #'
 assign_treated <- function(data, polygon, id = NA) {
   # \code{\link[sf:geos_binary_ops]{st_intersection}}.
@@ -48,3 +53,4 @@ assign_treated <- function(data, polygon, id = NA) {
 }
 
 # v 0.1.0 done
+# fixed example and made it executable by removing dontrun{}

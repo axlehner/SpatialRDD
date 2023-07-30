@@ -14,22 +14,20 @@ Imports:
     dplyr,
     sf,
     ggplot2,
-    tmap,
     rdrobust,
     lmtest,
     sandwich,
-    RATest,
     cowplot,
     magrittr,
     rlang,
-    rdd,
-    utils,
     broom
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
+    tmap,
     rmarkdown,
     testthat,
+    utils,
     kableExtra,
     lfe,
     stargazer

@@ -34,7 +34,7 @@ This repository hosts the code underlying the R package `SpatialRDD`. The workho
 * `shift_border()`
 * `cutoff2polygon()`
 
-The package can estimate heterogeneous treatment effects alongside an RD cutoff. Moreover it provides powerful spatial functions to carry out placebo exercises (move borders and reassign (placebo) treatment status). These functionalities are also useful for different empirical identification strategies that rely on flexibly changing geographic boundaries. 
+`SpatialRDD` is the first (geo-)statistical package that unifies the geographic tasks needed for spatial RDDs with all potential parametric and non-parametric estimation techniques that have been put forward [see @Lehner2023a]. It makes it easy to understand critical assumptions regarding bandwidths, sparse border points, and border segment fixed effects. The package can estimate heterogeneous treatment effects alongside an RD cutoff. Moreover it provides powerful spatial functions to carry out placebo exercises (move borders and reassign (placebo) treatment status). These functionalities are also useful for different empirical identification strategies that rely on flexibly changing geographic boundaries. 
 
 For full guidance check out the different vignettes on the [package website](https://axlehner.github.io/SpatialRDD/articles/spatialrdd_vignette.html) or with
 

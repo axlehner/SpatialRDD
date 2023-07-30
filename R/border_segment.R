@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{points.sf$segment10 <- border_segment(points.sf, cut_off.sf, 10)}
+#' \dontrun{points.sf$segment10 <- border_segment(points.sf, cut_off, 10)}
 #'
 border_segment <- function(data, cutoff, n = 10) {
 
@@ -27,7 +27,7 @@ border_segment <- function(data, cutoff, n = 10) {
 
   # first bifurcation depending on input type (POINT or LINE)
   if (sf::st_geometry_type(cutoff)[1] == "POINT" | sf::st_geometry_type(cutoff)[1] == "MULTIPOINT") {
-    cat("Drawing", n, "points out of the given set of boundarypoints.")
+    #cat("Drawing", n, "points out of the given set of boundarypoints.")
     # only random sampling implemented for now in st_sample
     # thus i cook up standard subsetting
     cutoff$id <- 1:nrow(cutoff) # create a unique id
@@ -49,7 +49,7 @@ border_segment <- function(data, cutoff, n = 10) {
     # this ensures that cutoffs with linegeometries that are not suited get transformed without braking the ones that are actually fine
     cutoff <- cutoff %>% sf::st_cast("LINESTRING")
     #cutoff <- cutoff %>% st_union() %>% st_as_sf() %>% st_transform(3857)
-    cat("Starting to create", n, "border segments with an approximate length of", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres each.\n")
+    #cat("Starting to create", n, "border segments with an approximate length of", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres each.\n")
     borderpoints.sf <- sf::st_line_sample(cutoff, n)
     borderpoints.sf <- borderpoints.sf %>% sf::st_cast("POINT") # cast to POINT in order to get the rownumber right
     borderpoints.sf <- sf::st_sf(borderpoints.sf) # then we need to make it an sf data frame again
@@ -64,5 +64,4 @@ border_segment <- function(data, cutoff, n = 10) {
 }
 
 # v 0.1.0 done
-# TODO
-# - make border segments random?
+# suppressed print messages to console

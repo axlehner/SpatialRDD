@@ -6,14 +6,14 @@
 #'Produces plot of GRDDseries and optionally of a map that visualises every point estimate in space.
 #'
 #' @param SpatialRDoutput spatial obkect that is produced by an estimation with \code{\link{spatialrd}}
-#' @param map T/F depending on whether mapplot is desired (make sure to set \code{spatial.objcet = T} in the \code{\link{spatialrd}} function)
+#' @param map TRUE/FALSE depending on whether mapplot is desired (make sure to set \code{spatial.objcet = TRUE} in the \code{\link{spatialrd}} function)
 #'
 #' @return plots produced with ggplot2
 #' @export
 #'
 #' @examples \dontrun{plotspatialrd(results.spatialrd)}
 
-plotspatialrd <- function(SpatialRDoutput, map = F) {
+plotspatialrd <- function(SpatialRDoutput, map = FALSE) {
 
   # replaced Courier New with Courier for now
   # TODO
@@ -62,10 +62,12 @@ plotspatialrd <- function(SpatialRDoutput, map = F) {
   #coord_map(xlim = c(73.7, 74.2), ylim = c(15, 15.8))
 
 
-  if (map == T) {
+  if (map == TRUE) {
     cowplot::plot_grid(cowplot::plot_grid(GRDD, GRDDrob, align = "v", nrow = 2), mapplot, rel_widths = c(1.8, 1))
   } else {
     cowplot::plot_grid(GRDD, GRDDrob, align = "v", nrow = 2)
   }
 
 }
+
+# corrected T/F

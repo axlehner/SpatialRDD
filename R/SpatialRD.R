@@ -1,16 +1,16 @@
 #' non-parametric Spatial RD / GRD
 #'
 #'
-#' This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
-#' using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014).
-#' It takes in the discretized cutoff point file (the RDcutoff linestring chopped into parts by the \code{\link{discretise_border}} function)
-#' and the sf object (which essentially is just a conventional data.frame with a geometry() column) containing all the observations (treated and untreated).
-#' The treated dummy variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
+#' This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression, as usual)
+#' using the \code{rdrobust} function from the \code{rdrobust} package from Calonico, Cattaneo, Titiunik (2014).
+#' It takes in the discretized cutoff point file (the RDcutoff, a linestring chopped into parts by the \code{\link{discretise_border}} function)
+#' and the sf object (which essentially is just a conventional data.frame with a \code{geometry()} column) containing all the observations (treated and untreated).
+#' The treated indicator variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
 #'
 #' This function nests \code{\link[rdrobust]{rdrobust}}. All its options (aside from running variable \code{x} and cutoff \code{c}) are available here as well (e.g. bw selection, cluster level, kernel, weights).
 #' Check the documentation in the \code{rdrobust} package for details. (bandwidth selection default in \code{rdrobust} is bwselect = 'mserd')
 #'
-#' To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{plotspatialrd}}.
+#' To visualise the output, use \code{\link{plotspatialrd}} for a graphical representation. You can use \code{\link{printspatialrd}} (or an R package of your choice) for a table output. .
 #'
 #'
 #' @param y The name of the dependent variable in the points frame in the form of a string
@@ -19,23 +19,56 @@
 #' @param treated column that contains the treated dummy (as string)
 #' @param minobs the minimum amount of observations in each estimation for the point estimate to be included (default is 50)
 #' @param bwfix_m fixed bandwidth in meters (in case you want to impose one yourself)
-#' @param sample draw a random sample of points T/F
+#' @param sample draw a random sample of points (default is FALSE)
 #' @param samplesize if random, how many points
-#' @param spatial.object return a spatial object (needed if you want to plot the point estimates on a map)?
-#' @param RATestvec vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired
+#' @param spatial.object return a spatial object (deafult is TRUE, needed if you want to plot the point estimates on a map)?
 #' @param sparse.exclusion in case we want to try to exclude sparse border points before the estimation (should reduce warnings)
 #' @param store.CIs set TRUE of confidence intervals should be stored
-#' @param print.msg set to TRUE if you want to receive printed info
 #' @param ... in addition you can use all options in \code{\link[rdrobust]{rdrobust}}
 #'
-#' @return a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
+#' @return a data.frame or spatial data.frame (sf object) in case spatial.object = TRUE (default)
 #' @export
 #'
-#' @examples \dontrun{results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
-#' treated = "treated", minobs = 10, spatial.object = F)}
+#' @examples
+#' points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+#' # make it an sf object bc st_sample only created the geometry list-column (sfc):
+#' points_samp.sf <- sf::st_sf(points_samp.sf)
+#' # add a unique ID to each observation:
+#' points_samp.sf$id <- 1:nrow(points_samp.sf)
+#' # assign treatment:
+#' points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated, id = "id")
+#' # first we define a variable for the number of "treated" and control
+#' NTr <- length(points_samp.sf$id[points_samp.sf$treated == 1])
+#' NCo <- length(points_samp.sf$id[points_samp.sf$treated == 0])
+#' # the treated areas get a 10 percentage point higher literacy rate
+#' points_samp.sf$education[points_samp.sf$treated == 1] <- 0.7
+#' points_samp.sf$education[points_samp.sf$treated == 0] <- 0.6
+#' # and we add some noise, otherwise we would obtain regression coeffictions with no standard errors
+#' points_samp.sf$education[points_samp.sf$treated == 1] <- rnorm(NTr, mean = 0, sd = .1) +
+#'   points_samp.sf$education[points_samp.sf$treated == 1]
+#' points_samp.sf$education[points_samp.sf$treated == 0] <- rnorm(NCo, mean = 0, sd = .1) +
+#'   points_samp.sf$education[points_samp.sf$treated == 0]
+#'
+#' # create distance to cutoff
+#' points_samp.sf$dist2cutoff <- as.numeric(sf::st_distance(points_samp.sf, cut_off))
+#'
+#' points_samp.sf$distrunning <- points_samp.sf$dist2cutoff
+#' # give the non-treated one's a negative score
+#' points_samp.sf$distrunning[points_samp.sf$treated == 0] <- -1 *
+#'  points_samp.sf$distrunning[points_samp.sf$treated == 0]
+#'
+#' # create borderpoints
+#' borderpoints.sf <- discretise_border(cutoff = cut_off, n = 50)
+#' borderpoints.sf$id <- 1:nrow(borderpoints.sf)
+#'
+#' # finally, carry out estimation alongside the boundary:
+#' results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
+#' treated = "treated", minobs = 10, spatial.object = FALSE)}
+#'
 #'
 #' @references
 #' Calonico, Cattaneo and Titiunik (2014): Robust Nonparametric Confidence Intervals for Regression-Discontinuity Designs, Econometrica 82(6): 2295-2326.
+
 
 
 spatialrd <- function(y,
@@ -44,9 +77,9 @@ spatialrd <- function(y,
                        sample = FALSE, samplesize = NA,
                        sparse.exclusion = FALSE,
                        #cluster = NA, # string required
-                       print.msg = FALSE, store.CIs = FALSE,
+                       store.CIs = FALSE,
                        spatial.object = TRUE, # if this is 1, function will return an sf object
-                       RATestvec = NA, ...
+                       ...
                        ) {
 
   # TODO
@@ -74,7 +107,7 @@ spatialrd <- function(y,
   # message 1
 
   n <- nrow(data)
-  if (print.msg) message("We have", n, "observations of which", sum(as.numeric(as.character(data[[treated]]))), "are treated observations.\n")
+  #if (print.msg) message("We have", n, "observations of which", sum(as.numeric(as.character(data[[treated]]))), "are treated observations.\n")
 
 
   bwfix <- F
@@ -88,10 +121,10 @@ spatialrd <- function(y,
     border_id <- border_id[order(border_id)]
     cutoff.points <- cutoff.points[border_id, ]
     np <- length(cutoff.points)
-    if (print.msg) message("Choosing", np, "random points on the border to iterate over.\n")
+    #if (print.msg) message("Choosing", np, "random points on the border to iterate over.\n")
   } else {
     np <- nrow(cutoff.points) #replaced the nrow with length. why? need nrow. NO only for points., hae?
-    if (print.msg) message("We are iterating over", np, "Boundarypoints.\n")
+    #if (print.msg) message("We are iterating over", np, "Boundarypoints.\n")
   }
 
 
@@ -108,7 +141,7 @@ spatialrd <- function(y,
   ########################################
   # after this we also define the number of points newly
 
-  if (print.msg) message("The dependent variable is", y,".\n")
+  #if (print.msg) message("The dependent variable is", y,".\n")
   # create storage for final results
   #columnames <- c("Point", "Estimate", "pvalC", "pvalR", "Ntr", "Nco", "bw", "CI_Conv", "CI_Rob", "McCrary", "RATest")
   # the version where the CIs have upper and lower in a separate column
@@ -158,8 +191,9 @@ spatialrd <- function(y,
       } else { # this is the same, just with MSE-optimal bandwidth
         rdrob_bwflex <- tryCatch(rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, ...), error = function(e) { err <<- TRUE})
       }
-    if(err) { next }  # break the loop if we have an error
+    if(err) {print("Skipped one boundary point due to error, possibly not enough observations in local neighbourhood. Check vignette for FAQ!"); next}  # break the loop if we have an error
     # RD testing
+    # Removed because can be implemented manually outside in case someone needs it
     #invisible(utils::capture.output(mccrary <- dc_test(data[["dist2cutoff"]]), plot = F))
     # switch to another mccrary, probably from the rdd itself, or the RDDtools?
     # is based on the DCdensity from rdd
@@ -208,7 +242,7 @@ spatialrd <- function(y,
 
 
   # set the geometry of the borderpoints before subsetting according to the minobs criterion
-  if (spatial.object == T) {results <- sf::st_set_geometry(results, sf::st_geometry(cutoff.points))}
+  if (spatial.object == TRUE) {results <- sf::st_set_geometry(results, sf::st_geometry(cutoff.points))}
   # this selects ultimately only the boundarypoint estimates that have a large enough sample size on both sides in order to ensure proper inference
   results %>% dplyr::filter(.data$Nco > minobs & .data$Ntr > minobs)
 
@@ -216,3 +250,7 @@ spatialrd <- function(y,
   # AND THEN PRODUCE ALSO STANDARD OUPUT! that is printed when u run it
 
 }
+
+# remove print.msg
+# remove RATest and DCdensity McCrary
+# fixed T/F

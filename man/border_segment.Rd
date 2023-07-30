@@ -21,6 +21,6 @@ Creates \code{n} segments of a line (the RD cut-off) and assigns the closest bor
 Computationally these tasks are quite demanding when the sample size is big and thus might take a few seconds to complete.
 }
 \examples{
-\dontrun{points.sf$segment10 <- border_segment(points.sf, cut_off.sf, 10)}
+\dontrun{points.sf$segment10 <- border_segment(points.sf, cut_off, 10)}
 
 }

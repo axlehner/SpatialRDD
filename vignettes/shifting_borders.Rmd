@@ -132,13 +132,13 @@ tm_shape(cut_off) + tm_lines() + tm_shape(tm_shift.sf) + tm_lines(col = "red")
 And the according polygons to assign the treated dummies:
 
 ```{r}
-polygon1 <- cutoff2polygon(data = points_samp.sf, cutoff = tm_placebo.sf1, orientation = c("west", "west"), endpoints = c(.8, .2), # corners = 0,
+polygon1 <- cutoff2polygon(data = points_samp.sf, cutoff = tm_placebo.sf1, orientation = c("west", "west"), endpoints = c(.8, .2) # corners = 0,
                            #     crs = 32643
                            )
-polygon2 <- cutoff2polygon(data = points_samp.sf, cutoff = tm_placebo.sf2, orientation = c("west", "west"), endpoints = c(.8, .2), # corners = 0,
+polygon2 <- cutoff2polygon(data = points_samp.sf, cutoff = tm_placebo.sf2, orientation = c("west", "west"), endpoints = c(.8, .2) # corners = 0,
                            #     crs = 32643
                            )
-polygon3 <- cutoff2polygon(data = points_samp.sf, cutoff = tm_placebo.sf3, orientation = c("west", "west"), endpoints = c(.8, .2), # corners = 0,
+polygon3 <- cutoff2polygon(data = points_samp.sf, cutoff = tm_placebo.sf3, orientation = c("west", "west"), endpoints = c(.8, .2) # corners = 0,
                            #     crs = 32643
                            )
 

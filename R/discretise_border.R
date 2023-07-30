@@ -9,19 +9,19 @@
 #' @param cutoff sf object of the RD cut-off in the form of a line (not preferred, but also boundarypoints are possible)
 #' @param n the number of borderpoints to be created
 #' @param random whether they are randomly chosen (not desireable in most cases)
-#' @param range default = F, if there is a specific range (N-S or E-W) for which the points are to be drawn (useful in order to exclude sparse borderpoints with little/no oberservations around because the non-parametric RD estimation will fail)
-#' @param ymax if range = T: y coordinates
-#' @param ymin if range = T: y coordinates
-#' @param xmax if range = T: x coordinates
-#' @param xmin if range = T: x coordinates
+#' @param range default = FALSE, if there is a specific range (N-S or E-W) for which the points are to be drawn (useful in order to exclude sparse borderpoints with little/no oberservations around because the non-parametric RD estimation will fail)
+#' @param ymax if range = TRUE: y coordinates
+#' @param ymin if range = TRUE: y coordinates
+#' @param xmax if range = TRUE: x coordinates
+#' @param xmin if range = TRUE: x coordinates
 #'
 #' @return an sf object with selected (and evenly spaced) borderpoints
 #' @export
 #'
 #' @examples
-#' \dontrun{borderpoints.sf <- discretise_border(cutoff = cut_off.sf, n = 50)}
+#' borderpoints <- discretise_border(cutoff = cut_off, n = 10)
 #'
-discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, ymin = NA, xmax = NA, xmin = NA) {
+discretise_border <- function(cutoff, n = 10, random = FALSE, range = FALSE, ymax = NA, ymin = NA, xmax = NA, xmin = NA) {
 
   # TODO
   # - fix the discrepancies btween just sfc and a full sf with multiple columns (length doesn't work then)
@@ -37,7 +37,7 @@ discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, 
   # do I need to prepare for other cases where the input is neither linestring nor multilinestring?
   # here the case for line data
   if (sf::st_geometry_type(cutoff)[1] == "LINESTRING" | sf::st_geometry_type(cutoff)[1] == "MULTILINESTRING") {
-    cat("Starting to create", n, "borderpoints from the given set of borderpoints. Approximately every", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres we can run an estimation then.\n")
+    #cat("Starting to create", n, "borderpoints from the given set of borderpoints. Approximately every", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres we can run an estimation then.\n")
 
     # first let's make the line a one feature object so that the sampling works (it draws n elements per feature with st_line_sample)
     # using combine in this version, might be risky because of errors
@@ -45,7 +45,7 @@ discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, 
 
 
 
-    if (random == F) {
+    if (random == FALSE) {
       cutoff <- cutoff %>% sf::st_cast("LINESTRING")
       #cutoff <- sf::st_combine(cutoff) # again?
       # this is the dirty hack when someone puts in 4326
@@ -70,12 +70,12 @@ discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, 
     #if ()
     cutoff$id <- 1:length(cutoff) # was this the hack to make the nrow work?
     borderpoints.sf <- cutoff[seq(1, nrow(cutoff), round(nrow(cutoff) / n, 0)), ] # subset according to this rule
-    cat("Starting to create", n, "borderpoints from the given line. Approximately every", round(as.numeric(sf::st_distance(borderpoints.sf[1], borderpoints.sf[2]))/1000/n, 0), "kilometres we can run an estimation then.\n")
+    #cat("Starting to create", n, "borderpoints from the given line. Approximately every", round(as.numeric(sf::st_distance(borderpoints.sf[1], borderpoints.sf[2]))/1000/n, 0), "kilometres we can run an estimation then.\n")
 
 
   }
 
-  if (range == T) {
+  if (range == TRUE) {
 
 
 
@@ -86,3 +86,7 @@ discretise_border <- function(cutoff, n = 10, random = F, range = F, ymax = NA, 
   sf::st_sf(borderpoints.sf)
 
 }
+
+# fix TRUE FALSE
+# make example active
+# supressed messages

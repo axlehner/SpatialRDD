@@ -14,10 +14,8 @@ spatialrd(
   sample = FALSE,
   samplesize = NA,
   sparse.exclusion = FALSE,
-  print.msg = FALSE,
   store.CIs = FALSE,
   spatial.object = TRUE,
-  RATestvec = NA,
   ...
 )
 }
@@ -34,42 +32,33 @@ spatialrd(
 
 \item{bwfix_m}{fixed bandwidth in meters (in case you want to impose one yourself)}
 
-\item{sample}{draw a random sample of points T/F}
+\item{sample}{draw a random sample of points (default is FALSE)}
 
 \item{samplesize}{if random, how many points}
 
 \item{sparse.exclusion}{in case we want to try to exclude sparse border points before the estimation (should reduce warnings)}
 
-\item{print.msg}{set to TRUE if you want to receive printed info}
-
 \item{store.CIs}{set TRUE of confidence intervals should be stored}
 
-\item{spatial.object}{return a spatial object (needed if you want to plot the point estimates on a map)?}
-
-\item{RATestvec}{vector with strings of basline covariates in the data object in case the RATest by Canay, Kamat (2018) is desired}
+\item{spatial.object}{return a spatial object (deafult is TRUE, needed if you want to plot the point estimates on a map)?}
 
 \item{...}{in addition you can use all options in \code{\link[rdrobust]{rdrobust}}}
 }
 \value{
-a data.frame or spatial data.frame (sf object) in case spatial.object = T (default)
+a data.frame or spatial data.frame (sf object) in case spatial.object = TRUE (default)
 }
 \description{
-This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression as usual)
-using the rdrobust function from the rdrobust package from Calonico, Cattaneo, Titiunik (2014).
-It takes in the discretized cutoff point file (the RDcutoff linestring chopped into parts by the \code{\link{discretise_border}} function)
-and the sf object (which essentially is just a conventional data.frame with a geometry() column) containing all the observations (treated and untreated).
-The treated dummy variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
+This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression, as usual)
+using the \code{rdrobust} function from the \code{rdrobust} package from Calonico, Cattaneo, Titiunik (2014).
+It takes in the discretized cutoff point file (the RDcutoff, a linestring chopped into parts by the \code{\link{discretise_border}} function)
+and the sf object (which essentially is just a conventional data.frame with a \code{geometry()} column) containing all the observations (treated and untreated).
+The treated indicator variable has to be assigned before (potentially with \code{\link{assign_treated}}) and be part of the sf object as a column.
 }
 \details{
 This function nests \code{\link[rdrobust]{rdrobust}}. All its options (aside from running variable \code{x} and cutoff \code{c}) are available here as well (e.g. bw selection, cluster level, kernel, weights).
 Check the documentation in the \code{rdrobust} package for details. (bandwidth selection default in \code{rdrobust} is bwselect = 'mserd')
 
-To visualise the output table, use \code{\link{printspatialrd}} or \code{\link{plotspatialrd}}.
-}
-\examples{
-\dontrun{results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
-treated = "treated", minobs = 10, spatial.object = F)}
-
+To visualise the output, use \code{\link{plotspatialrd}} for a graphical representation. You can use \code{\link{printspatialrd}} (or an R package of your choice) for a table output. .
 }
 \references{
 Calonico, Cattaneo and Titiunik (2014): Robust Nonparametric Confidence Intervals for Regression-Discontinuity Designs, Econometrica 82(6): 2295-2326.

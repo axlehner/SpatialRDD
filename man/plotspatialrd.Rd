@@ -4,12 +4,12 @@
 \alias{plotspatialrd}
 \title{Plot SpatialRD output}
 \usage{
-plotspatialrd(SpatialRDoutput, map = F)
+plotspatialrd(SpatialRDoutput, map = FALSE)
 }
 \arguments{
 \item{SpatialRDoutput}{spatial obkect that is produced by an estimation with \code{\link{spatialrd}}}
 
-\item{map}{T/F depending on whether mapplot is desired (make sure to set \code{spatial.objcet = T} in the \code{\link{spatialrd}} function)}
+\item{map}{TRUE/FALSE depending on whether mapplot is desired (make sure to set \code{spatial.objcet = TRUE} in the \code{\link{spatialrd}} function)}
 }
 \value{
 plots produced with ggplot2

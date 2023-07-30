@@ -10,8 +10,8 @@ create_placebos(
   formula,
   operations,
   bw_dist,
-  coefplot = F,
-  geometry = F
+  coefplot = FALSE,
+  geometry = FALSE
 )
 }
 \arguments{
