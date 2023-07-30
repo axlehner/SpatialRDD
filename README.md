@@ -1,5 +1,5 @@
 
-<!-- This brief doc/description is only for the github page. README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') -->
+<!-- This brief doc/description is only for the github page. README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') or devtools::build_readme() -->
 <!-- pre-CRAN checks: usethis::use_cran_comments(), devtools::check(remote = T), rhub::check_for_cran() # presubmission in an as_if_cran scenario, usethis::use_version(), update cran comments, FINAL devtools::submit_cran() -->
 
 # Spatial[R]()DD

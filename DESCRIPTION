@@ -1,6 +1,6 @@
 Package: SpatialRDD
 Type: Package
-Title: an R-package to conduct multiple types of geographic regression discontinuity designs
+Title: An R-Package to Conduct Multiple Types of Geographic Regression Discontinuity Designs
 Version: 0.1.0
 Authors@R: person("Alexander", "Lehner", email = "lehner@uchicago.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5885-5966"))
 Description: Spatial versions of Regression Discontinuity Designs (RDDs) are rising in popularity in the social sciences as a tool for causal inference. 
