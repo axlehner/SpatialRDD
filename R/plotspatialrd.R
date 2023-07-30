@@ -5,7 +5,7 @@
 #'
 #'Produces plot of GRDDseries and optionally of a map that visualises every point estimate in space.
 #'
-#' @param SpatialRDoutput spatial obkect that is produced by an estimation with \code{\link{spatialrd}}
+#' @param SpatialRDoutput spatial object that is produced by an estimation with \code{\link{spatialrd}}
 #' @param map TRUE/FALSE depending on whether mapplot is desired (make sure to set \code{spatial.objcet = TRUE} in the \code{\link{spatialrd}} function)
 #'
 #' @return plots produced with ggplot2

@@ -7,7 +7,7 @@
 plotspatialrd(SpatialRDoutput, map = FALSE)
 }
 \arguments{
-\item{SpatialRDoutput}{spatial obkect that is produced by an estimation with \code{\link{spatialrd}}}
+\item{SpatialRDoutput}{spatial object that is produced by an estimation with \code{\link{spatialrd}}}
 
 \item{map}{TRUE/FALSE depending on whether mapplot is desired (make sure to set \code{spatial.objcet = TRUE} in the \code{\link{spatialrd}} function)}
 }
