@@ -30,7 +30,7 @@
 #' @export
 #'
 #' @examples
-#' points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+#' points_samp.sf <- sf::st_sample(polygon_full, 1000) # create points
 #' # make it an sf object bc st_sample only created the geometry list-column (sfc):
 #' points_samp.sf <- sf::st_sf(points_samp.sf)
 #' # add a unique ID to each observation:
@@ -58,12 +58,12 @@
 #'  points_samp.sf$distrunning[points_samp.sf$treated == 0]
 #'
 #' # create borderpoints
-#' borderpoints.sf <- discretise_border(cutoff = cut_off, n = 50)
+#' borderpoints.sf <- discretise_border(cutoff = cut_off, n = 10)
 #' borderpoints.sf$id <- 1:nrow(borderpoints.sf)
 #'
 #' # finally, carry out estimation alongside the boundary:
 #' results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
-#' treated = "treated", minobs = 10, spatial.object = FALSE)
+#' treated = "treated", minobs = 20, spatial.object = FALSE)
 #'
 #'
 #' @references
