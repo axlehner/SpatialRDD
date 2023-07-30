@@ -6,6 +6,8 @@
 
 <!-- badges: start -->
 <!-- some dependency does not work, I have 0 error 0 warning [![Travis build status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD) -->
+
+[![R-CMD-check](https://github.com/axlehner/SpatialRDD/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/axlehner/SpatialRDD/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 This repository hosts the code underlying the R package `SpatialRDD`.

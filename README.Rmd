@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-<!-- This brief doc/description is only for the github page. README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') -->
+<!-- This brief doc/description is only for the github page. README.md is generated from README.Rmd. Please edit the latter file - rmarkdown::render('README.Rmd', output_format = 'github_document', output_file = 'README.md') or devtools::build_readme() -->
 
 <!-- pre-CRAN checks: usethis::use_cran_comments(), devtools::check(remote = T), rhub::check_for_cran() # presubmission in an as_if_cran scenario, usethis::use_version(), update cran comments, FINAL devtools::submit_cran() --> 
 ```{r readme-setup, echo = FALSE}
@@ -21,6 +21,7 @@ is_online = curl::has_internet()
 
 <!-- badges: start -->
 <!-- some dependency does not work, I have 0 error 0 warning [![Travis build status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD) -->
+[![R-CMD-check](https://github.com/axlehner/SpatialRDD/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/axlehner/SpatialRDD/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 This repository hosts the code underlying the R package `SpatialRDD`. The workhorse functions in a nutshell are:
