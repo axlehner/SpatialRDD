@@ -8,8 +8,8 @@
 <meta name="description" content="SpatialRDD">
 <title>SpatialRDD: get started • SpatialRDD</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="SpatialRDD: get started">
 <meta property="og:description" content="SpatialRDD">
@@ -50,7 +50,14 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
 </form>
 
-      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/axlehner/SpatialRDD/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 
     
@@ -61,29 +68,72 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>SpatialRDD: get started</h1>
-                        <h4 data-toc-skip class="author">Alexander Lehner</h4>
+                        <h4 data-toc-skip class="author">Alexander
+Lehner</h4>
             
-            <h4 data-toc-skip class="date">2022-03-08</h4>
+            <h4 data-toc-skip class="date">2023-07-30</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/axlehner/SpatialRDD/blob/HEAD/vignettes/spatialrdd_vignette.Rmd" class="external-link"><code>vignettes/spatialrdd_vignette.Rmd</code></a></small>
       <div class="d-none name"><code>spatialrdd_vignette.Rmd</code></div>
     </div>
 
     
     
-<p>Within the last years spatial versions of Regression Discontinuity Designs (RDDs) have increased tremendously in popularity in the social sciences. Executing spatial RDDs, especially the many required robustness- and sensitivity checks, in practice is quite cumbersome though. It requires knowledge of both statistical programming and how to handle and work with geographic objects (points, lines, polygons). Practitioners typically carry out these GIS tasks in a GUI like ArcGIS or QGIS and then manually export these data into the statistical environment of their choice and then carry out the analysis in an “aspatial way”. This is sub-optimal for several reasons:</p>
+<p>In recent years, spatial versions of Regression Discontinuity Designs
+(RDDs) have increased tremendously in popularity in the social sciences.
+In practice, executing spatial RDDs, especially the many required
+robustness- and sensitivity checks, is quite cumbersome. It requires
+knowledge of statistical programming and handling and working with
+geographic objects (points, lines, polygons). Practitioners typically
+carry out these GIS tasks in a “point and click” fashion in GUIs like
+ArcGIS, QGIS, or GeoDA and then manually export these data into the
+statistical environment of their choice. Statistical analysis is then
+carry out in an a-spatial way. This is sub-optimal for several
+reasons:</p>
 <ul>
 <li>it is very time consuming and cumbersome</li>
 <li>it is prone to errors</li>
-<li>it is not reproducible (which is especially annoying for oneself when it comes to e.g. revisions)</li>
-<li>it is not very flexible and makes it harder to understand our own data</li>
+<li>it is not reproducible</li>
+<li>it is not very flexible and makes it harder to understand the data
+at hand</li>
 </ul>
-<p><code>SpatialRDD</code> is the first (geo-)statistical package of its kind that unifies the geographic tasks that are needed for spatial RDDs with all potential parametric and non-parametric estimation techniques that have been put forward [see Lehner(forthcoming)]. It makes it very easy to understand the critical assumptions (in terms of bandwith, sparse border points). Furthermore, the flexibility of the <code>shift_border</code> function makes it attractive for all sorts of identification strategies outside of the RD literature that rely on shifting placebo borders.</p>
-<p>Geographic objects are treated as <a href="https://en.wikipedia.org/wiki/Simple_Features" class="external-link">simple features</a> throughout, making heavy use of the novel <code>sf</code> package by Edzer Pebesma which revolutionised spatial data analysis in <strong>R</strong> and is bound to supersede the older and less versatile <code>sp</code> package.<br><code>SpatialRDD</code> facilitates analysis inter alia because it contains all necessary functions to automatise otherwise very tedious tasks that are tipically carried out in GUIs such as QGIS or ArcGIS. Due to the fact that these GIS interfaces are not able to carry out appropriate statistical analysis, the researcher is tipically forced to migrate the obtained results to statistical software. This makes reproducibility difficult and most importantly is a very inefficient workflow.<br><code>SpatialRDD</code> unifies everything in one language and e.g. has the necessary functions to check for different bandwiths, shift placebo boundaries, do all necessary distance calculations, assign treated/non-treated dummies, and flexibly assign border segment fixed effects while keeping the units of observations at their proper position in space and allowing the researcher to visualise every intermediate step with mapplots. For the latter we will mostly rely on the flexible and computationally very efficient <code>tmap</code> package, while also <code>ggplot2</code> is used at times.<br>
-For the purpose of illustration, this vignette uses simulated data on real boundaries/polygons and guides the user through every necessary step in order to carry out a Geographic RDD estimation. At the appropriate points, we will also make remarks on technical caveats and issues that have been pointed out in the literature and give suggestions to improve these designs.<br>
-The workhorse functions of <code>SpatialRDD</code> in a nutshell are:</p>
+<p><code>SpatialRDD</code> is the first (geo-)statistical package that
+unifies the geographic tasks needed for spatial RDDs with all potential
+parametric and non-parametric estimation techniques that have been put
+forward <span class="citation">(see
+<strong>Lehner2023a?</strong>)</span>. It makes it easy to understand
+critical assumptions regarding bandwidths, sparse border points, and
+border segment fixed effects. Furthermore, the flexibility of the
+<code>shift_border</code> function makes it attractive for all sorts of
+identification strategies outside of the RD literature that rely on
+shifting placebo borders.</p>
+<p>Geographic objects are treated as <a href="https://en.wikipedia.org/wiki/Simple_Features" class="external-link">simple features</a>
+throughout, making heavy use of the <code>sf</code> package by Edzer
+Pebesma which revolutionized spatial data analysis in <strong>R</strong>
+and has already superseded the older and less versatile <code>sp</code>
+package.<br><code>SpatialRDD</code> facilitates analysis inter alia because it
+contains all necessary functions to automatize otherwise very tedious
+tasks that are typically carried out “by hand” in the GUIs of GIS
+software. <code>SpatialRDD</code> unifies everything in one language and
+e.g. has the necessary functions to check and visualize the implications
+of different bandwidths, shift placebo boundaries, do all necessary
+distance calculations, assign treated/non-treated indicators, and
+flexibly assign border segment fixed effects while keeping the units of
+observations at their proper position in space and allowing the
+researcher to visualize every intermediate step with map plots. For the
+latter we will mostly rely on the flexible and computationally very
+efficient <code>tmap</code> package, while also <code>ggplot2</code> is
+used at times.<br>
+For the purpose of illustration, this vignette uses simulated data on
+real boundaries/polygons and guides the user through every necessary
+step in order to carry out a spatial RDD estimation. At the appropriate
+points, we will also make remarks on technical caveats and issues that
+have been pointed out in the literature and give suggestions to improve
+these designs.<br>
+The workhorse functions of <code>SpatialRDD</code> in a nutshell
+are:</p>
 <ul>
 <li><code><a href="../reference/assign_treated.html">assign_treated()</a></code></li>
 <li><code><a href="../reference/border_segment.html">border_segment()</a></code></li>
@@ -98,272 +148,423 @@ The workhorse functions of <code>SpatialRDD</code> in a nutshell are:</p>
 <div class="section level3">
 <h3 id="some-words-of-caution">Some words of caution<a class="anchor" aria-label="anchor" href="#some-words-of-caution"></a>
 </h3>
-<p>You (obviously) have to pay attention that you have an RD border that is fine-grained enough so that it resembles the true cutoff. Something at the degree of e.g. the widely used GADM boundaries (just as an example, because administrative boundaries themselves are usually never valid RD cutoffs due to the compound treatment problem) is most probably not detailed enough. Furthermore it is suggested to always work in a localised projection system that has metres as units - as opposed to e.g. degrees (you can check that with <code>st_crs(data)$units</code>). A good choice would be UTM: find the right grid <a href="http://www.dmap.co.uk/utmworld.htm" class="external-link">here</a>, then get the corresponding <code>EPSG</code> number and use this in <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform()</a></code> after you imported your data.</p>
+<p>You (obviously) have to pay attention that you have an RD border that
+is fine-grained enough so that it resembles the true cutoff. Something
+at the degree of e.g. the widely used GADM boundaries (just as an
+example, because administrative boundaries themselves are usually never
+valid RD cutoffs due to the compound treatment problem) is most probably
+not detailed enough. Furthermore it is suggested to always work in a
+localized projection system that has meters as units - as opposed to
+e.g. degrees (you can check that with <code>st_crs(data)$units</code>).
+A good choice would be UTM: find the right grid <a href="http://www.dmap.co.uk/utmworld.htm" class="external-link">here</a>, then get the
+corresponding <a href="https://epsg.io" class="external-link">EPSG number</a> and use it in
+<code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform()</a></code> after you imported your data <span class="citation">(see e.g. Bivand and Pebesma 2023 for guidance on
+projection systems)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="setup-and-propaedeutics">Setup and Propaedeutics<a class="anchor" aria-label="anchor" href="#setup-and-propaedeutics"></a>
 </h2>
-<p>Throughout the vignette we will use the geographic boundaries on Goa, India, from Lehner (2019). The data, included in the package, contains</p>
+<p>Throughout the vignette we will use the geographic boundaries on Goa,
+India, from <span class="citation">(<strong>Lehner2023?</strong>)</span>. The data,
+included in the package, contains</p>
 <ol style="list-style-type: decimal">
-<li>a line called <code>cut_off.sf</code> which describes the spatial discontinuity</li>
+<li>a line called <code>cut_off</code> which describes the spatial
+discontinuity</li>
 <li>a polygon that defines the “treated” area</li>
-<li>a polygon that defines the full study area (which is going to be useful as this defines the bounding box)</li>
+<li>a polygon that defines the full study area (which is going to be
+useful as this defines the bounding box)</li>
 </ol>
-<p>For your own RD design you need 1. in the form of either a line (as a single feature, i.e. all potential segments merged together) or a finely spaced set of points on your border. Furthermore you need the polygon that specifies the treatment area, and, of course, the dataset that contains your units of observation, including the x- and y-coordinate for each unit of observation. This way it is easy to convert the data to an sf data.frame.</p>
+<p>For your own RD design you need 1. in the form of either a line (as a
+single feature, i.e. all potential segments merged together) or a finely
+spaced set of points on your border. Furthermore you need the polygon
+that specifies the treatment area, and, of course, the data set that
+contains all your observations, including the x- and y-coordinate for
+each unit of observation. This way it is easy to convert the data to an
+sf data.frame.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://axlehner.github.io/SpatialRDD/">SpatialRDD</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="co"># more intuitive data wrangling</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">stargazer</span><span class="op">)</span> <span class="co"># easy way to make model output look more appealing (R-inline, html, or latex)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></code></pre></div>
-<p>These come in EPSG EPSG:32643, which is a “localised” <a href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system" class="external-link">UTM</a> coordinate reference system (CRS). These are generally prefereable for exercises like a Spatial RDD, as they are more precise and also allow us to work in metres (the “classic” longitude/latitude CRS, EPSG 4326, works in degrees). If your study area is small, you should reproject your data into the CRS of the according UTM zone (simply use <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform()</a></code>). To verify the units of our CRS we could simply run <code>st_crs(cut_off.sf)$units</code>.</p>
-<p>All the spatial objects are of class <code>sf</code> from the <a href="https://CRAN.R-project.org/package=sf" class="external-link">sf package</a>. This means they are just a <code>data.frame</code> with a special column that contains a geometry for each row. The big advantage is, no matter if you prefer base R, <code>dplyr</code>, or any other way to handle and wrangle your data, the <code>sf</code> object can be treated just like a standard <code>data.frame</code>. The one single step that transforms these spatial objects back to a standard <code>data.frame</code> is just dropping the geometry column with</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://axlehner.github.io/SpatialRDD/">SpatialRDD</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="co"># more intuitive data wrangling</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">stargazer</span><span class="op">)</span> <span class="co"># easy way to make model output look more appealing (R-inline, html, or latex)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
+<p>The data shown here come in EPSG:32643, which is a “localized” <a href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system" class="external-link">UTM</a>
+coordinate reference system (CRS). These are generally preferable for
+exercises like a Spatial RDD, as they are more precise and also allow us
+to work in meters (the “classic” longitude/latitude CRS, EPSG 4326,
+works in degrees). If your study area is small, you should reproject
+your data into the CRS of the according UTM zone (simply use
+<code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform()</a></code>). To verify the units of our CRS we could
+simply run <code>st_crs(cut_off)$units</code>.</p>
+<p>All the spatial objects are of class <code>sf</code> from the <a href="https://CRAN.R-project.org/package=sf" class="external-link">sf package</a>. This means
+they are just a <code>data.frame</code> with a special column that
+contains a geometry for each row. The big advantage is, no matter if you
+prefer base R, <code>dplyr</code>, or any other way to handle and
+wrangle your data, the <code>sf</code> object can be treated just like a
+standard <code>data.frame</code>. The one single step that transforms
+these spatial objects back to a standard <code>data.frame</code> is just
+dropping the geometry column with</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">any.sf.object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">any.sf.object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>or alternatively</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_set_geometry</a></span><span class="op">(</span><span class="va">any.sf.object</span>, <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
-<p>If you import geospatial data in a different format, say the common shapefile (<code>*.shp</code>) - which is NOT preferrable <a href="http://switchfromshapefile.org/" class="external-link">see why here</a>, or as a geopackage, it is fairly straightforward to convert it:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_set_geometry</a></span><span class="op">(</span><span class="va">any.sf.object</span>, <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<p>If you import geospatial data in a different format, say the common
+shapefile (<code>*.shp</code>) - which is NOT preferrable <a href="http://switchfromshapefile.org/" class="external-link">see here why</a>, or as a
+geopackage (<code>*.gpkg</code>), it is fairly straightforward to
+convert it:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mydata.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/file.shp"</span><span class="op">)</span></code></pre></div>
-<p>In case your data is saved as a .csv (if in stata file format, check the <code>foreign</code> and <code>readstata13</code> package) you just have to tell <code>sf</code> in which columns the X- and Y-coordinates are saved, and it will convert it into a spatial object:</p>
+<code class="sourceCode R"><span><span class="va">mydata.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="st">"path/to/file.shp"</span><span class="op">)</span></span></code></pre></div>
+<p>In case your data is saved as a <code>*.csv</code> (if in Stata file
+format, check the <code>foreign</code> and <code>readstata13</code>
+package) you just have to tell <code>sf</code> in which columns the x-
+and x-coordinates are saved, and it will convert it into a spatial
+object:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mydata.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">loaded_file</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">projcrs</span><span class="op">)</span> 
-<span class="co"># just the EPSG as an integer or a proj4string of the desired CRS</span></code></pre></div>
-<p>For more thorough information I suggest to consult the documentation and vignettes of the <code>sf</code> package.</p>
+<code class="sourceCode R"><span><span class="va">mydata.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">loaded_file</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">projcrs</span><span class="op">)</span> </span>
+<span><span class="co"># just the EPSG as an integer or a proj4string of the desired CRS</span></span></code></pre></div>
+<p>For more thorough information, I suggest consulting the documentation
+and vignettes of the <code>sf</code> package or <span class="citation">Bivand and Pebesma (2023)</span>.</p>
 <div class="section level3">
 <h3 id="inspecting-the-study-area-simulating-data">Inspecting the Study Area &amp; simulating Data<a class="anchor" aria-label="anchor" href="#inspecting-the-study-area-simulating-data"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cut_off.sf</span>, <span class="va">polygon_full.sf</span>, <span class="va">polygon_treated.sf</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mtennekes/tmap" class="external-link">tmap</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">polygon_full.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">polygon_treated.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cut_off</span>, <span class="va">polygon_full</span>, <span class="va">polygon_treated</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap" class="external-link">tmap</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">polygon_full</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">polygon_treated</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<p>Above we see the simple map, visualising the “treated polygon” in a darker grey, and the <code>tmap</code> syntax that produced it.</p>
-<p>Let’s simulate some random points within the polygon that describes the full study area:</p>
+<p>Above we see the simple map, visualizing the “treated polygon” in a
+darker grey, and the <code>tmap</code> syntax that produced it.</p>
+<p>Let’s simulate some random points within the polygon that describes
+the entire study area:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1088</span><span class="op">)</span> <span class="co"># set a seed to make the results replicable</span>
-<span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_sample.html" class="external-link">st_sample</a></span><span class="op">(</span><span class="va">polygon_full.sf</span>, <span class="fl">1000</span><span class="op">)</span>
-<span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="co"># make it an sf object bc st_sample only created the geometry list-column (sfc)</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="co"># add a unique ID to each observation</span>
-<span class="co"># visualise results together with the line that represents our RDD cut-off</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1088</span><span class="op">)</span> <span class="co"># set a seed to make the results replicable</span></span>
+<span><span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_sample.html" class="external-link">st_sample</a></span><span class="op">(</span><span class="va">polygon_full</span>, <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="co"># make it an sf object bc st_sample only created the geometry list-column (sfc)</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="co"># add a unique ID to each observation</span></span>
+<span><span class="co"># visualise results together with the line that represents our RDD cutoff</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="assign-treatment">Assign Treatment<a class="anchor" aria-label="anchor" href="#assign-treatment"></a>
 </h3>
-<p>Now we use the first function of the <code>SpatialRDD</code> package. <code><a href="../reference/assign_treated.html">assign_treated()</a></code> in essence just does a spatial intersection and returns a column vector that contains <code>0</code> or <code>1</code>, depending on whether the observation is inside or outside the treatment area. Thus, we just add it as a new column to the points object. The function requires the name of the points object, the name of the polygon that defines the treated area, and the id that uniquely identifies each observation in the points object:</p>
+<p>Now we use the first function of the <code>SpatialRDD</code> package.
+<code><a href="../reference/assign_treated.html">assign_treated()</a></code> in essence just does a spatial
+intersection and returns a column vector that contains <code>0</code> or
+<code>1</code>, depending on whether the observation is inside or
+outside the treatment area. Thus, we just add it as a new column to the
+points object. The function requires the name of the points object, the
+name of the polygon that defines the treated area, and the id that
+uniquely identifies each observation in the points object:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assign_treated.html">assign_treated</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">polygon_treated.sf</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"treated"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assign_treated.html">assign_treated</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">polygon_treated</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"treated"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<p>As a next step we add an outcome of interest that we are going to use as dependent variable in our Spatial Regression Discontinuity Design. Let’s call this variable <code>education</code>, measuring the literacy rate that ranges from 0 to 1 (0%, meaning everyone illiterate to 100%, meaning everyone in the population can read and write). We assume that the units, call them villages, in the “treated” polygon have on average a higher literacy rate because they received some sort of “treatment”. Let’s just assume aliens dropped (better) schools in all of these villages, but NOT in any of the outside villages, and everything else is constant and identical across the two territories.</p>
+<p>As a next step we add an outcome of interest that we are going to use
+as dependent variable in our Spatial Regression Discontinuity Design.
+Let’s call this variable <code>education</code> and assume it measures
+the literacy rate that ranges from 0 to 1 (0%, meaning everyone is
+illiterate, to 100%, meaning everyone in the population can read and
+write). We assume that the units, call them villages, in the “treated”
+polygon have on average a higher literacy rate because they received
+some sort of “treatment”. Let’s just assume aliens dropped (better)
+schools in all of these villages, but not in any of the outside
+villages, and everything else is constant and identical across the two
+territories. Crucially, people also do not sort themselves across the
+border, i.e. they do not go on the other side to attend school and then
+return to their villages.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># first we define a variable for the number of "treated" and control which makes the code more readable in the future</span>
-<span class="va">NTr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="va">NCo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>
-<span class="co"># the treated areas get a 10 percentage point higher literacy rate</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.7</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.6</span>
-<span class="co"># and we add some noise, otherwise we would obtain regression coeffictions with no standard errors</span>
-<span class="co"># we draw from a normal with mean 0 and a standard devation of 0.1</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">NTr</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">NCo</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span>
-
-<span class="co"># let's also add a placebo outcome that has no jump</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">placebo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">1</span>, sd <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span>
-
-<span class="co"># visualisation split up by groups</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">education</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">treated</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># first we define a variable for the number of "treated" and control which makes the code more readable in the future</span></span>
+<span><span class="va">NTr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">NCo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">id</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co"># the treated areas get a 10 percentage point higher literacy rate</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.7</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.6</span></span>
+<span><span class="co"># and we add some noise, otherwise we would obtain regression coeffictions with no standard errors</span></span>
+<span><span class="co"># we draw from a normal with mean 0 and a standard devation of 0.1</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">NTr</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">NCo</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># let's also add a placebo outcome that has no jump</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">placebo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">1</span>, sd <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualisation split up by groups</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">education</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">treated</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<p>From the above histograms we can see that we were successful in creating different group means. This is also confirmed by the simple univariate regression of <span class="math inline">\(y_i = \alpha + \beta\ \unicode{x1D7D9}(treated)_i + \varepsilon_i\)</span>:</p>
+<p>From the above histograms we can see that we were successful in
+creating different group means. This is also confirmed by the simple
+univariate regression of <span class="math inline">\(y_i = \alpha +
+\beta\ \unicode{x1D7D9}(treated)_i + \varepsilon_i\)</span>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">)</span>,
-     <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">placebo</span>   <span class="op">~</span> <span class="va">treated</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ===========================================================</span>
-<span class="co">#&gt;                                    Dependent variable:     </span>
-<span class="co">#&gt;                                ----------------------------</span>
-<span class="co">#&gt;                                   education      placebo   </span>
-<span class="co">#&gt;                                      (1)           (2)     </span>
-<span class="co">#&gt; -----------------------------------------------------------</span>
-<span class="co">#&gt; treated1                          0.100***        0.035*   </span>
-<span class="co">#&gt;                                    (0.008)       (0.020)   </span>
-<span class="co">#&gt;                                                            </span>
-<span class="co">#&gt; Constant                          0.600***       0.990***  </span>
-<span class="co">#&gt;                                    (0.004)       (0.009)   </span>
-<span class="co">#&gt;                                                            </span>
-<span class="co">#&gt; -----------------------------------------------------------</span>
-<span class="co">#&gt; Observations                        1,000         1,000    </span>
-<span class="co">#&gt; R2                                  0.160         0.003    </span>
-<span class="co">#&gt; Adjusted R2                         0.160         0.002    </span>
-<span class="co">#&gt; Residual Std. Error (df = 998)      0.100         0.260    </span>
-<span class="co">#&gt; F Statistic (df = 1; 998)        186.000***       3.100*   </span>
-<span class="co">#&gt; ===========================================================</span>
-<span class="co">#&gt; Note:                           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></code></pre></div>
-<p>where the intercept tells us that the average in the non-treated areas is 0.6 and treated villages have on average 0.1 more education (10 percentage points).</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">)</span>,</span>
+<span>     <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">placebo</span>   <span class="op">~</span> <span class="va">treated</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ===========================================================</span></span>
+<span><span class="co">#&gt;                                    Dependent variable:     </span></span>
+<span><span class="co">#&gt;                                ----------------------------</span></span>
+<span><span class="co">#&gt;                                   education      placebo   </span></span>
+<span><span class="co">#&gt;                                      (1)           (2)     </span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------</span></span>
+<span><span class="co">#&gt; treated1                          0.100***        0.035*   </span></span>
+<span><span class="co">#&gt;                                    (0.008)       (0.020)   </span></span>
+<span><span class="co">#&gt;                                                            </span></span>
+<span><span class="co">#&gt; Constant                          0.600***       0.990***  </span></span>
+<span><span class="co">#&gt;                                    (0.004)       (0.009)   </span></span>
+<span><span class="co">#&gt;                                                            </span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Observations                        1,000         1,000    </span></span>
+<span><span class="co">#&gt; R2                                  0.160         0.003    </span></span>
+<span><span class="co">#&gt; Adjusted R2                         0.160         0.002    </span></span>
+<span><span class="co">#&gt; Residual Std. Error (df = 998)      0.100         0.260    </span></span>
+<span><span class="co">#&gt; F Statistic (df = 1; 998)        186.000***       3.100*   </span></span>
+<span><span class="co">#&gt; ===========================================================</span></span>
+<span><span class="co">#&gt; Note:                           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></span></code></pre></div>
+<p>where the intercept tells us that the average in the non-treated
+areas is 0.6 and treated villages have on average a 10 percentage points
+higher education level.</p>
 <div class="section level4">
-<h4 id="distance-to-cut-off">Distance to Cut-off<a class="anchor" aria-label="anchor" href="#distance-to-cut-off"></a>
+<h4 id="distance-to-cutoff">Distance to Cutoff<a class="anchor" aria-label="anchor" href="#distance-to-cutoff"></a>
 </h4>
-<p>The next essential step before we start to do proper Spatial RDD analysis, is to determine how far each of these points is away from the cut-off. Here we just make use of a function from <code>sf</code> called <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance()</a></code> that returns a vector with units (that we have to convert to real numbers by <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code>):</p>
+<p>The next essential step before we start t do proper Spatial RDD
+analysis is to determine how far each of these points is away from the
+cutoff. Here we just make use of a function from <code>sf</code> called
+<code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance()</a></code> that returns a vector with units (that we
+have to convert to real numbers by <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code>):</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off.sf</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>This allows us now to investigate villages only within a certain range, say 3 kilometres, around our “discontinuity”:</p>
+<code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>This allows us now to investigate villages only within a specific
+range, say 3 kilometers, around our “discontinuity”:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"education"</span>, palette <span class="op">=</span> <span class="st">"RdYlGn"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"education"</span>, palette <span class="op">=</span> <span class="st">"RdYlGn"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
-<p>And to run the univariate regression from above also just within a bandwith (this specification is already starting to resemble the RDD idea of Dell 2010). As we know the exact data generating process (no “spatial gradient” but a rather uniform assignment), it is obvious to us that this of course leaves the point estimate essentially unchanged:</p>
+<p>And to run the univariate regression from above also just within a
+bandwidth (this specification is already starting to resemble the
+canonical parametric spatial RD specification). As we know the exact
+data generating process (no “spatial gradient” but a rather uniform
+assignment), it is obvious to us that this of course leaves the point
+estimate essentially unchanged:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ===============================================</span>
-<span class="co">#&gt;                         Dependent variable:    </span>
-<span class="co">#&gt;                     ---------------------------</span>
-<span class="co">#&gt;                              education         </span>
-<span class="co">#&gt; -----------------------------------------------</span>
-<span class="co">#&gt; treated1                     0.090***          </span>
-<span class="co">#&gt;                               (0.015)          </span>
-<span class="co">#&gt;                                                </span>
-<span class="co">#&gt; Constant                     0.610***          </span>
-<span class="co">#&gt;                               (0.011)          </span>
-<span class="co">#&gt;                                                </span>
-<span class="co">#&gt; -----------------------------------------------</span>
-<span class="co">#&gt; Observations                    159            </span>
-<span class="co">#&gt; R2                             0.190           </span>
-<span class="co">#&gt; Adjusted R2                    0.180           </span>
-<span class="co">#&gt; Residual Std. Error      0.095 (df = 157)      </span>
-<span class="co">#&gt; F Statistic           36.000*** (df = 1; 157)  </span>
-<span class="co">#&gt; ===============================================</span>
-<span class="co">#&gt; Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ===============================================</span></span>
+<span><span class="co">#&gt;                         Dependent variable:    </span></span>
+<span><span class="co">#&gt;                     ---------------------------</span></span>
+<span><span class="co">#&gt;                              education         </span></span>
+<span><span class="co">#&gt; -----------------------------------------------</span></span>
+<span><span class="co">#&gt; treated1                     0.090***          </span></span>
+<span><span class="co">#&gt;                               (0.015)          </span></span>
+<span><span class="co">#&gt;                                                </span></span>
+<span><span class="co">#&gt; Constant                     0.610***          </span></span>
+<span><span class="co">#&gt;                               (0.011)          </span></span>
+<span><span class="co">#&gt;                                                </span></span>
+<span><span class="co">#&gt; -----------------------------------------------</span></span>
+<span><span class="co">#&gt; Observations                    159            </span></span>
+<span><span class="co">#&gt; R2                             0.190           </span></span>
+<span><span class="co">#&gt; Adjusted R2                    0.180           </span></span>
+<span><span class="co">#&gt; Residual Std. Error      0.095 (df = 157)      </span></span>
+<span><span class="co">#&gt; F Statistic           36.000*** (df = 1; 157)  </span></span>
+<span><span class="co">#&gt; ===============================================</span></span>
+<span><span class="co">#&gt; Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></span></code></pre></div>
 </div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="carrying-out-spatial-rdd-estimation">Carrying out Spatial RDD estimation<a class="anchor" aria-label="anchor" href="#carrying-out-spatial-rdd-estimation"></a>
 </h2>
-<p>Now we go step by step through all potential (parametric and non-parametric) ways in which one could obtain point estimates for Spatial RDD’s (see e.g. Lehner2019 for details).</p>
+<p>Now we go step by step through all potential (parametric and
+non-parametric) ways in which one could obtain point estimates for
+Spatial RDDs <span class="citation">(see e.g.
+<strong>Lehner2023a?</strong> for details)</span>.</p>
 <div class="section level3">
 <h3 id="naive-distance">Naive Distance<a class="anchor" aria-label="anchor" href="#naive-distance"></a>
 </h3>
-<p>For the “naive” estimation (KeeleTitiunik2015), meaning that the spatial dimension is essentially disregarded, we first define a variable <code>distrunning</code> that makes the distances in the treated areas negative so that our 2-dimensional cut-off is then at 0.</p>
+<p>For the “naive” estimation <span class="citation">(Keele and Titiunik
+2015)</span>, meaning that the spatial dimension is essentially
+disregarded, we first define a variable <code>distrunning</code> that
+makes the distances in the treated areas negative so that our
+2-dimensional cutoff is then at 0.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span> <span class="op">&lt;-</span> <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span>
-<span class="co"># give the non-treated one's a negative score</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">distrunning</span>, y <span class="op">=</span> <span class="va">education</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span> <span class="op">&lt;-</span> <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span></span>
+<span><span class="co"># give the non-treated one's a negative score</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">distrunning</span>, y <span class="op">=</span> <span class="va">education</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
-<p>The point estimate of the “classic” non-parametric local linear regression, carried out with the <code>rdrobust</code> package, then looks like this:</p>
+<p>The point estimate of the “classic” non-parametric local linear
+regression, carried out with the <code>rdrobust</code> package, then
+looks like this:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rdrobust</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/rdrobust/man/rdrobust.html" class="external-link">rdrobust</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span>, <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span>, c <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Call: rdrobust</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Number of Obs.                 1000</span>
-<span class="co">#&gt; BW type                       mserd</span>
-<span class="co">#&gt; Kernel                   Triangular</span>
-<span class="co">#&gt; VCE method                       NN</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Number of Obs.                 785         215</span>
-<span class="co">#&gt; Eff. Number of Obs.            127         100</span>
-<span class="co">#&gt; Order est. (p)                   1           1</span>
-<span class="co">#&gt; Order bias  (q)                  2           2</span>
-<span class="co">#&gt; BW est. (h)               4248.546    4248.546</span>
-<span class="co">#&gt; BW bias (b)               6601.220    6601.220</span>
-<span class="co">#&gt; rho (h/b)                    0.644       0.644</span>
-<span class="co">#&gt; Unique Obs.                    785         215</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; =============================================================================</span>
-<span class="co">#&gt;         Method     Coef. Std. Err.         z     P&gt;|z|      [ 95% C.I. ]       </span>
-<span class="co">#&gt; =============================================================================</span>
-<span class="co">#&gt;   Conventional     0.116     0.025     4.580     0.000     [0.066 , 0.166]     </span>
-<span class="co">#&gt;         Robust         -         -     4.089     0.000     [0.064 , 0.181]     </span>
-<span class="co">#&gt; =============================================================================</span></code></pre></div>
-<p>and the according visualisation with data driven bin-width selection:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rdrobust</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/rdrobust/man/rdrobust.html" class="external-link">rdrobust</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span>, <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span>, c <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Sharp RD estimates using local polynomial regression.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of Obs.                 1000</span></span>
+<span><span class="co">#&gt; BW type                       mserd</span></span>
+<span><span class="co">#&gt; Kernel                   Triangular</span></span>
+<span><span class="co">#&gt; VCE method                       NN</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of Obs.                  785          215</span></span>
+<span><span class="co">#&gt; Eff. Number of Obs.             127          100</span></span>
+<span><span class="co">#&gt; Order est. (p)                    1            1</span></span>
+<span><span class="co">#&gt; Order bias  (q)                   2            2</span></span>
+<span><span class="co">#&gt; BW est. (h)                4248.546     4248.546</span></span>
+<span><span class="co">#&gt; BW bias (b)                6601.220     6601.220</span></span>
+<span><span class="co">#&gt; rho (h/b)                     0.644        0.644</span></span>
+<span><span class="co">#&gt; Unique Obs.                     785          215</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; =============================================================================</span></span>
+<span><span class="co">#&gt;         Method     Coef. Std. Err.         z     P&gt;|z|      [ 95% C.I. ]       </span></span>
+<span><span class="co">#&gt; =============================================================================</span></span>
+<span><span class="co">#&gt;   Conventional     0.116     0.025     4.580     0.000     [0.066 , 0.166]     </span></span>
+<span><span class="co">#&gt;         Robust         -         -     4.089     0.000     [0.064 , 0.181]     </span></span>
+<span><span class="co">#&gt; =============================================================================</span></span></code></pre></div>
+<p>and the according visualization with data driven bin-width
+selection:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/rdrobust/man/rdplot.html" class="external-link">rdplot</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span>, <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span>, c <span class="op">=</span> <span class="fl">0</span>, ci <span class="op">=</span> <span class="fl">95</span>, 
-       kernel <span class="op">=</span> <span class="st">"triangular"</span>, y.label <span class="op">=</span> <span class="st">"education"</span>, x.label <span class="op">=</span> <span class="st">"distance to border"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/rdrobust/man/rdplot.html" class="external-link">rdplot</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">education</span>, <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">distrunning</span>, c <span class="op">=</span> <span class="fl">0</span>, ci <span class="op">=</span> <span class="fl">95</span>, </span>
+<span>       kernel <span class="op">=</span> <span class="st">"triangular"</span>, y.label <span class="op">=</span> <span class="st">"education"</span>, x.label <span class="op">=</span> <span class="st">"distance to border"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-16-1.png" width="\textwidth"></p>
-<p>For RDD estimation in <strong>R</strong> in general there are currently three packages flying around: <code>RDD</code>, <code>rddtools</code>, and <code>rddapp</code> (building on the <code>RDD</code>); whereby the latter seems to be the most up-to-date and comprehensive one (as it draws on previous work that others did).<br><code>rddapp</code> estimates various specifications (does not do robust inference though)</p>
+<p>For RDD estimation in <strong>R</strong>, in general, there are
+currently three packages flying around: <code>RDD</code>,
+<code>rddtools</code>, and <code>rddapp</code> (building on the
+<code>RDD</code>); whereby the latter seems to be the most up-to-date
+and comprehensive one (as it draws on previous work that others
+did).<br><code>rddapp</code> estimates various specifications (does not do robust
+inference, though)</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rddapp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">rd_est</span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">distrunning</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, t.design <span class="op">=</span> <span class="st">"g"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>And it gives several possibilities of visualising classic RDDs. Here we arbitrarily pick one parametric and one non-parametric estimate, including confidence intervals, and manually chosen binsizes:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rddapp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">rd_est</span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">distrunning</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, t.design <span class="op">=</span> <span class="st">"g"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>And it gives several possibilities of visualizing classic,
+one-dimensional RDDs. Here we arbitrarily pick one parametric and one
+non-parametric estimate, including confidence intervals, and manually
+chosen binsizes:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">rd_est</span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">distrunning</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, t.design <span class="op">=</span> <span class="st">"g"</span><span class="op">)</span>, fit_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quadratic"</span>, <span class="st">"optimal"</span><span class="op">)</span>, bin_n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">rd_est</span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">distrunning</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, t.design <span class="op">=</span> <span class="st">"g"</span><span class="op">)</span>, fit_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quadratic"</span>, <span class="st">"optimal"</span><span class="op">)</span>, bin_n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="parametric-specifications">Parametric Specifications<a class="anchor" aria-label="anchor" href="#parametric-specifications"></a>
 </h3>
-<p>This method, popularised by Dell2010 in her JMP on the Peruvian Mining Mita, examines only observations within a certain distance around the border by using a (semi-)parametric approach. From the point of view of which additional “spatial technicalities” are needed, it essentially only boils down to the introduction of border segments. These are then used to apply a “within estimator” to allow for different intercepts for each of those segment categories in order to, inter alia, alleviate the omitted variable problem. As an alternative to this fixed-effects approach we might as well throw a set of dummies for each of the segments in the regression. The regression coefficient of interest then gives a weighted average over all segments. On top of that we might also be interested in the coefficient of each segment to infer something about potential heterogeneity alongside our regression discontinuity.<br>
-The (computationally a bit demanding) function <code><a href="../reference/border_segment.html">border_segment()</a></code> only needs the points layer and the cut-off as input (preferrably as line, but also an input in the form of boundarypoint works). The last parameter of the function lets us determine how many segments we want. As with the <code><a href="../reference/assign_treated.html">assign_treated()</a></code> function, the output is a vector of factors.</p>
+<p>This method, popularized by <span class="citation">Dell (2010)</span>
+in her influential on the Peruvian Mining Mita, examines only
+observations within a certain distance around the border by using a
+parametric approach. From the point of view of which additional “spatial
+technicalities” are needed, it essentially only boils down to the
+introduction of border segments. These are then used to apply a “within
+estimator” to allow for different intercepts for each of those segment
+categories in order to, inter alia, alleviate the omitted variable
+problem. As is well known, instead of a within transformation, one might
+as well throw a set of dummies for each of the segments in the
+regression. The regression coefficient of interest of this saturated
+model then gives a weighted average over all segments. On top of that we
+might also be interested in the coefficient of each segment to infer
+something about potential heterogeneity alongside our regression
+discontinuity.<br>
+The (computationally a bit demanding) function
+<code><a href="../reference/border_segment.html">border_segment()</a></code> only needs the points layer and the cutoff
+as input (preferably as a line, but also an input in the form of points
+at the boundary works). The function’s last parameter lets us determine
+how many segments we want. As with the <code><a href="../reference/assign_treated.html">assign_treated()</a></code>
+function, the output is a vector of factors.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off.sf</span>, <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt; Starting to create 10 border segments with an approximate length of 13 kilometres each.</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment15</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off.sf</span>, <span class="fl">15</span><span class="op">)</span>
-<span class="co">#&gt; Starting to create 15 border segments with an approximate length of 9 kilometres each.</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"segment10"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"segment15"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment15</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off</span>, <span class="fl">15</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"segment10"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"segment15"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-19-1.png" width="700"><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-19-2.png" width="700"></p>
-<p>It is worth noting that the researcher has to pay attention to how the fixed effects are assigned. It could, e.g. due to odd bendings of the cut-off, be the case that for some segment only one side actually gets assigned point. These situations are undesireable for estimation. It is thus paramount to always plot the fixed-effect categories on a map! The <code><a href="../reference/border_segment.html">border_segment()</a></code> already gives the researcher a feeling for how meaningful the choice for the number of segments was. In the above example we have a segment for every 13 kilometres, which seems not too unreasonable. We could see however, that some of the FE categories contain verly little observations which is not very desireable for several reasons.<br>
-In the following example we thus choose less borderpoints, leading to more observations on each side of the border for every segment and thus to more meaningful point estimates:</p>
+<p>It is worth noting that the researcher has to pay attention to how
+the fixed effects are assigned. It could, e.g. due to odd bendings of
+the cutoff, be the case that for some segments only one side actually
+gets assigned a point. These situations are undesirable for two main
+reasons. First, estimation with segments that contain either only
+treated or only untreated units will be dropped automatically. Second,
+fixed effects category with a small amount of observations are not very
+informative for estimation. It is thus paramount to always plot the
+fixed effect categories on a map. The <code><a href="../reference/border_segment.html">border_segment()</a></code>
+already gives the researcher a feeling for how meaningful the choice for
+the number of segments was. In the above example we have a segment for
+every 13 kilometers, which seems not too unreasonable. We could already
+see however, that some of the categories contain very little
+observations. In the following example, we thus choose fewer border
+points, leading to more observations on each side of the border for
+every segment and thus to more meaningful point estimates:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off.sf</span>, <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; Starting to create 5 border segments with an approximate length of 26 kilometres each.</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"segment5"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"segment5"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
-<p>Simple OLS estimates, using the segments that we just obtained as categories for our fixed effects, show these differences:</p>
+<p>Simple OLS estimates, using the segments that we just obtained as
+categories for our fixed effects, show these differences:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sgaure/lfe" class="external-link">lfe</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: Matrix</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">lfe</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">felm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">segment15</span><span class="op">)</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="fl">0</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span>,
-<span class="fu">lfe</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">felm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">segment5</span><span class="op">)</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="fl">0</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span>
-<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; =====================================================</span>
-<span class="co">#&gt;                            Dependent variable:       </span>
-<span class="co">#&gt;                     ---------------------------------</span>
-<span class="co">#&gt;                                 education            </span>
-<span class="co">#&gt;                           (1)              (2)       </span>
-<span class="co">#&gt; -----------------------------------------------------</span>
-<span class="co">#&gt; treated1                0.094***         0.089***    </span>
-<span class="co">#&gt;                         (0.016)          (0.015)     </span>
-<span class="co">#&gt;                                                      </span>
-<span class="co">#&gt; -----------------------------------------------------</span>
-<span class="co">#&gt; Observations              159              159       </span>
-<span class="co">#&gt; R2                       0.280            0.250      </span>
-<span class="co">#&gt; Adjusted R2              0.200            0.220      </span>
-<span class="co">#&gt; Residual Std. Error 0.094 (df = 143) 0.092 (df = 153)</span>
-<span class="co">#&gt; =====================================================</span>
-<span class="co">#&gt; Note:                     *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></code></pre></div>
-<p>The confidence intervals of both point estimates are overlapping, yet, one can see that the fixed effects choice can have a substantial impact. We obtain a point estimate that is (unsurprisingly, as we have a data generating process that is very uniform across space) very similar to the one we obtained from the simple OLS regression from the beginning. As compared to the “classic RD” point estimate that we obtained from the non-parametric local linear regression from the <code>rdrobust</code> package, the point estimate from our fixed effects regression is a bit more conservative. But from eyeballing we can determine that the average effect lies somewhere around 0.1, meaning that the literacy rate is 10 percentage points higher in the treated areas. Exactly the way we designed our simulated data.<br>
-In the “full” polynomial specification by Dell2010 we would be required to also control for the position in space via a flexible polynomial function in longitude and latitude.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MatthieuStigler/lfe" class="external-link">lfe</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: Matrix</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">lfe</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">felm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">segment15</span><span class="op">)</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="fl">0</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span>,</span>
+<span><span class="fu">lfe</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">felm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">segment5</span><span class="op">)</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="fl">0</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; =====================================================</span></span>
+<span><span class="co">#&gt;                            Dependent variable:       </span></span>
+<span><span class="co">#&gt;                     ---------------------------------</span></span>
+<span><span class="co">#&gt;                                 education            </span></span>
+<span><span class="co">#&gt;                           (1)              (2)       </span></span>
+<span><span class="co">#&gt; -----------------------------------------------------</span></span>
+<span><span class="co">#&gt; treated1                0.094***         0.089***    </span></span>
+<span><span class="co">#&gt;                         (0.016)          (0.015)     </span></span>
+<span><span class="co">#&gt;                                                      </span></span>
+<span><span class="co">#&gt; -----------------------------------------------------</span></span>
+<span><span class="co">#&gt; Observations              159              159       </span></span>
+<span><span class="co">#&gt; R2                       0.280            0.250      </span></span>
+<span><span class="co">#&gt; Adjusted R2              0.200            0.220      </span></span>
+<span><span class="co">#&gt; Residual Std. Error 0.094 (df = 143) 0.092 (df = 153)</span></span>
+<span><span class="co">#&gt; =====================================================</span></span>
+<span><span class="co">#&gt; Note:                     *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></span></code></pre></div>
+<p>The confidence intervals of both point estimates are overlapping,
+yet, one can see that the fixed effects choice can have a substantial
+impact. We obtain a point estimate that is (unsurprisingly, as we have a
+data generating process that is very uniform across space) very similar
+to the one we obtained from the simple OLS regression from the
+beginning. As compared to the “classic RD” point estimate that we
+obtained from the non-parametric local linear regression from the
+<code>rdrobust</code> package, the point estimate from our fixed effects
+regression is a bit more conservative. But from eyeballing we can
+determine that the average effect lies somewhere around 0.1, meaning
+that the literacy rate is 10 percentage points higher in the treated
+areas. Exactly the way we designed our simulated data.</p>
 </div>
 <div class="section level3">
 <h3 id="grd">GRD<a class="anchor" aria-label="anchor" href="#grd"></a>
 </h3>
-<p>Finally we move towards a fully fledged Geographic Regression Discontinuity (GRD) design (KeeleTitiunik2015). The function <code><a href="../reference/spatialrd.html">spatialrd()</a></code> incorporates the RD estimation with two running variables, but also allows to carry out the estimation on each boundarypoint (“GRDDseries”) with just one line of code. This allows us to visualise the treatment effect at multiple points of the cut-off and thus infer something about the potential heterogeneity of the effect. Or, most importantly, to assess the robustness of the GRD itself.<br>
-A future version of <code>SpatialRDD</code> will also incorporate the “Optimized RDD” approach by ImbensWager2019.</p>
-<p>First of all we have to cut the border into equally spaced segments. For each of these segments, or rather boundarypoints, we will later obtain a point estimate. The <code><a href="../reference/discretise_border.html">discretise_border()</a></code> function just requires the sf object that represent the cut-off (polyline preferred but also points possible) and the number of desired boundarypoints:</p>
+<p>Finally we move towards a fully fledged Geographic Regression
+Discontinuity (GRD) design <span class="citation">(according to the
+nomenclature by Keele and Titiunik 2015)</span>. The function
+<code><a href="../reference/spatialrd.html">spatialrd()</a></code> incorporates the RD estimation with two running
+variables but also allows to carry out the estimation on any boundary
+point (“GRDDseries”) with just one line of code. This allows us to
+visualize the treatment effect at multiple points of the cutoff and thus
+infer something about the potential heterogeneity of the effect. Or,
+most importantly, to assess the robustness of the GRD itself.</p>
+<p>First of all we have to cut the border into equally spaced segments.
+We will obtain a point estimate for each of these segments, or boundary
+points. The <code><a href="../reference/discretise_border.html">discretise_border()</a></code> function just requires the
+sf object that represent the cutoff (polyline preferred but also points
+possible) and the number of desired boundary points:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">borderpoints.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/discretise_border.html">discretise_border</a></span><span class="op">(</span>cutoff <span class="op">=</span> <span class="va">cut_off.sf</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-<span class="co">#&gt; Starting to create 50 borderpoints from the given set of borderpoints. Approximately every 3 kilometres we can run an estimation then.</span>
-<span class="va">borderpoints.sf</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">borderpoints.sf</span><span class="op">)</span>
-<span class="co"># exclude some of the borderpoints with little n so that the vignette can compile without warning:</span>
-<span class="co">#borderpoints.sf &lt;- borderpoints.sf %&gt;% slice(c(5,10,20,30,40))</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"education"</span>, palette <span class="op">=</span> <span class="st">"RdYlGn"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">borderpoints.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_symbols</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">borderpoints.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/discretise_border.html">discretise_border</a></span><span class="op">(</span>cutoff <span class="op">=</span> <span class="va">cut_off</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="va">borderpoints.sf</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">borderpoints.sf</span><span class="op">)</span></span>
+<span><span class="co"># exclude some of the borderpoints with little n so that the vignette can compile without warning:</span></span>
+<span><span class="co">#borderpoints.sf &lt;- borderpoints.sf %&gt;% slice(c(5,10,20,30,40))</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"education"</span>, palette <span class="op">=</span> <span class="st">"RdYlGn"</span>, size <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">borderpoints.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_symbols</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
-<p>for plotting just a results table, it would be preferrable to choose just a <code>data.frame</code> as output (spatial.object = F).</p>
+<p>For plotting just a results table, it would be preferrable to choose
+just a <code>data.frame</code> as output
+(<code>spatial.object = FALSE</code>).</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spatialrd.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">borderpoints.sf</span>, treated <span class="op">=</span> <span class="st">"treated"</span>, minobs <span class="op">=</span> <span class="fl">10</span>, spatial.object <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spatialrd.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">borderpoints.sf</span>, treated <span class="op">=</span> <span class="st">"treated"</span>, minobs <span class="op">=</span> <span class="fl">10</span>, spatial.object <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="6%">
@@ -1168,91 +1369,155 @@ A future version of <code>SpatialRDD</code> will also incorporate the “Optimiz
 </tr>
 </tbody>
 </table>
-<p>The average treatment effect is given by taking the mean of all point estimates. Running <code>mean(results$Estimate)</code> this gives 0.12, which is exactly how we designed our DGP. For the plotting of the <em>GRDDseries</em> and a visualisation in space of each point estimate we need to have a spatial object. All this is incorporated in the <code><a href="../reference/plotspatialrd.html">plotspatialrd()</a></code> function.</p>
+<p>The average treatment effect is given by taking the mean of all point
+estimates. Running <code>mean(results$Estimate)</code> this gives 0.12,
+which is exactly how we designed our DGP. For the plotting of the
+<em>GRDDseries</em> and a visualisation in space of each point estimate
+we need to have a spatial object. All this is incorporated in the
+<code><a href="../reference/plotspatialrd.html">plotspatialrd()</a></code> function.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spatialrd.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">borderpoints.sf</span>, treated <span class="op">=</span> <span class="st">"treated"</span>, minobs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotspatialrd.html">plotspatialrd</a></span><span class="op">(</span><span class="va">results</span>, map <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spatialrd.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">borderpoints.sf</span>, treated <span class="op">=</span> <span class="st">"treated"</span>, minobs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotspatialrd.html">plotspatialrd</a></span><span class="op">(</span><span class="va">results</span>, map <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
 <p>Or just the <em>GRDDseries</em> without the map.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plotspatialrd.html">plotspatialrd</a></span><span class="op">(</span><span class="va">results</span>, map <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotspatialrd.html">plotspatialrd</a></span><span class="op">(</span><span class="va">results</span>, map <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="robustness">Robustness<a class="anchor" aria-label="anchor" href="#robustness"></a>
 </h2>
-<p>In Spatial Regression Discontinuity exercises, the researcher usually also has to show that the results are robust towards different specifications and parameters. Also in this respect the <code>SpatialRDD</code> package offers a lot of capabilities that are time saving and make replicability very easy. This toolbox for shifting and moving around borders and afterwards assigning (placebo) treatment status again is in fact so potent, that it is of use in many other research design settings outside of geographic RDs. In this vignette we will just see the basic intuiton. For more details on all the options check out the separate vignette <code>shifting_borders</code>.</p>
+<p>In Spatial Regression Discontinuity exercises, the researcher usually
+also has to show that the results are robust towards different
+specifications and parameters. Also in this respect the
+<code>SpatialRDD</code> package offers a lot of capabilities that are
+time saving and make replicability easy. This toolbox for shifting and
+moving around borders and afterwards assigning (placebo) treatment
+status again is in fact so potent, that it is of use in many other
+research design settings outside of geographic RDs. In this vignette we
+will just see the basic intuition. For more details on all the options
+check out the separate vignette <code>shifting_borders</code> or go to
+the <a href="https://axlehner.github.io/SpatialRDD/articles/shifting_borders.html">copy
+of the article on the package website</a>.</p>
 <div class="section level3">
 <h3 id="placebo-borders">Placebo Borders<a class="anchor" aria-label="anchor" href="#placebo-borders"></a>
 </h3>
-<p>Here we are going to apply a standard tool that we got to know in linear algebra 1 classes: an affine transformation of the type <span class="math inline">\(f(x) = x\mathbf{A}+b\)</span>, where the matrix <span class="math inline">\(\mathbf{A}\)</span> is the projection matrix to shift, (re-)scale, or rotate the border. For simplicity we now only apply a shift by 3000 metres in both the x and y coordinates of the border.</p>
+<p>Here we are going to apply a standard tool that we got to know in
+linear algebra 1 classes: an affine transformation of the type <span class="math inline">\(f(x) = x\mathbf{A}+b\)</span>, where the matrix
+<span class="math inline">\(\mathbf{A}\)</span> is the projection matrix
+to shift, (re-)scale, or rotate the border. For simplicity we now only
+apply a shift by 3000 meters in both the x- and y-coordinates of the
+border.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">placebocut_off.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shift_border.html">shift_border</a></span><span class="op">(</span><span class="va">cut_off.sf</span>, operation <span class="op">=</span> <span class="st">"shift"</span>, shift <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3000</span>, <span class="fl">3000</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Pay attention to CRS! If you work in lon/lat then degrees have to be provided. Local UTM CRS is preferable!</span>
-<span class="va">placeboborderpoints.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/discretise_border.html">discretise_border</a></span><span class="op">(</span>cutoff <span class="op">=</span> <span class="va">placebocut_off.1</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-<span class="co">#&gt; Starting to create 50 borderpoints from the given set of borderpoints. Approximately every 3 kilometres we can run an estimation then.</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"treated"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placeboborderpoints.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_symbols</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placebocut_off.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">placebocut_off.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shift_border.html">shift_border</a></span><span class="op">(</span><span class="va">cut_off</span>, operation <span class="op">=</span> <span class="st">"shift"</span>, shift <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3000</span>, <span class="fl">3000</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">placeboborderpoints.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/discretise_border.html">discretise_border</a></span><span class="op">(</span>cutoff <span class="op">=</span> <span class="va">placebocut_off.1</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"treated"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placeboborderpoints.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_symbols</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placebocut_off.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
-<p>After the border shift we now have to re-assign the new treatment status in order to carry out regressions. For that matter we create new polygons from scratch with the <code>cutoff2polygons()</code> function. The logic of this function is not very intuitive at first, but the vignette on border shifting will clarify that. In our case we do not have to go around corners with the counterfactual polygon because both ends of the cutoff go towards the west. Just make sure that the endpoints are chosen in a way so that all observations that should be in the “placebo treated” group are also actually inside this resulting polygon.</p>
+<p>After the border shift we now have to re-assign the new treatment
+status in order to carry out regressions. For that matter, we create new
+polygons from scratch with the <code>cutoff2polygons()</code> function.
+The logic of this function is not very intuitive at first, but the
+vignette on border shifting will clarify that. In our case, we do not
+have to go around corners with the counterfactual polygon because both
+ends of the cutoff go towards the West. Just make sure that the
+endpoints are chosen in a way so that all observations that should be in
+the “placebo treated” group are also actually inside this resulting
+polygon.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">placebo.poly.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cutoff2polygon.html">cutoff2polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff <span class="op">=</span> <span class="va">placebocut_off.1</span>, orientation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"west"</span>, <span class="st">"west"</span><span class="op">)</span>, endpoints <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placebo.poly.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">placebo.poly.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cutoff2polygon.html">cutoff2polygon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff <span class="op">=</span> <span class="va">placebocut_off.1</span>, orientation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"west"</span>, <span class="st">"west"</span><span class="op">)</span>, endpoints <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placebo.poly.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html" class="external-link">tm_polygons</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
-<p>Finally we have to use the <code><a href="../reference/assign_treated.html">assign_treated()</a></code> function from the beginning of the vignette again:</p>
+<p>Finally, we have to use the <code><a href="../reference/assign_treated.html">assign_treated()</a></code> function
+from the beginning of the vignette again:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assign_treated.html">assign_treated</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, polygon <span class="op">=</span> <span class="va">placebo.poly.1</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated1</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># number of villages that switched treatment status</span>
-<span class="co">#&gt; [1] 60</span>
-<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"treated1"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placeboborderpoints.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_symbols</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placebocut_off.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assign_treated.html">assign_treated</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, polygon <span class="op">=</span> <span class="va">placebo.poly.1</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated1</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># number of villages that switched treatment status</span></span>
+<span><span class="co">#&gt; [1] 60</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_dots</a></span><span class="op">(</span><span class="st">"treated1"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placeboborderpoints.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_symbols.html" class="external-link">tm_symbols</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">placebocut_off.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
-<p>After plotting the points again, we can visually infer that the right villages got assign the “treated” dummy. Further we can compute the number of villages that change their status. This helps us to decide whether the bordershift was big enough (if e.g. only a handful of observations switched, then we would expect this to have little to no impact on our point estimates and thus would dub such a robustness exercise as not very meaningful).<br>
-In this case 60 villages changed. Given the initial number of treated observations, this seems a change of a big enough magnitude and thus a meaningful robustness exercise.</p>
+<p>After plotting the points again, we can visually infer that the
+villages to the right got assigned the “treated” dummy. Further we can
+compute the number of villages that change their status. This helps us
+to decide whether the bordershift was big enough (if e.g. only a handful
+of observations switched, then we would expect this to have little to no
+impact on our point estimates and thus would dub such a robustness
+exercise as not very meaningful).<br>
+In this case 60 villages changed. Given the initial number of treated
+observations, this seems a change of a big enough magnitude and thus a
+meaningful robustness exercise.</p>
 <div class="section level4">
 <h4 id="robustness-grd">Robustness GRD<a class="anchor" aria-label="anchor" href="#robustness-grd"></a>
 </h4>
-<p>Finally we do the exact same exercise from above again and run the nonparametric specification on many boundary points to approximate a countinous treatment effect. The series is fluctuating around 0 and has not a single significant estimate and it is thus save to conclude that the methodology works.</p>
+<p>Finally, we do the exact same exercise from above again and run the
+nonparametric specification on many boundary points to approximate a
+continuous treatment effect. The series fluctuates around 0 and has not
+a single significant estimate, and it is thus safe to conclude that the
+methodology works.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spatialrd.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">placeboborderpoints.1</span>, treated <span class="op">=</span> <span class="st">"treated1"</span>, minobs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotspatialrd.html">plotspatialrd</a></span><span class="op">(</span><span class="va">results1</span>, map <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spatialrd.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">placeboborderpoints.1</span>, treated <span class="op">=</span> <span class="st">"treated1"</span>, minobs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotspatialrd.html">plotspatialrd</a></span><span class="op">(</span><span class="va">results1</span>, map <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="spatialrdd_vignette_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="robustness-polynomial-specification">Robustness Polynomial Specification<a class="anchor" aria-label="anchor" href="#robustness-polynomial-specification"></a>
 </h4>
-<p>Finally we also run our placebo exercise with the parametric specification. Unfortunately OLS with fixed effects is not as sensitive when it comes to detecting the border shift. The coefficient is still borderline significant. In this case we should have moved the border 1 or 2 kilometres farther to make it insignificant.</p>
+<p>Before we close, let’s also run our placebo exercise with the
+parametric specification. Unfortunately, OLS with fixed effects is not
+as sensitive when it comes to detecting the border shift. The
+coefficient is still borderline significant. In this case, we should
+have moved the border 1 or 2 kilometers farther to make it
+insignificant.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment.1.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">placebocut_off.1</span>, <span class="fl">5</span><span class="op">)</span> <span class="co"># assigning new segments based on now cutoff</span>
-<span class="co">#&gt; Starting to create 5 border segments with an approximate length of 26 kilometres each.</span>
-<span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">placebocut_off.1</span><span class="op">)</span><span class="op">)</span> <span class="co"># recompute distance to new placebo cutoff</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated1</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff1</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span>,
-  <span class="fu">lfe</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">felm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated1</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">segment.1.5</span><span class="op">)</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="fl">0</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff1</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span>
-<span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ========================================================</span>
-<span class="co">#&gt;                             Dependent variable:         </span>
-<span class="co">#&gt;                     ------------------------------------</span>
-<span class="co">#&gt;                                  education              </span>
-<span class="co">#&gt;                             OLS               felm      </span>
-<span class="co">#&gt;                             (1)               (2)       </span>
-<span class="co">#&gt; --------------------------------------------------------</span>
-<span class="co">#&gt; treated11                  0.021             0.018      </span>
-<span class="co">#&gt;                           (0.015)           (0.015)     </span>
-<span class="co">#&gt;                                                         </span>
-<span class="co">#&gt; Constant                 0.620***                       </span>
-<span class="co">#&gt;                           (0.010)                       </span>
-<span class="co">#&gt;                                                         </span>
-<span class="co">#&gt; --------------------------------------------------------</span>
-<span class="co">#&gt; Observations                177               177       </span>
-<span class="co">#&gt; R2                         0.011             0.032      </span>
-<span class="co">#&gt; Adjusted R2                0.005             0.004      </span>
-<span class="co">#&gt; Residual Std. Error  0.100 (df = 175)   0.100 (df = 171)</span>
-<span class="co">#&gt; F Statistic         1.900 (df = 1; 175)                 </span>
-<span class="co">#&gt; ========================================================</span>
-<span class="co">#&gt; Note:                        *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment.1.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">placebocut_off.1</span>, <span class="fl">5</span><span class="op">)</span> <span class="co"># assigning new segments based on now cutoff</span></span>
+<span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html" class="external-link">st_distance</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">placebocut_off.1</span><span class="op">)</span><span class="op">)</span> <span class="co"># recompute distance to new placebo cutoff</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated1</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff1</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span>,</span>
+<span>  <span class="fu">lfe</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">felm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treated1</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">segment.1.5</span><span class="op">)</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="fl">0</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span><span class="op">[</span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">dist2cutoff1</span> <span class="op">&lt;</span> <span class="fl">3000</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html" class="external-link">stargazer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ========================================================</span></span>
+<span><span class="co">#&gt;                             Dependent variable:         </span></span>
+<span><span class="co">#&gt;                     ------------------------------------</span></span>
+<span><span class="co">#&gt;                                  education              </span></span>
+<span><span class="co">#&gt;                             OLS               felm      </span></span>
+<span><span class="co">#&gt;                             (1)               (2)       </span></span>
+<span><span class="co">#&gt; --------------------------------------------------------</span></span>
+<span><span class="co">#&gt; treated11                  0.021             0.018      </span></span>
+<span><span class="co">#&gt;                           (0.015)           (0.015)     </span></span>
+<span><span class="co">#&gt;                                                         </span></span>
+<span><span class="co">#&gt; Constant                 0.620***                       </span></span>
+<span><span class="co">#&gt;                           (0.010)                       </span></span>
+<span><span class="co">#&gt;                                                         </span></span>
+<span><span class="co">#&gt; --------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Observations                177               177       </span></span>
+<span><span class="co">#&gt; R2                         0.011             0.032      </span></span>
+<span><span class="co">#&gt; Adjusted R2                0.005             0.004      </span></span>
+<span><span class="co">#&gt; Residual Std. Error  0.100 (df = 175)   0.100 (df = 171)</span></span>
+<span><span class="co">#&gt; F Statistic         1.900 (df = 1; 175)                 </span></span>
+<span><span class="co">#&gt; ========================================================</span></span>
+<span><span class="co">#&gt; Note:                        *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bivand_Pebesma_2023" class="csl-entry">
+Bivand, Roger, and Edzer Pebesma. 2023. <em>Spatial Data Science: With
+Applications in r</em>. New York: Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9780429459016" class="external-link">https://doi.org/10.1201/9780429459016</a>.
+</div>
+<div id="ref-Dell_2010" class="csl-entry">
+Dell, Melissa. 2010. <span>“The Persistent Effects of Peru’s Mining
+Mita.”</span> <em>Econometrica</em> 78 (6): 1863–903.
+</div>
+<div id="ref-Keele_Titiunik_2015" class="csl-entry">
+Keele, Luke J., and Rocío Titiunik. 2015. <span>“Geographic Boundaries
+as Regression Discontinuities.”</span> <em>Political Analysis</em> 23
+(1): 127–55. <a href="https://doi.org/10.1093/pan/mpu014" class="external-link">https://doi.org/10.1093/pan/mpu014</a>.
 </div>
 </div>
 </div>
@@ -1269,7 +1534,7 @@ In this case 60 villages changed. Given the initial number of treated observatio
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
