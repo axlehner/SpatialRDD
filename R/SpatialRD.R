@@ -63,7 +63,7 @@
 #'
 #' # finally, carry out estimation alongside the boundary:
 #' results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf,
-#' treated = "treated", minobs = 10, spatial.object = FALSE)}
+#' treated = "treated", minobs = 10, spatial.object = FALSE)
 #'
 #'
 #' @references
