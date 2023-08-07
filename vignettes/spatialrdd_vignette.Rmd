@@ -39,7 +39,7 @@ In recent years, spatial versions of Regression Discontinuity Designs (RDDs) hav
 * it is not reproducible
 * it is not very flexible and makes it harder to understand the data at hand
 
-`SpatialRDD` is the first (geo-)statistical package that unifies the geographic tasks needed for spatial RDDs with all potential parametric and non-parametric estimation techniques that have been put forward [see @Lehner2023a]. It makes it easy to understand critical assumptions regarding bandwidths, sparse border points, and border segment fixed effects.
+`SpatialRDD` is the first (geo-)statistical package that unifies the geographic tasks needed for spatial RDDs with all potential parametric and non-parametric estimation techniques that have been put forward [see e.g. @Lehner2023a for an overview]. It makes it easy to understand critical assumptions regarding bandwidths, sparse border points, and border segment fixed effects.
 Furthermore, the flexibility of the `shift_border` function makes it attractive for all sorts of identification strategies outside of the RD literature that rely on shifting placebo borders.
 
 Geographic objects are treated as [simple features](https://en.wikipedia.org/wiki/Simple_Features) throughout, making heavy use of the `sf` package by Edzer Pebesma which revolutionized spatial data analysis in **R** and has already superseded the older and less versatile `sp` package.  
@@ -66,7 +66,7 @@ Furthermore it is suggested to always work in a localized projection system that
 
 # Setup and Propaedeutics
 
-Throughout the vignette we will use the geographic boundaries on Goa, India, from @Lehner2023. The data, included in the package, contains
+Throughout the vignette we will use the geographic boundaries on Goa, India, from @Lehner_2023. The data, included in the package, contains
 
 1. a line called `cut_off` which describes the spatial discontinuity
 2. a polygon that defines the "treated" area
@@ -207,7 +207,7 @@ points_samp.sf$distrunning[points_samp.sf$treated == 0] <- -1 * points_samp.sf$d
 ggplot(data = points_samp.sf, aes(x = distrunning, y = education)) + geom_point() + geom_vline(xintercept = 0, col = "red")
 ```
 
-The point estimate of the "classic" non-parametric local linear regression, carried out with the `rdrobust` package, then looks like this:
+The point estimate of the "classic" non-parametric local linear regression, carried out with the `rdrobust` package [@Calonico_Cattaneo_Titiunik_2015], then looks like this:
 
 ```{r}
 library(rdrobust)
