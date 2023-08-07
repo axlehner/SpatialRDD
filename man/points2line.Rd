@@ -18,10 +18,9 @@ a line as an sf object
 Small function that connects dots and makes them one line which can later be used as a cutoff for the RD.
 }
 \examples{
-\donttest{
 points_samp.sf <- sf::st_sample(polygon_full, 2) # create points
 # make it an sf object bc st_sample only created the geometry list-column (sfc):
 points_samp.sf <- sf::st_sf(points_samp.sf)
 points2line(points_samp.sf, crs = sf::st_crs(points_samp.sf))
-}
+
 }

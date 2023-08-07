@@ -9,12 +9,12 @@
 #' @return a line as an sf object
 #' @export
 #'
-#' @examples \donttest{
+#' @examples
 #' points_samp.sf <- sf::st_sample(polygon_full, 2) # create points
 #' # make it an sf object bc st_sample only created the geometry list-column (sfc):
 #' points_samp.sf <- sf::st_sf(points_samp.sf)
 #' points2line(points_samp.sf, crs = sf::st_crs(points_samp.sf))
-#' }
+#'
 
 points2line <- function(borderpoints, crs) {
 
