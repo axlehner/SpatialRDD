@@ -67,7 +67,6 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
   formula <- stats::update(formula, ~ treated + .) # treated is always put on second position
   # KEY for all the following is that treated is on the 1st postion in the formula and thus 2nd coefficient in all the outputs (after the constant)
   y.string <- stats::formula(formula)[[2]]
-  print(y.string)
 
   # loop over the placeboregressions -------------------------
   # ... later: option to parallelise! foreach or just make this loop one function and run it on parLapply or the purrr equiv? (since we have many params)
@@ -81,12 +80,12 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
                                     orientation = c(operations$orientation.1[i], operations$orientation.2[i]),
                                     endpoints   = c(operations$endpoint.1[i], operations$endpoint.2[i])))
     # if the polygon comes out invalid we jump the loop, this is a safe fallback.
-    if (sf::st_is_valid(polygon.1) == FALSE) {cat("invalid treated polygon, jumping to next iteration! \n"); next}
+    if (sf::st_is_valid(polygon.1) == FALSE) {message("invalid treated polygon, jumping to next iteration! \n"); next}
 
     err <- FALSE # here we introduce some errorhandling
     #print(err)
     data$treated <- tryCatch({assign_treated(data = data, polygon = polygon.1, id = "id")}, error = function(e) {err <<- TRUE})
-    if (err) {print("err, next loop!"); next}
+    if (err) {message("err, next loop!"); next}
     data$dist2cutoff.1 <- as.numeric(sf::st_distance(data, cutoff.1)) %>% try() # compute distance to new border
     # NOW FOR THE NON-PARAMETRIC
     data$distrunning <- data$dist2cutoff.1
@@ -101,7 +100,7 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
               results$rd.estimate[i] <- rd.obj$Estimate[[1]]
               }, error = function(e) {err <<- TRUE})
     #print(err)
-    if (err) {print("err, next loop!"); next}
+    if (err) {message("err, next loop!"); next}
     if (geometry == TRUE) results$geometry[i] <- sf::st_geometry(cutoff.1) %>% try()
   }
   # make it an sf object if we want to plot the lines on a map

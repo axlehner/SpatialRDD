@@ -30,7 +30,7 @@ shift_border <- function(border, operation = c("shift", "scale", "rotate"),
   stopifnot(
     "cutoff is not an sf object"            = inherits(border, "sf")
   )
-  #if (messages == TRUE) cat("Pay attention to CRS! If you work in lon/lat then degrees have to be provided. Local UTM CRS is preferable!\n")
+  #if (messages == TRUE) message("Pay attention to CRS! If you work in lon/lat then degrees have to be provided. Local UTM CRS is preferable!\n")
 
   # first we take out the geometry and the centroid
   border_sfc <- sf::st_geometry(border)
@@ -44,7 +44,7 @@ shift_border <- function(border, operation = c("shift", "scale", "rotate"),
     border_sfc <- border_sfc + c(shift[1], shift[2]) # units are in deg or meters here
 
     #} else {
-    #  cat("nothing of use provided")
+    #  message("nothing of use provided")
     #}
 
 

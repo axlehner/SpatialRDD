@@ -37,7 +37,7 @@ discretise_border <- function(cutoff, n = 10, random = FALSE, range = FALSE, yma
   # do I need to prepare for other cases where the input is neither linestring nor multilinestring?
   # here the case for line data
   if (sf::st_geometry_type(cutoff)[1] == "LINESTRING" | sf::st_geometry_type(cutoff)[1] == "MULTILINESTRING") {
-    #cat("Starting to create", n, "borderpoints from the given set of borderpoints. Approximately every", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres we can run an estimation then.\n")
+    #message("Starting to create", n, "borderpoints from the given set of borderpoints. Approximately every", round(as.numeric(sf::st_length(cutoff))/1000/n, 0), "kilometres we can run an estimation then.\n")
 
     # first let's make the line a one feature object so that the sampling works (it draws n elements per feature with st_line_sample)
     # using combine in this version, might be risky because of errors
@@ -70,7 +70,7 @@ discretise_border <- function(cutoff, n = 10, random = FALSE, range = FALSE, yma
     #if ()
     cutoff$id <- 1:length(cutoff) # was this the hack to make the nrow work?
     borderpoints.sf <- cutoff[seq(1, nrow(cutoff), round(nrow(cutoff) / n, 0)), ] # subset according to this rule
-    #cat("Starting to create", n, "borderpoints from the given line. Approximately every", round(as.numeric(sf::st_distance(borderpoints.sf[1], borderpoints.sf[2]))/1000/n, 0), "kilometres we can run an estimation then.\n")
+    #message("Starting to create", n, "borderpoints from the given line. Approximately every", round(as.numeric(sf::st_distance(borderpoints.sf[1], borderpoints.sf[2]))/1000/n, 0), "kilometres we can run an estimation then.\n")
 
 
   }

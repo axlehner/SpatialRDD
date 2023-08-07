@@ -80,7 +80,7 @@ cutoff2polygon <- function(data, cutoff,
   offsetY <- 0
 
   # OLD CORNERING GRAVEYARD (keep for future reference):
-  # if (is.na(corners) | corners[1] == 0) {if (messages == T) cat("\n No corners selected, thus both extensions will end in the same side.\n")
+  # if (is.na(corners) | corners[1] == 0) {if (messages == T) message("\n No corners selected, thus both extensions will end in the same side.\n")
   #   corners <- c(0)
   #   poly_c_start <- c(NA, NA)
   #   }
@@ -189,7 +189,7 @@ cutoff2polygon <- function(data, cutoff,
                         crs = crs))
 
   # print this messages even though we are fixing the problem internally - but we want to use this opportunity to raise the user's awareness that his geographic objects might be invalid
-  if (sf::st_is_valid(poly_full) == FALSE) cat("Polygon invalid, have yout tried switching the position of the two endpoints? \n If you think it is a false flag, try to make it valid with sf::st_make_valid().\n")
+  if (sf::st_is_valid(poly_full) == FALSE) message("Polygon invalid, have yout tried switching the position of the two endpoints? \n If you think it is a false flag, try to make it valid with sf::st_make_valid().\n")
   if (sf::st_is_valid(poly_full) == FALSE) poly_full <- sf::st_make_valid(poly_full)
 
   # HERE WE COULD ADD, to you want the negation of the result? and then just do cookie cutting with the polygon of the full bbox

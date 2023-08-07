@@ -27,9 +27,9 @@ assign_treated <- function(data, polygon, id = NA) {
   # no deparse(substitute(colname)), require the string directly
 
   # PRECHECKS on the id col
-  if (is.na(id)) {cat("Please provide column name for unique id point layer as a string.\n")
+  if (is.na(id)) {message("Please provide column name for unique id point layer as a string.\n")
     return()}
-  if (typeof(id) != "character") {cat("Column name for unique id point layer is not a string, wrap it around \" \".\n")
+  if (typeof(id) != "character") {message("Column name for unique id point layer is not a string, wrap it around \" \".\n")
     return()}
   #microbenchmark::microbenchmark(any(names(data) == id), id %in% names(data))
   stopifnot("id column not found. Did you specify it correctly? (check spelling, is it a string?)"

@@ -191,7 +191,7 @@ spatialrd <- function(y,
       } else { # this is the same, just with MSE-optimal bandwidth
         rdrob_bwflex <- tryCatch(rdrobust::rdrobust(data[[y]], x = data[["dist2cutoff"]], c = 0, ...), error = function(e) { err <<- TRUE})
       }
-    if(err) {print("Skipped one boundary point due to error, possibly not enough observations in local neighbourhood. Check vignette for FAQ!"); next}  # break the loop if we have an error
+    if(err) {message("Skipped one boundary point due to error, possibly not enough observations in local neighbourhood. Check vignette for FAQ!"); next}  # break the loop if we have an error
     # RD testing
     # Removed because can be implemented manually outside in case someone needs it
     #invisible(utils::capture.output(mccrary <- dc_test(data[["dist2cutoff"]]), plot = F))
