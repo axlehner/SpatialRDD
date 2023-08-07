@@ -1,13 +1,20 @@
 
-#' Title
-#' this is just a test function, export was removed for now
+#' Convert borderpoints to a line
+#'
+#' Small function that connects dots and makes them one line which can later be used as a cutoff for the RD.
 #'
 #' @param borderpoints a set of points on a boundary
 #' @param crs set the coordinate reference system (CRS)
 #'
 #' @return a line as an sf object
+#' @export
 #'
-#' @examples \donttest{test}
+#' @examples \donttest{
+#' points_samp.sf <- sf::st_sample(polygon_full, 2) # create points
+#' # make it an sf object bc st_sample only created the geometry list-column (sfc):
+#' points_samp.sf <- sf::st_sf(points_samp.sf)
+#' points2line(points_samp.sf, crs = sf::st_crs(points_samp.sf))
+#' }
 
 points2line <- function(borderpoints, crs) {
 

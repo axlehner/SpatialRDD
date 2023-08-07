@@ -2,8 +2,7 @@
 % Please edit documentation in R/points2line.R
 \name{points2line}
 \alias{points2line}
-\title{Title
-this is just a test function, export was removed for now}
+\title{Convert borderpoints to a line}
 \usage{
 points2line(borderpoints, crs)
 }
@@ -16,9 +15,13 @@ points2line(borderpoints, crs)
 a line as an sf object
 }
 \description{
-Title
-this is just a test function, export was removed for now
+Small function that connects dots and makes them one line which can later be used as a cutoff for the RD.
 }
 \examples{
-\donttest{test}
+\donttest{
+points_samp.sf <- sf::st_sample(polygon_full, 2) # create points
+# make it an sf object bc st_sample only created the geometry list-column (sfc):
+points_samp.sf <- sf::st_sf(points_samp.sf)
+points2line(points_samp.sf, crs = sf::st_crs(points_samp.sf))
+}
 }
