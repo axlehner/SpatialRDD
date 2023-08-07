@@ -30,7 +30,7 @@ create_placebos(
 \item{geometry}{set to \code{TRUE} if you want to plot all the lines of the used placebo borders}
 }
 \value{
-either a coefplot or data.frame containing results of placeboregressions
+either a coefplot or data.frame containing results of placebo regressions
 }
 \description{
 Unifies \code{\link{shift_border}}, \code{\link{cutoff2polygon}}, \code{\link{assign_treated}} in one function to carry out a myriad of placebo checks at once.
@@ -39,6 +39,6 @@ Requires operations data.frame that contains all desired operations (columns shi
 if you don't need a certain operation just use default values (e.g. 0 for angle and 1 for scale), but the column has to be there.
 }
 \examples{
-\dontrun{create_placebos(data = points_samp.sf, cutoff = cut_off.sf,
+\donttest{create_placebos(data = points_samp.sf, cutoff = cut_off.sf,
 formula = education ~ 1, operations = operations)}
 }

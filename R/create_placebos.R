@@ -16,11 +16,11 @@
 #' @param geometry set to \code{TRUE} if you want to plot all the lines of the used placebo borders
 #' @param bw_dist what is the distance for the bandwith (in CRS units, thus ideally metres)
 #'
-#' @return either a coefplot or data.frame containing results of placeboregressions
+#' @return either a coefplot or data.frame containing results of placebo regressions
 #' @export
 #'
 #' @examples
-#' \dontrun{create_placebos(data = points_samp.sf, cutoff = cut_off.sf,
+#' \donttest{create_placebos(data = points_samp.sf, cutoff = cut_off.sf,
 #' formula = education ~ 1, operations = operations)}
 
 create_placebos <- function(data, cutoff, formula, operations, bw_dist,

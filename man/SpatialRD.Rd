@@ -48,7 +48,7 @@ spatialrd(
 a data.frame or spatial data.frame (sf object) in case spatial.object = TRUE (default)
 }
 \description{
-This function loops over all boundary points and locally estimates a non-parametric RD (local linear regression, as usual)
+This function loops over all boundary points and locally estimates a non-parametric RD (using local linear regression)
 using the \code{rdrobust} function from the \code{rdrobust} package from Calonico, Cattaneo, Titiunik (2014).
 It takes in the discretized cutoff point file (the RDcutoff, a linestring chopped into parts by the \code{\link{discretise_border}} function)
 and the sf object (which essentially is just a conventional data.frame with a \code{geometry()} column) containing all the observations (treated and untreated).

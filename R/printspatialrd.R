@@ -12,7 +12,8 @@
 #' @return A formatted table with results from the \code{\link{spatialrd}} function
 #' @export
 #'
-#' @examples \dontrun{printspatialrd(results.spatialrd)}
+#' @examples \donttest{printspatialrd(results.spatialrd)}
+#'
 printspatialrd <- function(SpatialRDoutput, #label = NA, caption = NA, footnote = NA,
                            format = "latex"
                            ) {

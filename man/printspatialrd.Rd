@@ -19,5 +19,6 @@ Preliminary function using kable and kableextra.
 You could also just use the package of your choice to print out columns of the output from \code{\link{spatialrd}}.
 }
 \examples{
-\dontrun{printspatialrd(results.spatialrd)}
+\donttest{printspatialrd(results.spatialrd)}
+
 }

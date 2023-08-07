@@ -7,7 +7,7 @@
 #'
 #' @return a line as an sf object
 #'
-#' @examples \dontrun{test}
+#' @examples \donttest{test}
 
 points2line <- function(borderpoints, crs) {
 

@@ -11,7 +11,7 @@
 #' @return plots produced with ggplot2
 #' @export
 #'
-#' @examples \dontrun{plotspatialrd(results.spatialrd)}
+#' @examples \donttest{plotspatialrd(results.spatialrd)}
 
 plotspatialrd <- function(SpatialRDoutput, map = FALSE) {
 

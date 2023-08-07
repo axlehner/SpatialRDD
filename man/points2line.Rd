@@ -20,5 +20,5 @@ Title
 this is just a test function, export was removed for now
 }
 \examples{
-\dontrun{test}
+\donttest{test}
 }

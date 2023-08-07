@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{points.sf$segment10 <- border_segment(points.sf, cut_off, 10)}
+#' \donttest{points.sf$segment10 <- border_segment(points.sf, cut_off, 10)}
 #'
 border_segment <- function(data, cutoff, n = 10) {
 
