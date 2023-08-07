@@ -13,7 +13,10 @@
 #' @export
 #'
 #' @examples
-#' \donttest{points.sf$segment10 <- border_segment(points.sf, cut_off, 10)}
+#' points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+#' # make it an sf object bc st_sample only created the geometry list-column (sfc):
+#' points_samp.sf <- sf::st_sf(points_samp.sf)
+#' points_samp.sf$segment10 <- border_segment(points_samp.sf, cut_off, 3)
 #'
 border_segment <- function(data, cutoff, n = 10) {
 

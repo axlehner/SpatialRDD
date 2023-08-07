@@ -39,6 +39,21 @@ Requires operations data.frame that contains all desired operations (columns shi
 if you don't need a certain operation just use default values (e.g. 0 for angle and 1 for scale), but the column has to be there.
 }
 \examples{
-\donttest{create_placebos(data = points_samp.sf, cutoff = cut_off.sf,
-formula = education ~ 1, operations = operations)}
+points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+# make it an sf object bc st_sample only created the geometry list-column (sfc):
+points_samp.sf <- sf::st_sf(points_samp.sf)
+# add a unique ID to each observation:
+points_samp.sf$id <- 1:nrow(points_samp.sf)
+points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated, id = "id")
+operations.df <- data.frame(operation = c("shift"),
+                            shift.x = c(0),
+                            shift.y = c(0),
+                            scale = 1,
+                            angle = 0,
+                            orientation.1 = c("west"),
+                            orientation.2 = c("west"),
+                            endpoint.1 = c(.8),
+                            endpoint.2 = c(.2))
+create_placebos(data = points_samp.sf, cutoff = cut_off,
+formula = id ~ 1, operations = operations.df, bw_dist = 3000)
 }

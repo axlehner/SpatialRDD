@@ -20,8 +20,23 @@
 #' @export
 #'
 #' @examples
-#' \donttest{create_placebos(data = points_samp.sf, cutoff = cut_off.sf,
-#' formula = education ~ 1, operations = operations)}
+#' points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+#' # make it an sf object bc st_sample only created the geometry list-column (sfc):
+#' points_samp.sf <- sf::st_sf(points_samp.sf)
+#' # add a unique ID to each observation:
+#' points_samp.sf$id <- 1:nrow(points_samp.sf)
+#' points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated, id = "id")
+#' operations.df <- data.frame(operation = c("shift"),
+#'                             shift.x = c(0),
+#'                             shift.y = c(0),
+#'                             scale = 1,
+#'                             angle = 0,
+#'                             orientation.1 = c("west"),
+#'                             orientation.2 = c("west"),
+#'                             endpoint.1 = c(.8),
+#'                             endpoint.2 = c(.2))
+#' create_placebos(data = points_samp.sf, cutoff = cut_off,
+#' formula = id ~ 1, operations = operations.df, bw_dist = 3000)
 
 create_placebos <- function(data, cutoff, formula, operations, bw_dist,
                              coefplot = FALSE, geometry = FALSE
@@ -68,7 +83,7 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
   # KEY for all the following is that treated is on the 1st postion in the formula and thus 2nd coefficient in all the outputs (after the constant)
   y.string <- stats::formula(formula)[[2]]
 
-  # loop over the placeboregressions -------------------------
+    # loop over the placeboregressions -------------------------
   # ... later: option to parallelise! foreach or just make this loop one function and run it on parLapply or the purrr equiv? (since we have many params)
   for (i in 1:nrow(operations)) {
     #print(operations$angle[i])
@@ -79,14 +94,18 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
     polygon.1     <- try(cutoff2polygon(data = data, cutoff = cutoff.1,
                                     orientation = c(operations$orientation.1[i], operations$orientation.2[i]),
                                     endpoints   = c(operations$endpoint.1[i], operations$endpoint.2[i])))
+
+    polygon.1     <- sf::st_make_valid(polygon.1) # redundancy bc cutoff2polygon also does taht
     # if the polygon comes out invalid we jump the loop, this is a safe fallback.
     if (sf::st_is_valid(polygon.1) == FALSE) {message("invalid treated polygon, jumping to next iteration! \n"); next}
 
     err <- FALSE # here we introduce some errorhandling
     #print(err)
+    print(cutoff.1)
     data$treated <- tryCatch({assign_treated(data = data, polygon = polygon.1, id = "id")}, error = function(e) {err <<- TRUE})
     if (err) {message("err, next loop!"); next}
     data$dist2cutoff.1 <- as.numeric(sf::st_distance(data, cutoff.1)) %>% try() # compute distance to new border
+    print("HERE")
     # NOW FOR THE NON-PARAMETRIC
     data$distrunning <- data$dist2cutoff.1
     # give the non-treated one's a negative score BECAUSE rdrobust recognizes positive score as treated

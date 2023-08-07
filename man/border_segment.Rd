@@ -21,6 +21,9 @@ Creates \code{n} segments of a line (the RD cut-off) and assigns the closest bor
 Computationally these tasks are quite demanding when the sample size is big and thus might take a few seconds to complete.
 }
 \examples{
-\donttest{points.sf$segment10 <- border_segment(points.sf, cut_off, 10)}
+points_samp.sf <- sf::st_sample(polygon_full, 100) # create points
+# make it an sf object bc st_sample only created the geometry list-column (sfc):
+points_samp.sf <- sf::st_sf(points_samp.sf)
+points_samp.sf$segment10 <- border_segment(points_samp.sf, cut_off, 3)
 
 }
