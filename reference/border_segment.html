@@ -91,7 +91,10 @@ Computationally these tasks are quite demanding when the sample size is big and 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="va">points.sf</span><span class="op">$</span><span class="va">segment10</span> <span class="op">&lt;-</span> <span class="fu">border_segment</span><span class="op">(</span><span class="va">points.sf</span>, <span class="va">cut_off</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_sample.html" class="external-link">st_sample</a></span><span class="op">(</span><span class="va">polygon_full</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># create points</span></span></span>
+<span class="r-in"><span><span class="co"># make it an sf object bc st_sample only created the geometry list-column (sfc):</span></span></span>
+<span class="r-in"><span><span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment10</span> <span class="op">&lt;-</span> <span class="fu">border_segment</span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

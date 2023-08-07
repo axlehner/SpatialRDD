@@ -114,13 +114,44 @@ if you don't need a certain operation just use default values (e.g. 0 for angle 
     <h2>Value</h2>
     
 
-<p>either a coefplot or data.frame containing results of placeboregressions</p>
+<p>either a coefplot or data.frame containing results of placebo regressions</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu">create_placebos</span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff <span class="op">=</span> <span class="va">cut_off.sf</span>,</span></span>
-<span class="r-in"><span>formula <span class="op">=</span> <span class="va">education</span> <span class="op">~</span> <span class="fl">1</span>, operations <span class="op">=</span> <span class="va">operations</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_sample.html" class="external-link">st_sample</a></span><span class="op">(</span><span class="va">polygon_full</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># create points</span></span></span>
+<span class="r-in"><span><span class="co"># make it an sf object bc st_sample only created the geometry list-column (sfc):</span></span></span>
+<span class="r-in"><span><span class="va">points_samp.sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># add a unique ID to each observation:</span></span></span>
+<span class="r-in"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">treated</span> <span class="op">&lt;-</span> <span class="fu"><a href="assign_treated.html">assign_treated</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">polygon_treated</span>, id <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-in"><span><span class="va">operations.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>operation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"shift"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            shift.x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            shift.y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            scale <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                            angle <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                            orientation.1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"west"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            orientation.2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"west"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            endpoint.1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            endpoint.2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">create_placebos</span><span class="op">(</span>data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff <span class="op">=</span> <span class="va">cut_off</span>,</span></span>
+<span class="r-in"><span>formula <span class="op">=</span> <span class="va">id</span> <span class="op">~</span> <span class="fl">1</span>, operations <span class="op">=</span> <span class="va">operations.df</span>, bw_dist <span class="op">=</span> <span class="fl">3000</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 0 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTILINESTRING</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 366034.5 ymin: 1673763 xmax: 400561.6 ymax: 1734272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / UTM zone 43N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       border_sfc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 MULTILINESTRING ((366034.5 ...</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HERE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id  estimate std.error statistic  p.value rd.estimate      const        HC0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 -6.649351  11.78021 -0.564451 0.577911   -7.117783 -0.5890683 -0.5650144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          HC1        HC2        HC3 HC4 operation shift.x shift.y scale angle</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.5642894 -0.5405229 -0.5632008  NA     shift       0       0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   orientation.1 orientation.2 endpoint.1 endpoint.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          west          west        0.8        0.2</span>
 </code></pre></div>
     </div>
   </div>
