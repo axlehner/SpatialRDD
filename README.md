@@ -48,6 +48,10 @@ shifting (many) borders.
 ## Installation
 
 ``` r
+# From CRAN
+install.packages("SpatialRDD")
+
+# For the latest stable development version
 install.packages("devtools")
 devtools::install_github("axlehner/SpatialRDD") # add build_vignettes = TRUE if you want to have access to them via R, otherwise just look at the .Rmd on github in \vignettes 
 ```
