@@ -1,3 +1,5 @@
+# SpatialRDD (development version)
+
 # SpatialRDD 0.1.0 [2023-08]
 
 * (finally) submitted to CRAN with minor changes (just implemented reviewer comments on code style and testing environments)

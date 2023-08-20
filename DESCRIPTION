@@ -1,7 +1,7 @@
 Package: SpatialRDD
 Type: Package
 Title: Conduct Multiple Types of Geographic Regression Discontinuity Designs
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: person("Alexander", "Lehner", email = "lehner@uchicago.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5885-5966"))
 Description: Spatial versions of Regression Discontinuity Designs (RDDs) are becoming increasingly popular as tools for causal inference. However, conducting state-of-the-art analyses often involves tedious and time-consuming steps. This package offers comprehensive functionalities for executing all required spatial and econometric tasks in a streamlined manner. Moreover, it equips researchers with tools for performing essential placebo and balancing checks comprehensively. The fact that researchers do not have to rely on 'APIs' of external 'GIS' software ensures replicability and raises the standard for spatial RDDs.
 Depends: R (>= 2.10)
