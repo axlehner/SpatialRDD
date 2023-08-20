@@ -123,28 +123,30 @@ You could also just use the package of your choice to print out columns of the o
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="SpatialRD.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">borderpoints.sf</span>,</span></span>
 <span class="r-in"><span>treated <span class="op">=</span> <span class="st">"treated"</span>, minobs <span class="op">=</span> <span class="fl">20</span>, spatial.object <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">printspatialrd</span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Point   Estimate    SE_Conv     SE_Rob    p_Conv     p_Rob       Ntr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1 0.16000000 0.07000000 0.09000000 0.0300000 0.0300000  48.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2 0.05000000 0.05000000 0.06000000 0.3500000 0.5000000  95.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3 0.09000000 0.07000000 0.09000000 0.2400000 0.3500000  48.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4 0.14000000 0.07000000 0.08000000 0.0400000 0.0500000  42.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5 0.06000000 0.07000000 0.08000000 0.3400000 0.5300000  42.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      7 0.16000000 0.13000000 0.15000000 0.2100000 0.2400000  32.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      8 0.09000000 0.06000000 0.07000000 0.1000000 0.2600000 211.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      9 0.08000000 0.05000000 0.06000000 0.0700000 0.1400000 203.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9     10 0.02000000 0.08000000 0.09000000 0.8500000 0.9200000  73.00000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  Mean 0.09444444 0.07222222 0.08555556 0.2477778 0.3355556  88.22222</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Nco     bw_l     bw_r   CI_Conv_l CI_Conv_u CI_Rob_l CI_Rob_u</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  48.00000 10.00000 10.00000  0.02000000 0.3100000     0.02     0.35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  65.00000 17.00000 17.00000 -0.05000000 0.1400000    -0.07     0.15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  47.00000 11.10000 11.10000 -0.06000000 0.2300000    -0.09     0.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  72.00000 11.70000 11.70000  0.01000000 0.2700000     0.00     0.32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  27.00000  9.10000  9.10000 -0.07000000 0.1900000    -0.10     0.20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  39.00000  8.30000  8.30000 -0.09000000 0.4100000    -0.12     0.48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  88.00000 19.30000 19.30000 -0.02000000 0.2000000    -0.06     0.23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  66.00000 17.90000 17.90000 -0.01000000 0.1700000    -0.03     0.19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  28.00000 11.10000 11.10000 -0.14000000 0.1700000    -0.18     0.17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 53.33333 12.83333 12.83333 -0.04555556 0.2322222    -0.07     0.26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Point Estimate SE_Conv SE_Rob p_Conv p_Rob   Ntr   Nco  bw_l  bw_r CI_Conv_l</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      1    0.110   0.050  0.060  0.020 0.090 102.0  76.0 17.90 17.90     0.020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      2    0.020   0.100  0.110  0.880 0.990  78.0  25.0 14.10 14.10    -0.180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      3    0.120   0.040  0.060  0.010 0.020 103.0  96.0 16.80 16.80     0.040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      4    0.180   0.070  0.080  0.010 0.020  59.0 102.0 14.20 14.20     0.040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      5    0.070   0.070  0.080  0.280 0.460  70.0  57.0 12.10 12.10    -0.060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      6    0.140   0.070  0.080  0.040 0.070  27.0  42.0  9.30  9.30     0.010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      7    0.090   0.050  0.060  0.080 0.190  97.0  73.0 14.80 14.80    -0.010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      8    0.090   0.090  0.110  0.300 0.450 116.0  52.0 13.90 13.90    -0.080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      9    0.060   0.050  0.060  0.200 0.410 285.0  79.0 21.20 21.20    -0.030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    10    0.060   0.060  0.080  0.320 0.520  95.0  45.0 13.60 13.60    -0.060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  Mean    0.094   0.065  0.078  0.214 0.322 103.2  64.7 14.79 14.79    -0.031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    CI_Conv_u CI_Rob_l CI_Rob_u</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      0.200   -0.010    0.210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      0.210   -0.220    0.220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      0.210    0.020    0.240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      0.310    0.030    0.350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      0.210   -0.100    0.220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      0.280   -0.010    0.320</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      0.190   -0.040    0.210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      0.260   -0.130    0.290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      0.160   -0.070    0.170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     0.190   -0.100    0.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     0.222   -0.063    0.243</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
