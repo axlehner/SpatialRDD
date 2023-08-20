@@ -22,6 +22,7 @@ is_online = curl::has_internet()
 <!-- badges: start -->
 <!-- some dependency does not work, I have 0 error 0 warning [![Travis build status](https://travis-ci.com/axlehner/SpatialRDD.svg?branch=master)](https://travis-ci.com/axlehner/SpatialRDD) -->
 [![R-CMD-check](https://github.com/axlehner/SpatialRDD/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/axlehner/SpatialRDD/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/SpatialRDD)](https://CRAN.R-project.org/package=SpatialRDD)
 <!-- badges: end -->
 
 This repository hosts the code underlying the R package `SpatialRDD`. The workhorse functions in a nutshell are:
