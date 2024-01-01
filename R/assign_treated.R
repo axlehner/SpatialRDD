@@ -31,6 +31,8 @@ assign_treated <- function(data, polygon, id = NA) {
     return()}
   if (typeof(id) != "character") {message("Column name for unique id point layer is not a string, wrap it around \" \".\n")
     return()}
+  if ("id" %in% names(polygon)) {message("You have a column named 'id' in your polygon, consider renaming it to avoid confusion with the unique id in your data.\n")
+    return()}
   #microbenchmark::microbenchmark(any(names(data) == id), id %in% names(data))
   stopifnot("id column not found. Did you specify it correctly? (check spelling, is it a string?)"
             = any(names(data) == id))
@@ -44,7 +46,7 @@ assign_treated <- function(data, polygon, id = NA) {
   )
 
   # retrieving the id's that were treated (this function effectively subsets the whole df/sf object, we extract only one column of that)
-  over_id <- sf::st_intersection(polygon, data)[[id]]
+  over_id <- sf::st_intersection(data, polygon)[[id]] # changed the order such that the correct "id" column gets picked in case the polygon has a column named "id"
   data[["treated"]] <- 0
   # here we have a very clumsy way to access the column we just created, just to keep in mind that would work
   data[[deparse(substitute(treated))]][data[[id]] %in% over_id] <- 1
