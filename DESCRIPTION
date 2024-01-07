@@ -18,12 +18,15 @@ Imports:
     cowplot,
     magrittr,
     rlang,
-    broom
+    broom,
+    spatstat.geom,
+    spatstat.random,
+    lwgeom
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     tmap,
-    rmarkdown,
+    rmarkdown, markdown,
     testthat,
     utils,
     kableExtra,
