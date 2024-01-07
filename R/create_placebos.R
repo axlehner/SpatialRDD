@@ -155,7 +155,7 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
 #'
 #' @param depvar the dependent variable as a string
 #' @param points.sf sf data.frame containing all points and the relevant variables
-#' @param lambdapoisl the parameter for the poisson line process (see \code{\link[rpoisline]{rpoisline}} from `spatstat` for details)
+#' @param lambdapoisl the parameter for the poisson line process (see \code{\link[spatstat]{rpoisline}} from \code{spatstat} for details)
 #' @param nruns number of randomization runs (ideally in the thousands, start by trying a few dozen to check performance and speed)
 #' @param id the unique id column in the points frame
 #' @param geometry should the return results frame contain geometries so that all placebo/randomization lines can be plotted on a map?
@@ -165,7 +165,6 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
 #' @export
 #'
 #' @examples
-#'
 #' points_samp.sf <- sf::st_sample(polygon_full, 1000) # create points
 #' # make it an sf object bc st_sample only created the geometry list-column (sfc):
 #' points_samp.sf <- sf::st_sf(points_samp.sf)
