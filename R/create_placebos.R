@@ -160,6 +160,7 @@ create_placebos <- function(data, cutoff, formula, operations, bw_dist,
 #' @param id the unique id column in the points frame
 #' @param geometry should the return results frame contain geometries so that all placebo/randomization lines can be plotted on a map?
 #' @param sentinel_tries sometimes the poisson process creates lines that do not cross any points, thus leading to no control units (expected to happen by chance). This parameter determines how often the function should retry in case this happnes (default is 10).
+#' @param ... pass arguments to \code{rdrobust}
 #'
 #' @return a randomization inference p-value or, alternatively, a data frame containing all simulated lines with the respective estimates
 #' @export
@@ -194,7 +195,8 @@ randinf <- function(depvar, points.sf,
                     lambdapoisl, nruns,
                     id = "id",
                     geometry = TRUE,
-                    sentinel_tries = 10) {
+                    sentinel_tries = 10,
+                    ...) {
 
   # create bbox from point input
   W <- spatstat.geom::as.owin(sf::st_as_sfc(sf::st_bbox(points.sf)))
@@ -230,7 +232,7 @@ randinf <- function(depvar, points.sf,
       points.sf$distrunning[points.sf$treated == 0] <- -1 * points.sf$distrunning[points.sf$treated == 0]
 
       # Estimation (need more flexibility later to allow for other specifications and an lm version)
-      rdobj <- tryCatch({rdrobust::rdrobust(points.sf[[depvar]], points.sf$distrunning, c = 0, p = 1) |> suppressWarnings()}, error = function(e) {err <<- TRUE})
+      rdobj <- tryCatch({rdrobust::rdrobust(points.sf[[depvar]], points.sf$distrunning, c = 0, p = 1, ...) |> suppressWarnings()}, error = function(e) {err <<- TRUE})
       if (err) {#message("err, next loop!");
         # notification if max sentinel numbers reached
         if (sent == sentinel_tries) message("could not construct a valid randomization exercise in one run, skipping... \n")

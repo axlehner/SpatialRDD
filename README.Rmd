@@ -58,9 +58,10 @@ devtools::install_github("axlehner/SpatialRDD") # add build_vignettes = TRUE if 
 
 What you need to run you own spatial RD with `SpatialRDD`:
 
-1. An RD boundary as a single line (the simplest way is to cut this by hand in e.g. ArcGIS or QGIS by just splitting a line off a polygon for example - also make sure to merge all features together in case there are multiple left, this will be important and prevent annoying troubles later on)
-2. The data frame containing the columns with x- and y-coordinates. Read in with `read.csv()` or with `readstata13::read.dta13()`. Make them an sf object with `st_as_sf(data, coords = c("x", "y"), crs = 4326)` if you have longitude/latitude as coordinates (which is reflected by the 4326 EPSG). If this is the case use `st_transform()` on all your objects into a local UTM projection (not necessary but recommended for several reasons). Note: In case your data comes as a shapefile/geopackage/etc. directly, just read it in with `st_read("path/to/file.shp")`. If these are polygons it is advised to work with the centroids straightaway (extract with `st_centroid()`). If you need zonal statistics (on elevation/ruggednes etc.) for e.g. checking identifying assumptions, do these before converting to centroids.
-3. Ideally also a polygon that covers the treated areas (this could be created within the package with `cutoff2polygon` though)
+1. An RD boundary as a single line (the simplest way is to cut this by hand in e.g. ArcGIS or QGIS by just splitting a line off a polygon for example - also make sure to merge all features together in case there are multiple left, this will be important and prevent annoying troubles later on).
+2. The data frame containing the columns with x- and y-coordinates. Read in with `read.csv()` or with `readstata13::read.dta13()`. Make them an sf object with `st_as_sf(data, coords = c("x", "y"), crs = 4326)` if you have longitude/latitude as coordinates (which is reflected by the 4326 EPSG). Note: In case your data comes as a shapefile/geopackage/etc. directly, just read it in with `st_read("path/to/file.shp")`. If these are polygons it is advised to work with the centroids straightaway (extract with `st_centroid()`). If you need zonal statistics (on elevation/ruggednes etc.) for e.g. checking identifying assumptions, do these before converting to centroids.
+3. Ideally also a polygon that covers the treated areas (this could be created within the package with `cutoff2polygon` though).
+4. Be careful when you choose your coordinate reference system (CRS), I suggest to transform your data into a projected CRS and work on the euclidean plane (instead of on the sphere with angles, that is, with longitude and latitude). You can do this with `sf::st_transform()`. See the reference below for more details.
 
 You could verify the "geographic validity" of your objects with e.g. `mapview::mapview()`.
 
@@ -83,21 +84,22 @@ points_samp.sf$education[points_samp.sf$treated == 1] <- rnorm(NTr, mean = 0, sd
 points_samp.sf$education[points_samp.sf$treated == 0] <- rnorm(NCo, mean = 0, sd = .1) + points_samp.sf$education[points_samp.sf$treated == 0]
 ```
 
-Adding border segment for transparent fixed effect category creation (for the non-parametric specification that is just OLS with `lm()` or `lfe::felm()`):
+Adding border segment for transparent fixed effect category creation:
 
 ```{r border_segment, message = FALSE, warning = FALSE}
 points_samp.sf$segment5 <- border_segment(points_samp.sf, cut_off, 5)
 tm_shape(points_samp.sf) + tm_dots("segment5", size = 0.1) + tm_shape(cut_off) + tm_lines()
 ```
 
-Create points alongside border and run GRD to explore heterogeneity:
+If you want, you can create boundarypoints alongside the border to, inter alia, explore heterogeneity:
 
 ```{r grd, message = FALSE, warning = FALSE}
 borderpoints.sf <- discretise_border(cutoff = cut_off, n = 50)
-results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 10)
+results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 30)
 plotspatialrd(results, map = T)
 ```
 
 
 ## References
 
+Lehner (2024) [A Note On Spatial Regression Discontinuity Designs](https://lehner.xyz/pdf/Lehner_SpatialRDDnote.pdf), mimeograph.

@@ -61,8 +61,8 @@ and they are going to be introduced here in precisely this order.
 
 ## Some words of caution
 
-You (obviously) have to pay attention that you have an RD border that is fine-grained enough so that it resembles the true cutoff. Something at the degree of e.g. the widely used GADM boundaries (just as an example, because administrative boundaries themselves are usually never valid RD cutoffs due to the compound treatment problem) is most probably not detailed enough.
-Furthermore it is suggested to always work in a localized projection system that has meters as units - as opposed to e.g. degrees (you can check that with `st_crs(data)$units`). A good choice would be UTM: find the right grid [here](http://www.dmap.co.uk/utmworld.htm), then get the corresponding [EPSG number](https://epsg.io) and use it in `st_transform()` after you imported your data [see e.g. @Bivand_Pebesma_2023 for guidance on projection systems].
+You (obviously) have to pay attention that you have an RD border that is fine-grained enough so that it resembles the true cutoff. Something at the degree of e.g. the widely used GADM boundaries (just as an example, because administrative boundaries themselves are usually never valid RD cutoffs due to the compound treatment problem) is most probably *not detailed enough*.
+Furthermore, I suggest to transform your data into a projected CRS and work on the euclidean plane (instead of on the sphere with angles, that is, with longitude and latitude). A good choice would be UTM: find the right grid [here](http://www.dmap.co.uk/utmworld.htm), then get the corresponding [EPSG number](https://epsg.io) and use it in `st_transform()` after you imported your data [see e.g. @Bivand_Pebesma_2023 for guidance on projection systems].
 
 # Setup and Propaedeutics
 
@@ -81,7 +81,7 @@ library(stargazer) # easy way to make model output look more appealing (R-inline
 library(sf)
 ```
 
-The data shown here come in `r sf::st_crs(cut_off)$input`, which is a "localized" [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) coordinate reference system (CRS). These are generally preferable for exercises like a Spatial RDD, as they are more precise and also allow us to work in meters (the "classic" longitude/latitude CRS, EPSG 4326, works in degrees). If your study area is small, you should reproject your data into the CRS of the according UTM zone (simply use `st_transform()`). To verify the units of our CRS we could simply run `st_crs(cut_off)$units`.
+The data shown here come in `r sf::st_crs(cut_off)$input`, which is a "localized" [UTM](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) projected coordinate reference system (CRS). If your study area is small, you should consider reprojecting your data into the CRS of the according UTM zone (simply use `st_transform()`) - or choose a different projection in case it is more appropriate to your study area. To verify the units of our CRS we could simply run `st_crs(cut_off)$units`.
 
 All the spatial objects are of class `sf` from the [sf package](https://CRAN.R-project.org/package=sf). This means they are just a `data.frame` with a special column that contains a geometry for each row. The big advantage is, no matter if you prefer base R, `dplyr`, or any other way to handle and wrangle your data, the `sf` object can be treated just like a standard `data.frame`. The one single step that transforms these spatial objects back to a standard `data.frame` is just dropping the geometry column with
 ```{r, eval = FALSE}
@@ -137,7 +137,7 @@ points_samp.sf$treated <- assign_treated(points_samp.sf, polygon_treated, id = "
 tm_shape(points_samp.sf) + tm_dots("treated", palette = "Set1") + tm_shape(cut_off) + tm_lines(col = "red")
 ```
 
-As a next step we add an outcome of interest that we are going to use as dependent variable in our Spatial Regression Discontinuity Design. Let's call this variable `education` and assume it measures the literacy rate that ranges from 0 to 1 (0%, meaning everyone is illiterate, to 100%, meaning everyone in the population can read and write). We assume that the units, call them villages, in the "treated" polygon have on average a higher literacy rate because they received some sort of "treatment". Let's just assume aliens dropped (better) schools in all of these villages, but not in any of the outside villages, and everything else is constant and identical across the two territories. Crucially, people also do not sort themselves across the border, i.e. they do not go on the other side to attend school and then return to their villages.
+As a next step we add an outcome of interest that we are going to use as dependent variable in our Spatial Regression Discontinuity Design. Let's call this variable `education` and assume it measures the literacy rate that ranges from 0 to 1 (0%, meaning everyone is illiterate, to 100%, meaning everyone in the population can read and write). We assume that the units, call them villages, in the "treated" polygon have on average a higher literacy rate because they received some sort of "treatment". Let's just assume someone magically dropped (better) schools in all of these villages, but not in any of the outside villages, and everything else is constant and identical across the two territories. Crucially, people also do not sort themselves across the border, i.e. they do not go on the other side to attend school and then return to their villages.
 
 ```{r, warning = FALSE}
 # first we define a variable for the number of "treated" and control which makes the code more readable in the future
@@ -171,7 +171,7 @@ where the intercept tells us that the average in the non-treated areas is 0.6 an
 
 ### Distance to Cutoff
 
-The next essential step before we start t do proper Spatial RDD analysis is to determine how far each of these points is away from the cutoff. Here we just make use of a function from `sf` called `st_distance()` that returns a vector with units (that we have to convert to real numbers by `as.numeric()`):
+The next essential step before we start to do proper spatial RDD analysis is to determine how far each of these points is away from the cutoff. Here we just make use of a function from `sf` called `st_distance()` that returns a vector with units (that we have to convert to real numbers by `as.numeric()`):
 
 ```{r}
 points_samp.sf$dist2cutoff <- as.numeric(sf::st_distance(points_samp.sf, cut_off))
@@ -184,7 +184,7 @@ tm_shape(points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) + tm_dots("educati
 
 ```
 
-And to run the univariate regression from above also just within a bandwidth (this specification is already starting to resemble the canonical parametric spatial RD specification). As we know the exact data generating process (no "spatial gradient" but a rather uniform assignment), it is obvious to us that this of course leaves the point estimate essentially unchanged:
+And to run the univariate regression from above also just within a bandwidth (this specification is already starting to resemble the canonical RD specification). As we know the exact data generating process (no "spatial gradient" but a rather uniform assignment), it is obvious to us that this of course leaves the point estimate essentially unchanged:
 
 ```{r}
 lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]) %>% stargazer::stargazer(type = "text")
@@ -193,12 +193,12 @@ lm(education ~ treated, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000,
 
 # Carrying out Spatial RDD estimation
 
-Now we go step by step through all potential (parametric and non-parametric) ways in which one could obtain point estimates for Spatial RDDs [see e.g. @Lehner2023a for details].
+Now we go step by step through all potential (parametric and non-parametric) ways in which one could obtain point estimates for Spatial RDDs [see e.g. @Lehner2024 for details].
 
 
-## Naive Distance
+## Unidimensional Specifications
 
-For the "naive" estimation [@Keele_Titiunik_2015], meaning that the spatial dimension is essentially disregarded, we first define a variable `distrunning` that makes the distances in the treated areas negative so that our 2-dimensional cutoff is then at 0.
+Before we can run the RD, we need to transform the distance variable into a score. In this case, we can just multiply the distances on one side of the border with `-1`. To verify, let's visualize the RDD by plotting all datapoints with the outcome on the y-axis and the score on the x-axis:
 
 ```{r}
 points_samp.sf$distrunning <- points_samp.sf$dist2cutoff
@@ -207,35 +207,36 @@ points_samp.sf$distrunning[points_samp.sf$treated == 0] <- -1 * points_samp.sf$d
 ggplot(data = points_samp.sf, aes(x = distrunning, y = education)) + geom_point() + geom_vline(xintercept = 0, col = "red")
 ```
 
-The point estimate of the "classic" non-parametric local linear regression, carried out with the `rdrobust` package [@Calonico_Cattaneo_Titiunik_2015], then looks like this:
+To obtain the point estimate, we use the fantastic `rdrobust` package [@Calonico_Cattaneo_Titiunik_2015]. The default estimates an `mserd` bandwidth with a triangular kernel:
 
 ```{r}
 library(rdrobust)
-summary(rdrobust(points_samp.sf$education, points_samp.sf$distrunning, c = 0))
+rdbws <- rdrobust::rdbwselect(points_samp.sf$education, points_samp.sf$distrunning, kernel = "uniform") # save the bw
+summary(rdrobust(points_samp.sf$education, points_samp.sf$distrunning, c = 0, kernel = "uniform"))
 ```
-and the according visualization with data driven bin-width selection:
+
+The according visualization with data driven bin-width selection and the local linear regression lines within the `mserd` bandwidth:
+
 ```{r, out.width='\\textwidth', fig.width = 7, fig.height = 5}
-rdplot(points_samp.sf$education, points_samp.sf$distrunning, c = 0, ci = 95, 
+rdplot(points_samp.sf$education, points_samp.sf$distrunning, c = 0, ci = 95, p = 1,
+       h = rdbws$bws[1],
        kernel = "triangular", y.label = "education", x.label = "distance to border")
 ```
 
-For RDD estimation in **R**, in general, there are currently three packages flying around: `RDD`, `rddtools`, and `rddapp` (building on the `RDD`); whereby the latter seems to be the most up-to-date and comprehensive one (as it draws on previous work that others did).  
-`rddapp` estimates various specifications (does not do robust inference, though)
+The same point estimate can be obtained through OLS by estimating
 
-```{r, eval = FALSE}
-library(rddapp)
-summary(rd_est(education ~ distrunning, data = points_samp.sf, t.design = "g"))
+$$Y_i = \beta_0 + \beta_1\ D_i + \beta_2\ (X_i - c) + \beta_3\ D_i \times (X_i - c) + \varepsilon_i.$$
+This amounts to running:
+
+```{r}
+list(lm(education ~ treated*distrunning, data = points_samp.sf[points_samp.sf$dist2cutoff < rdbws$bws[1], ])) %>% stargazer::stargazer(type = "text")
 ```
 
-And it gives several possibilities of visualizing classic, one-dimensional RDDs. Here we arbitrarily pick one parametric and one non-parametric estimate, including confidence intervals, and manually chosen binsizes:
+... which is the same point estimate as above.
 
-```{r, out.width='\\textwidth', fig.width = 7, fig.height = 5, eval = FALSE}
-plot(rd_est(education ~ distrunning, data = points_samp.sf, t.design = "g"), fit_line = c("quadratic", "optimal"), bin_n = 50)
-```
+### Adding Boundary Segment Fixed Effects
 
-## Parametric Specifications
-
-This method, popularized by @Dell_2010 in her influential on the Peruvian Mining Mita, examines only observations within a certain distance around the border by using a parametric approach. From the point of view of which additional "spatial technicalities" are needed, it essentially only boils down to the introduction of border segments. These are then used to apply a "within estimator" to allow for different intercepts for each of those segment categories in order to, inter alia, alleviate the omitted variable problem. As is well known, instead of a within transformation, one might as well throw a set of dummies for each of the segments in the regression. The regression coefficient of interest of this saturated model then gives a weighted average over all segments. On top of that we might also be interested in the coefficient of each segment to infer something about potential heterogeneity alongside our regression discontinuity.   
+To ensure that only observations that are close to eachother are compared, we can create boundary segment categories. These are then used to apply a "within estimator" to allow for different intercepts for each of those segment categories. As is well known, instead of a within transformation, one might as well throw a set of dummies for each of the segments in the regression. The regression coefficient of interest of this saturated model then gives a weighted average over all segments. On top of that we might also be interested in the coefficient of each segment to infer something about potential heterogeneity alongside our regression discontinuity.   
 The (computationally a bit demanding) function `border_segment()` only needs the points layer and the cutoff as input (preferably as a line, but also an input in the form of points at the boundary works). The function's last parameter lets us determine how many segments we want. As with the `assign_treated()` function, the output is a vector of factors.
 
 ```{r, fig.show='hold'}
@@ -258,19 +259,18 @@ Simple OLS estimates, using the segments that we just obtained as categories for
 
 ```{r}
 library(lfe)
-list(lfe::felm(education ~ treated | factor(segment15) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ]),
-lfe::felm(education ~ treated | factor(segment5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < 3000, ])
+list(lfe::felm(education ~ treated*distrunning | factor(segment15) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < rdbws$bws[1], ]),
+lfe::felm(education ~ treated*distrunning | factor(segment5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff < rdbws$bws[1], ])
 ) %>% stargazer::stargazer(type = "text")
 
 ```
 
-The confidence intervals of both point estimates are overlapping, yet, one can see that the fixed effects choice can have a substantial impact.
-We obtain a point estimate that is (unsurprisingly, as we have a data generating process that is very uniform across space) very similar to the one we obtained from the simple OLS regression from the beginning. As compared to the "classic RD" point estimate that we obtained from the non-parametric local linear regression from the `rdrobust` package, the point estimate from our fixed effects regression is a bit more conservative. But from eyeballing we can determine that the average effect lies somewhere around 0.1, meaning that the literacy rate is 10 percentage points higher in the treated areas. Exactly the way we designed our simulated data.  
+We obtain a point estimate that is (unsurprisingly, as we have a data generating process that is very uniform across space) essentially the same as the "classic RD" point estimate that we obtained from the non-parametric local linear regression from the `rdrobust` package (or the OLS equivalent with interaction) without segment fixed effects. 
 
 
-## GRD
+## Specification With Two-Dimensional Score
 
-Finally we move towards a fully fledged Geographic Regression Discontinuity (GRD) design [according to the nomenclature by @Keele_Titiunik_2015]. The function `spatialrd()` incorporates the RD estimation with two running variables but also allows to carry out the estimation on any boundary point ("GRDDseries") with just one line of code. This allows us to visualize the treatment effect at multiple points of the cutoff and thus infer something about the potential heterogeneity of the effect. Or, most importantly, to assess the robustness of the GRD itself.   
+Finally, we move towards a exploiting the two-dimensional nature of a spatial RDD. The function `spatialrd()` incorporates the RD estimation on any boundary point with just one line of code. This allows us to visualize the treatment effect at multiple points of the cutoff and thus infer something about the potential heterogeneity of the effect. Or, most importantly, to assess the robustness of the design itself.   
 
 First of all we have to cut the border into equally spaced segments. We will obtain a point estimate for each of these segments, or boundary points. The `discretise_border()` function just requires the sf object that represent the cutoff (polyline preferred but also points possible) and the number of desired boundary points:
 
@@ -290,14 +290,14 @@ results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = bor
 knitr::kable(results)
 ```
 
-The average treatment effect is given by taking the mean of all point estimates. Running `mean(results$Estimate)` this gives `r round(mean(results$Estimate), 3)`, which is exactly how we designed our DGP. For the plotting of the *GRDDseries* and a visualisation in space of each point estimate we need to have a spatial object. All this is incorporated in the `plotspatialrd()` function.
+The average treatment effect is given by taking the mean of all point estimates because there is no heterogeneity. Otherwise it would be necessary to weigh the point estimate at each boundary point (by the respective sample size, for example). Running `mean(results$Estimate)` this gives `r round(mean(results$Estimate), 3)`, which is exactly how we designed our DGP. For the plotting of boundarypoints and a visualization in space of each point estimate we need to have a spatial object. All this is incorporated in the `plotspatialrd()` function.
 
 ```{r, warning = FALSE, fig.width = 7, fig.height = 5}
 results <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = borderpoints.sf, treated = "treated", minobs = 10)
 plotspatialrd(results, map = T)
 ```
 
-Or just the *GRDDseries* without the map.
+Or just the series of boundarypoints without the map.
 
 ```{r, fig.width = 7, fig.height = 5}
 plotspatialrd(results, map = F)
@@ -339,26 +339,26 @@ tm_shape(points_samp.sf) + tm_dots("treated1", palette = "Set1")  + tm_shape(pla
 After plotting the points again, we can visually infer that the villages to the right got assigned the "treated" dummy. Further we can compute the number of villages that change their status. This helps us to decide whether the bordershift was big enough (if e.g. only a handful of observations switched, then we would expect this to have little to no impact on our point estimates and thus would dub such a robustness exercise as not very meaningful).   
 In this case `r sum(points_samp.sf$treated == 0 & points_samp.sf$treated1 == 1)` villages changed. Given the initial number of treated observations, this seems a change of a big enough magnitude and thus a meaningful robustness exercise.   
 
-### Robustness GRD
+### Robustness With Two-Dimensional Score
 
-Finally, we do the exact same exercise from above again and run the nonparametric specification on many boundary points to approximate a continuous treatment effect. The series fluctuates around 0 and has not a single significant estimate, and it is thus safe to conclude that the methodology works.
+Finally, we do the exact same exercise from above again and run the uni-dimensional RD specification on many boundary points to approximate a continuous treatment effect. The series fluctuates around 0 and has not a single significant estimate, and it is thus safe to conclude that the methodology works.
 
 ```{r, warning = FALSE, fig.width = 7, fig.height = 5}
 results1 <- spatialrd(y = "education", data = points_samp.sf, cutoff.points = placeboborderpoints.1, treated = "treated1", minobs = 10)
 plotspatialrd(results1, map = T)
 ```
 
-### Robustness Polynomial Specification
+### Robustness With Uni-Dimensional Specification
 
-Before we close, let's also run our placebo exercise with the parametric specification. Unfortunately, OLS with fixed effects is not as sensitive when it comes to detecting the border shift. The coefficient is still borderline significant. In this case, we should have moved the border 1 or 2 kilometers farther to make it insignificant.
+Before we close, let's also run our placebo exercise with the uni-dimensional specification. 
 
 ```{r}
 points_samp.sf$segment.1.5 <- border_segment(points_samp.sf, placebocut_off.1, 5) # assigning new segments based on now cutoff
 points_samp.sf$dist2cutoff1 <- as.numeric(sf::st_distance(points_samp.sf, placebocut_off.1)) # recompute distance to new placebo cutoff
 
 list(
-  lm(education ~ treated1, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ]),
-  lfe::felm(education ~ treated1 | factor(segment.1.5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ])
+  lm(education ~ treated1*distrunning, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ])#,
+  #lfe::felm(education ~ treated1*distrunning | factor(segment.1.5) | 0 | 0, data = points_samp.sf[points_samp.sf$dist2cutoff1 < 3000, ])
 ) %>% stargazer::stargazer(type = "text")
 ```
 

@@ -11,7 +11,8 @@ randinf(
   nruns,
   id = "id",
   geometry = TRUE,
-  sentinel_tries = 10
+  sentinel_tries = 10,
+  ...
 )
 }
 \arguments{
