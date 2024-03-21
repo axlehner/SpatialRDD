@@ -116,30 +116,32 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"axlehner/SpatialRDD"</span><span class="op">)</span> <span class="co"># add build_vignettes = TRUE if you want to have access to them via R, otherwise just look at the .Rmd on github in \vignettes </span></span></code></pre></div>
 <p>What you need to run you own spatial RD with <code>SpatialRDD</code>:</p>
 <ol style="list-style-type: decimal">
-<li>An RD boundary as a single line (the simplest way is to cut this by hand in e.g. ArcGIS or QGIS by just splitting a line off a polygon for example - also make sure to merge all features together in case there are multiple left, this will be important and prevent annoying troubles later on)</li>
-<li>The data frame containing the columns with x- and y-coordinates. Read in with <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv()</a></code> or with <code>readstata13::read.dta13()</code>. Make them an sf object with <code>st_as_sf(data, coords = c("x", "y"), crs = 4326)</code> if you have longitude/latitude as coordinates (which is reflected by the 4326 EPSG). If this is the case use <code>st_transform()</code> on all your objects into a local UTM projection (not necessary but recommended for several reasons). Note: In case your data comes as a shapefile/geopackage/etc. directly, just read it in with <code>st_read("path/to/file.shp")</code>. If these are polygons it is advised to work with the centroids straightaway (extract with <code>st_centroid()</code>). If you need zonal statistics (on elevation/ruggednes etc.) for e.g. checking identifying assumptions, do these before converting to centroids.</li>
-<li>Ideally also a polygon that covers the treated areas (this could be created within the package with <code>cutoff2polygon</code> though)</li>
+<li>An RD boundary as a single line (the simplest way is to cut this by hand in e.g. ArcGIS or QGIS by just splitting a line off a polygon for example - also make sure to merge all features together in case there are multiple left, this will be important and prevent annoying troubles later on).</li>
+<li>The data frame containing the columns with x- and y-coordinates. Read in with <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv()</a></code> or with <code>readstata13::read.dta13()</code>. Make them an sf object with <code>st_as_sf(data, coords = c("x", "y"), crs = 4326)</code> if you have longitude/latitude as coordinates (which is reflected by the 4326 EPSG). Note: In case your data comes as a shapefile/geopackage/etc. directly, just read it in with <code>st_read("path/to/file.shp")</code>. If these are polygons it is advised to work with the centroids straightaway (extract with <code>st_centroid()</code>). If you need zonal statistics (on elevation/ruggednes etc.) for e.g. checking identifying assumptions, do these before converting to centroids.</li>
+<li>Ideally also a polygon that covers the treated areas (this could be created within the package with <code>cutoff2polygon</code> though).</li>
+<li>Be careful when you choose your coordinate reference system (CRS), I suggest to transform your data into a projected CRS and work on the euclidean plane (instead of on the sphere with angles, that is, with longitude and latitude). You can do this with <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">sf::st_transform()</a></code>. See the reference below for more details.</li>
 </ol>
 <p>You could verify the “geographic validity” of your objects with e.g. <code>mapview::mapview()</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-guide">Quick Guide<a class="anchor" aria-label="anchor" href="#quick-guide"></a>
 </h2>
-<p>Adding border segment for transparent fixed effect category creation (for the non-parametric specification that is just OLS with <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or <code><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">lfe::felm()</a></code>):</p>
+<p>Adding border segment for transparent fixed effect category creation:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">points_samp.sf</span><span class="op">$</span><span class="va">segment5</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/border_segment.html">border_segment</a></span><span class="op">(</span><span class="va">points_samp.sf</span>, <span class="va">cut_off</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu">tm_shape</span><span class="op">(</span><span class="va">points_samp.sf</span><span class="op">)</span> <span class="op">+</span> <span class="fu">tm_dots</span><span class="op">(</span><span class="st">"segment5"</span>, size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> <span class="fu">tm_shape</span><span class="op">(</span><span class="va">cut_off</span><span class="op">)</span> <span class="op">+</span> <span class="fu">tm_lines</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-border_segment-1.png"><!-- --></p>
-<p>Create points alongside border and run GRD to explore heterogeneity:</p>
+<p>If you want, you can create boundarypoints alongside the border to, inter alia, explore heterogeneity:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">borderpoints.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/discretise_border.html">discretise_border</a></span><span class="op">(</span>cutoff <span class="op">=</span> <span class="va">cut_off</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/SpatialRD.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">borderpoints.sf</span>, treated <span class="op">=</span> <span class="st">"treated"</span>, minobs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/SpatialRD.html">spatialrd</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"education"</span>, data <span class="op">=</span> <span class="va">points_samp.sf</span>, cutoff.points <span class="op">=</span> <span class="va">borderpoints.sf</span>, treated <span class="op">=</span> <span class="st">"treated"</span>, minobs <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plotspatialrd.html">plotspatialrd</a></span><span class="op">(</span><span class="va">results</span>, map <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-grd-1.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+<p>Lehner (2024) <a href="https://lehner.xyz/pdf/Lehner_SpatialRDDnote.pdf" class="external-link">A Note On Spatial Regression Discontinuity Designs</a>, mimeograph.</p>
 </div>
 </div>
   </div>
