@@ -29,6 +29,8 @@ randinf(
 \item{geometry}{should the return results frame contain geometries so that all placebo/randomization lines can be plotted on a map?}
 
 \item{sentinel_tries}{sometimes the poisson process creates lines that do not cross any points, thus leading to no control units (expected to happen by chance). This parameter determines how often the function should retry in case this happnes (default is 10).}
+
+\item{...}{pass arguments to \code{rdrobust}}
 }
 \value{
 a randomization inference p-value or, alternatively, a data frame containing all simulated lines with the respective estimates
